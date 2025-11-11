@@ -1,0 +1,54 @@
+{
+  "call_id": "CALL1009",
+  "customer_id": "CUST1003",
+  "call_type": "inbound",
+  "call_timestamp": "2025-11-01T12:12:30",
+  "call_duration_seconds": 890,
+  "agent_id": "AGENT017",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": true,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Wendy. How can I help you today?",
+      "timestamp": "2025-11-01T12:12:30",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "Hello, I'm calling about a recent transaction on my card.",
+      "timestamp": "2025-11-01T12:12:40",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I have a speech disability, please be patient with me",
+      "timestamp": "2025-11-01T12:12:50",
+      "metadata": {
+        "ada_disclosure": true
+      }
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you for your patience. I'll make sure to accommodate your needs.",
+      "timestamp": "2025-11-01T12:13:00",
+      "metadata": {
+        "ada_compliant": true
+      }
+    },
+    {
+      "speaker": "customer",
+      "text": "Thank you for your help.",
+      "timestamp": "2025-11-01T12:13:10",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "You're welcome. Is there anything else I can assist you with today?",
+      "timestamp": "2025-11-01T12:13:20",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "payment_plan_created"
+}

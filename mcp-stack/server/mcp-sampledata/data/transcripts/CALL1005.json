@@ -1,0 +1,55 @@
+{
+  "call_id": "CALL1005",
+  "customer_id": "CUST1044",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-16T07:33:35",
+  "call_duration_seconds": 1510,
+  "agent_id": "AGENT020",
+  "call_summary": "ADA Policy Violation - Agent failed to offer accommodation",
+  "is_ada_related": true,
+  "ada_violation_occurred": true,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Jennifer. How can I help you today?",
+      "timestamp": "2025-10-16T07:33:35",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I want to dispute a charge on my statement.",
+      "timestamp": "2025-10-16T07:33:45",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I'm hard of hearing, can you speak up?",
+      "timestamp": "2025-10-16T07:33:55",
+      "metadata": {
+        "ada_disclosure": true
+      }
+    },
+    {
+      "speaker": "agent",
+      "text": "I apologize for the inconvenience. Let me see what I can do.",
+      "timestamp": "2025-10-16T07:34:05",
+      "metadata": {
+        "ada_violation": true,
+        "violation_type": "no_accommodation_offered"
+      }
+    },
+    {
+      "speaker": "customer",
+      "text": "That's not helpful. I need assistance now.",
+      "timestamp": "2025-10-16T07:34:15",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Let me transfer you to my supervisor.",
+      "timestamp": "2025-10-16T07:34:25",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "ada_policy_violation"
+}

@@ -135,13 +135,27 @@ class MCPServer:
         @self.app.get("/tools")
         async def list_tools():
             """List all available tools and their configurations."""
-            return {
-                tool_name.value: {
-                    "enabled": self.config.tools[tool_name].enabled,
-                    **tool.get_metadata()
-                }
-                for tool_name, tool in self.tools.items()
-            }
+            tools_info = {}
+            
+            if hasattr(self.config, 'text_processor'):
+                tool_info = {"enabled": self.config.text_processor.enabled}
+                if ToolName.TEXT_PROCESSOR in self.tools:
+                    tool_info.update(self.tools[ToolName.TEXT_PROCESSOR].get_metadata())
+                tools_info[ToolName.TEXT_PROCESSOR.value] = tool_info
+                
+            if hasattr(self.config, 'sentiment_analyzer'):
+                tool_info = {"enabled": self.config.sentiment_analyzer.enabled}
+                if ToolName.SENTIMENT_ANALYZER in self.tools:
+                    tool_info.update(self.tools[ToolName.SENTIMENT_ANALYZER].get_metadata())
+                tools_info[ToolName.SENTIMENT_ANALYZER.value] = tool_info
+                
+            if hasattr(self.config, 'keyword_extractor'):
+                tool_info = {"enabled": self.config.keyword_extractor.enabled}
+                if ToolName.KEYWORD_EXTRACTOR in self.tools:
+                    tool_info.update(self.tools[ToolName.KEYWORD_EXTRACTOR].get_metadata())
+                tools_info[ToolName.KEYWORD_EXTRACTOR.value] = tool_info
+                
+            return tools_info
         
         @self.app.post("/process", response_model=TextResponse)
         async def process_text(request: TextRequest):

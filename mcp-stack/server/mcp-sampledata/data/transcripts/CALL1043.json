@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1043",
+  "customer_id": "CUST1045",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-29T11:51:17",
+  "call_duration_seconds": 501,
+  "agent_id": "AGENT020",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Jennifer. How can I help you today?",
+      "timestamp": "2025-10-29T11:51:17",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I need help with my credit card payment.",
+      "timestamp": "2025-10-29T11:51:27",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-29T11:51:37",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 3012.",
+      "timestamp": "2025-10-29T11:51:47",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-29T11:51:57",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "ada_policy_violation"
+}

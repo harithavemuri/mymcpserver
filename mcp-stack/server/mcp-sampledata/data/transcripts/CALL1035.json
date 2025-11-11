@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1035",
+  "customer_id": "CUST1011",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-24T23:21:19",
+  "call_duration_seconds": 1355,
+  "agent_id": "AGENT012",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Sheri. How can I help you today?",
+      "timestamp": "2025-10-24T23:21:19",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I need help with my credit card payment.",
+      "timestamp": "2025-10-24T23:21:29",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-24T23:21:39",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 6507.",
+      "timestamp": "2025-10-24T23:21:49",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-24T23:21:59",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "partial_payment"
+}

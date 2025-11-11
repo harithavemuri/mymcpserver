@@ -1,0 +1,1954 @@
+{
+  "customers": [
+    {
+      "customer_id": "CUST1000",
+      "personal_info": {
+        "first_name": "Eric",
+        "last_name": "Miller",
+        "email": "hguerrero@example.net",
+        "phone": "(793)438-3665x83945",
+        "date_of_birth": "2006-09-16"
+      },
+      "home_address": {
+        "street": "3813 Bright Isle Suite 854",
+        "city": "East Jennifer",
+        "state": "TN",
+        "zip_code": "98052",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Huang, Johnson and Ortega",
+        "position": "Nutritional therapist",
+        "work_email": "smithjoshua@huerta.com",
+        "work_phone": "614.692.1453x742",
+        "work_address": {
+          "street": "410 Porter Rapid Suite 004",
+          "city": "North Chaseshire",
+          "state": "DE",
+          "zip_code": "59924",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-7659",
+        "expiry": "09/28",
+        "cvv": "324"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 5000,
+      "current_balance": 478.97
+    },
+    {
+      "customer_id": "CUST1001",
+      "personal_info": {
+        "first_name": "Joe",
+        "last_name": "Moore",
+        "email": "elizabeth91@example.com",
+        "phone": "+1-375-871-4119x10283",
+        "date_of_birth": "1953-12-29"
+      },
+      "home_address": {
+        "street": "6266 Lester Knoll Suite 632",
+        "city": "Cainside",
+        "state": "CA",
+        "zip_code": "96568",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Wood-Smith",
+        "position": "Programme researcher, broadcasting/film/video",
+        "work_email": "wrivas@bauer.com",
+        "work_phone": "+1-411-261-5184x15229",
+        "work_address": {
+          "street": "87479 Tina Hills Apt. 922",
+          "city": "Lake Erikborough",
+          "state": "NV",
+          "zip_code": "92273",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-362",
+        "expiry": "04/29",
+        "cvv": "776"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 10000,
+      "current_balance": 2580.78
+    },
+    {
+      "customer_id": "CUST1002",
+      "personal_info": {
+        "first_name": "Margaret",
+        "last_name": "Bowman",
+        "email": "randy54@example.org",
+        "phone": "595-920-2886x6545",
+        "date_of_birth": "1983-09-13"
+      },
+      "home_address": {
+        "street": "64161 Hamilton Mall Apt. 344",
+        "city": "West Lisa",
+        "state": "RI",
+        "zip_code": "05905",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Sweeney-Gordon",
+        "position": "Cartographer",
+        "work_email": "wramirez@mills-bartlett.com",
+        "work_phone": "001-706-813-6495x119",
+        "work_address": {
+          "street": "28149 Murray Fork Suite 301",
+          "city": "Quinnville",
+          "state": "NC",
+          "zip_code": "68135",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-4308",
+        "expiry": "05/26",
+        "cvv": "876"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 10000,
+      "current_balance": 13428.94
+    },
+    {
+      "customer_id": "CUST1003",
+      "personal_info": {
+        "first_name": "Kelsey",
+        "last_name": "Waters",
+        "email": "treese@example.net",
+        "phone": "831.561.1049x477",
+        "date_of_birth": "1938-12-10"
+      },
+      "home_address": {
+        "street": "997 Grant Station Suite 372",
+        "city": "Lake William",
+        "state": "NJ",
+        "zip_code": "29695",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Hamilton, Hanna and Ryan",
+        "position": "Psychologist, occupational",
+        "work_email": "tonicolon@rivera.com",
+        "work_phone": "001-453-932-5925x9497",
+        "work_address": {
+          "street": "4300 Walker Track",
+          "city": "North Christopher",
+          "state": "HI",
+          "zip_code": "96045",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-7540",
+        "expiry": "11/26",
+        "cvv": "556"
+      },
+      "account_status": "active",
+      "credit_limit": 20000,
+      "current_balance": 12116.52
+    },
+    {
+      "customer_id": "CUST1004",
+      "personal_info": {
+        "first_name": "Lisa",
+        "last_name": "Lutz",
+        "email": "suarezbrandon@example.net",
+        "phone": "001-746-788-9406x408",
+        "date_of_birth": "2002-12-29"
+      },
+      "home_address": {
+        "street": "203 Atkins Track",
+        "city": "North Jillian",
+        "state": "AK",
+        "zip_code": "41936",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Martinez, Morales and Flores",
+        "position": "Paramedic",
+        "work_email": "thuber@rodriguez.com",
+        "work_phone": "284.686.5044x421",
+        "work_address": {
+          "street": "60279 Virginia Garden Suite 005",
+          "city": "West Bryce",
+          "state": "WI",
+          "zip_code": "54214",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-8301",
+        "expiry": "08/27",
+        "cvv": "942"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 5000,
+      "current_balance": 14241.37
+    },
+    {
+      "customer_id": "CUST1005",
+      "personal_info": {
+        "first_name": "Sara",
+        "last_name": "Ross",
+        "email": "johnsonantonio@example.com",
+        "phone": "(749)482-8112x67494",
+        "date_of_birth": "1934-12-13"
+      },
+      "home_address": {
+        "street": "09922 Christina Knolls Suite 558",
+        "city": "Lake Thomasfort",
+        "state": "AK",
+        "zip_code": "12042",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Moss-Wright",
+        "position": "Logistics and distribution manager",
+        "work_email": "gainesandre@stone-wilson.com",
+        "work_phone": "001-710-549-4138",
+        "work_address": {
+          "street": "436 Willis Greens",
+          "city": "Lake Thomasfort",
+          "state": "AK",
+          "zip_code": "50837",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-8094",
+        "expiry": "03/28",
+        "cvv": "411"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 5000,
+      "current_balance": 19071.81
+    },
+    {
+      "customer_id": "CUST1006",
+      "personal_info": {
+        "first_name": "Kyle",
+        "last_name": "Carpenter",
+        "email": "smithnancy@example.net",
+        "phone": "298.309.8150x270",
+        "date_of_birth": "1992-07-13"
+      },
+      "home_address": {
+        "street": "8911 Dennis Valleys",
+        "city": "North Whitney",
+        "state": "NC",
+        "zip_code": "47651",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Rodriguez Inc",
+        "position": "Community development worker",
+        "work_email": "valeriewilliams@underwood-williams.com",
+        "work_phone": "001-715-375-5517x665",
+        "work_address": {
+          "street": "069 Villanueva Ramp Apt. 789",
+          "city": "Aliciaside",
+          "state": "WY",
+          "zip_code": "28306",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-4394",
+        "expiry": "12/27",
+        "cvv": "854"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 11265.52
+    },
+    {
+      "customer_id": "CUST1007",
+      "personal_info": {
+        "first_name": "Tyler",
+        "last_name": "Sanders",
+        "email": "michaelhernandez@example.net",
+        "phone": "583-446-8059",
+        "date_of_birth": "2002-01-10"
+      },
+      "home_address": {
+        "street": "513 Christopher Path",
+        "city": "Williamschester",
+        "state": "VA",
+        "zip_code": "77306",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Mclean-Reid",
+        "position": "Immigration officer",
+        "work_email": "jay70@flores.com",
+        "work_phone": "+1-312-967-0924x56596",
+        "work_address": {
+          "street": "48338 Wilkinson Dam",
+          "city": "Kristinahaven",
+          "state": "MO",
+          "zip_code": "68397",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-1383",
+        "expiry": "11/29",
+        "cvv": "314"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 25000,
+      "current_balance": 2055.07
+    },
+    {
+      "customer_id": "CUST1008",
+      "personal_info": {
+        "first_name": "Timothy",
+        "last_name": "Collins",
+        "email": "jlewis@example.net",
+        "phone": "+1-580-609-6284x246",
+        "date_of_birth": "1977-12-10"
+      },
+      "home_address": {
+        "street": "882 Amanda Islands Suite 317",
+        "city": "North Tinachester",
+        "state": "NC",
+        "zip_code": "48220",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Buck-Day",
+        "position": "Scientist, marine",
+        "work_email": "steinstephanie@ross.com",
+        "work_phone": "(467)526-2729x3209",
+        "work_address": {
+          "street": "8029 Randy Plaza",
+          "city": "North Tinachester",
+          "state": "NC",
+          "zip_code": "25139",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-1393",
+        "expiry": "03/28",
+        "cvv": "232"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 5000,
+      "current_balance": 6647.4
+    },
+    {
+      "customer_id": "CUST1009",
+      "personal_info": {
+        "first_name": "Tiffany",
+        "last_name": "Warren",
+        "email": "petermorales@example.com",
+        "phone": "(587)645-0066x1856",
+        "date_of_birth": "1939-07-29"
+      },
+      "home_address": {
+        "street": "1355 Emily Mount",
+        "city": "Port Donaldhaven",
+        "state": "VT",
+        "zip_code": "07227",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Carr-Perez",
+        "position": "Music tutor",
+        "work_email": "andrewanderson@frank.biz",
+        "work_phone": "266-987-6203x642",
+        "work_address": {
+          "street": "5012 Spencer Plains",
+          "city": "Vangborough",
+          "state": "AR",
+          "zip_code": "87906",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-528",
+        "expiry": "01/26",
+        "cvv": "792"
+      },
+      "account_status": "active",
+      "credit_limit": 10000,
+      "current_balance": 8554.09
+    },
+    {
+      "customer_id": "CUST1010",
+      "personal_info": {
+        "first_name": "Garrett",
+        "last_name": "Bartlett",
+        "email": "tanderson@example.com",
+        "phone": "(720)449-7512",
+        "date_of_birth": "1959-12-14"
+      },
+      "home_address": {
+        "street": "13185 Jones Turnpike Apt. 307",
+        "city": "Washingtonhaven",
+        "state": "MO",
+        "zip_code": "14221",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Davis-Martinez",
+        "position": "Teacher, secondary school",
+        "work_email": "joseph69@ward.com",
+        "work_phone": "(417)290-5247x5985",
+        "work_address": {
+          "street": "5853 Tracy Street Suite 299",
+          "city": "Margaretview",
+          "state": "MP",
+          "zip_code": "43620",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-771",
+        "expiry": "11/27",
+        "cvv": "218"
+      },
+      "account_status": "active",
+      "credit_limit": 25000,
+      "current_balance": 880.11
+    },
+    {
+      "customer_id": "CUST1011",
+      "personal_info": {
+        "first_name": "Cynthia",
+        "last_name": "Gonzales",
+        "email": "williamsoncynthia@example.net",
+        "phone": "200-395-0040",
+        "date_of_birth": "1958-02-28"
+      },
+      "home_address": {
+        "street": "52284 Jennifer Flat Suite 922",
+        "city": "Jonburgh",
+        "state": "TN",
+        "zip_code": "09617",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Garner Group",
+        "position": "Higher education careers adviser",
+        "work_email": "frederick43@duffy-brown.com",
+        "work_phone": "423-679-1753x898",
+        "work_address": {
+          "street": "5933 Lowe Mission Suite 203",
+          "city": "Jonburgh",
+          "state": "TN",
+          "zip_code": "13191",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-4537",
+        "expiry": "12/29",
+        "cvv": "510"
+      },
+      "account_status": "active",
+      "credit_limit": 20000,
+      "current_balance": 6009.01
+    },
+    {
+      "customer_id": "CUST1012",
+      "personal_info": {
+        "first_name": "Lucas",
+        "last_name": "Gomez",
+        "email": "michellejacobson@example.com",
+        "phone": "837-606-1102",
+        "date_of_birth": "1970-07-04"
+      },
+      "home_address": {
+        "street": "23758 Erin Extensions Suite 468",
+        "city": "Brianport",
+        "state": "VI",
+        "zip_code": "41467",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Davis-Davis",
+        "position": "Structural engineer",
+        "work_email": "zbrown@kent.net",
+        "work_phone": "001-602-391-9140",
+        "work_address": {
+          "street": "1713 Hall Walks",
+          "city": "Amyshire",
+          "state": "GA",
+          "zip_code": "33496",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-6399",
+        "expiry": "03/28",
+        "cvv": "83"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 15000,
+      "current_balance": 5280.13
+    },
+    {
+      "customer_id": "CUST1013",
+      "personal_info": {
+        "first_name": "Nicole",
+        "last_name": "Vincent",
+        "email": "gleach@example.org",
+        "phone": "839-528-5312x76871",
+        "date_of_birth": "1991-07-20"
+      },
+      "home_address": {
+        "street": "538 Jessica Mission",
+        "city": "Elizabethmouth",
+        "state": "KS",
+        "zip_code": "69524",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Robinson Ltd",
+        "position": "Chartered certified accountant",
+        "work_email": "sherry62@salazar.com",
+        "work_phone": "266-762-0474",
+        "work_address": {
+          "street": "47219 Bass Branch",
+          "city": "South Noahfort",
+          "state": "VT",
+          "zip_code": "58335",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-7826",
+        "expiry": "12/29",
+        "cvv": "289"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 10000,
+      "current_balance": 19848.84
+    },
+    {
+      "customer_id": "CUST1014",
+      "personal_info": {
+        "first_name": "David",
+        "last_name": "Gordon",
+        "email": "justinjefferson@example.com",
+        "phone": "622-676-0250x753",
+        "date_of_birth": "1989-07-25"
+      },
+      "home_address": {
+        "street": "48454 Brewer River",
+        "city": "South Tina",
+        "state": "AL",
+        "zip_code": "63744",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Smith, Hansen and Garner",
+        "position": "Chartered loss adjuster",
+        "work_email": "billsmith@murphy.com",
+        "work_phone": "+1-342-978-0769x90702",
+        "work_address": {
+          "street": "874 Gibson Knolls",
+          "city": "Boydshire",
+          "state": "NJ",
+          "zip_code": "04001",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-8676",
+        "expiry": "01/30",
+        "cvv": "953"
+      },
+      "account_status": "active",
+      "credit_limit": 15000,
+      "current_balance": 14907.79
+    },
+    {
+      "customer_id": "CUST1015",
+      "personal_info": {
+        "first_name": "Lucas",
+        "last_name": "Lynch",
+        "email": "ysandoval@example.org",
+        "phone": "(699)690-5472x0415",
+        "date_of_birth": "1984-01-15"
+      },
+      "home_address": {
+        "street": "32149 Derek Parkways Suite 759",
+        "city": "New Jasontown",
+        "state": "WV",
+        "zip_code": "31797",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Dawson Ltd",
+        "position": "Accountant, chartered management",
+        "work_email": "bbyrd@johnson-abbott.com",
+        "work_phone": "787-510-9218x717",
+        "work_address": {
+          "street": "7124 Anthony Canyon",
+          "city": "North Deborah",
+          "state": "AS",
+          "zip_code": "32966",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-1064",
+        "expiry": "07/28",
+        "cvv": "169"
+      },
+      "account_status": "active",
+      "credit_limit": 5000,
+      "current_balance": 13545.37
+    },
+    {
+      "customer_id": "CUST1016",
+      "personal_info": {
+        "first_name": "Erica",
+        "last_name": "Johnston",
+        "email": "patrickshaffer@example.net",
+        "phone": "(565)768-8601",
+        "date_of_birth": "1991-06-24"
+      },
+      "home_address": {
+        "street": "6049 Henry Fall Suite 649",
+        "city": "Davisside",
+        "state": "FL",
+        "zip_code": "72061",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Miller Inc",
+        "position": "Museum/gallery exhibitions officer",
+        "work_email": "gibsonjohn@barnett.info",
+        "work_phone": "(996)722-4498x68888",
+        "work_address": {
+          "street": "24040 Dana Highway Suite 839",
+          "city": "Nicholasbury",
+          "state": "NC",
+          "zip_code": "95839",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-6530",
+        "expiry": "04/26",
+        "cvv": "765"
+      },
+      "account_status": "active",
+      "credit_limit": 20000,
+      "current_balance": 17491.1
+    },
+    {
+      "customer_id": "CUST1017",
+      "personal_info": {
+        "first_name": "Theresa",
+        "last_name": "Thompson",
+        "email": "derek12@example.net",
+        "phone": "(617)718-2287x12553",
+        "date_of_birth": "2005-03-26"
+      },
+      "home_address": {
+        "street": "6515 Jensen Gateway",
+        "city": "Fernandezview",
+        "state": "AR",
+        "zip_code": "78322",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Gordon-Henderson",
+        "position": "Merchandiser, retail",
+        "work_email": "martinsharon@king.net",
+        "work_phone": "+1-393-696-8164x84810",
+        "work_address": {
+          "street": "97641 Jones Lodge Apt. 125",
+          "city": "New Kylie",
+          "state": "TN",
+          "zip_code": "08723",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-6713",
+        "expiry": "10/27",
+        "cvv": "958"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 15000,
+      "current_balance": 7732.12
+    },
+    {
+      "customer_id": "CUST1018",
+      "personal_info": {
+        "first_name": "Jason",
+        "last_name": "Cordova",
+        "email": "lisawoodward@example.org",
+        "phone": "+1-521-677-0492x0590",
+        "date_of_birth": "1983-11-10"
+      },
+      "home_address": {
+        "street": "482 Margaret Trail",
+        "city": "South Daniel",
+        "state": "AK",
+        "zip_code": "27036",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Torres-Golden",
+        "position": "Chemist, analytical",
+        "work_email": "vsalazar@camacho.com",
+        "work_phone": "633.263.1280x12622",
+        "work_address": {
+          "street": "7744 Daniel Turnpike Apt. 378",
+          "city": "Stephanieview",
+          "state": "GU",
+          "zip_code": "82754",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-2057",
+        "expiry": "06/29",
+        "cvv": "25"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 15226.34
+    },
+    {
+      "customer_id": "CUST1019",
+      "personal_info": {
+        "first_name": "Debbie",
+        "last_name": "Ingram",
+        "email": "ndavis@example.net",
+        "phone": "001-885-553-8687x02080",
+        "date_of_birth": "1945-04-20"
+      },
+      "home_address": {
+        "street": "75622 Jones Well Suite 726",
+        "city": "East Michelle",
+        "state": "LA",
+        "zip_code": "81731",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Chapman-Mcgrath",
+        "position": "Engineer, water",
+        "work_email": "ubooth@harvey.info",
+        "work_phone": "(465)474-8252x2807",
+        "work_address": {
+          "street": "1439 Jason Ranch Suite 432",
+          "city": "Allisonmouth",
+          "state": "WY",
+          "zip_code": "78044",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-8958",
+        "expiry": "03/30",
+        "cvv": "991"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 15000,
+      "current_balance": 18868.97
+    },
+    {
+      "customer_id": "CUST1020",
+      "personal_info": {
+        "first_name": "Paula",
+        "last_name": "Romero",
+        "email": "christopherallen@example.net",
+        "phone": "5557065887",
+        "date_of_birth": "1997-05-17"
+      },
+      "home_address": {
+        "street": "0623 Johnson Row",
+        "city": "Luisville",
+        "state": "NM",
+        "zip_code": "86259",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Alvarez, Taylor and Davidson",
+        "position": "Designer, blown glass/stained glass",
+        "work_email": "susanmoore@smith.biz",
+        "work_phone": "2086825947",
+        "work_address": {
+          "street": "949 Washington Square",
+          "city": "Aaronhaven",
+          "state": "MT",
+          "zip_code": "57397",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-3627",
+        "expiry": "03/26",
+        "cvv": "526"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 15000,
+      "current_balance": 16803.58
+    },
+    {
+      "customer_id": "CUST1021",
+      "personal_info": {
+        "first_name": "James",
+        "last_name": "Gallagher",
+        "email": "hhoward@example.net",
+        "phone": "762-901-2773x78680",
+        "date_of_birth": "1968-12-05"
+      },
+      "home_address": {
+        "street": "6011 Craig Knolls Suite 272",
+        "city": "North Kathleenborough",
+        "state": "NC",
+        "zip_code": "36021",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Fitzpatrick-Howard",
+        "position": "Therapist, nutritional",
+        "work_email": "anna24@jones.biz",
+        "work_phone": "514-473-4042",
+        "work_address": {
+          "street": "2697 Long Alley Apt. 906",
+          "city": "Port Katieborough",
+          "state": "TN",
+          "zip_code": "98754",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-9128",
+        "expiry": "09/29",
+        "cvv": "210"
+      },
+      "account_status": "active",
+      "credit_limit": 25000,
+      "current_balance": 8271.9
+    },
+    {
+      "customer_id": "CUST1022",
+      "personal_info": {
+        "first_name": "Micheal",
+        "last_name": "Jones",
+        "email": "elliottvincent@example.net",
+        "phone": "346.844.8993x9299",
+        "date_of_birth": "1980-04-15"
+      },
+      "home_address": {
+        "street": "94556 Smith Ports",
+        "city": "South Jeff",
+        "state": "OK",
+        "zip_code": "46795",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Hill-Hanson",
+        "position": "Clinical biochemist",
+        "work_email": "gyang@black.biz",
+        "work_phone": "334-660-0263x97292",
+        "work_address": {
+          "street": "0472 Finley Underpass Apt. 253",
+          "city": "Lake James",
+          "state": "KS",
+          "zip_code": "46240",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-9287",
+        "expiry": "06/26",
+        "cvv": "729"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 5000,
+      "current_balance": 5846.35
+    },
+    {
+      "customer_id": "CUST1023",
+      "personal_info": {
+        "first_name": "Cynthia",
+        "last_name": "Graham",
+        "email": "kristagonzales@example.net",
+        "phone": "001-736-317-6776x3902",
+        "date_of_birth": "1975-02-17"
+      },
+      "home_address": {
+        "street": "6406 Hansen Ville Apt. 512",
+        "city": "Sanderstown",
+        "state": "MI",
+        "zip_code": "80967",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Santiago-Davis",
+        "position": "Surveyor, land/geomatics",
+        "work_email": "wrightmichael@morales-wells.com",
+        "work_phone": "001-539-842-7047x796",
+        "work_address": {
+          "street": "23845 Blair Avenue",
+          "city": "Sanderstown",
+          "state": "MI",
+          "zip_code": "74849",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-5085",
+        "expiry": "05/29",
+        "cvv": "334"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 18150.71
+    },
+    {
+      "customer_id": "CUST1024",
+      "personal_info": {
+        "first_name": "Amber",
+        "last_name": "Rivera",
+        "email": "pacemary@example.com",
+        "phone": "693.527.2010x963",
+        "date_of_birth": "2005-01-14"
+      },
+      "home_address": {
+        "street": "862 Kevin Pass Apt. 630",
+        "city": "Port Garyland",
+        "state": "RI",
+        "zip_code": "21959",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Burton, Lewis and Clements",
+        "position": "Soil scientist",
+        "work_email": "rgomez@castillo.com",
+        "work_phone": "+1-676-521-5946x123",
+        "work_address": {
+          "street": "514 Patel Walks Apt. 923",
+          "city": "Baileymouth",
+          "state": "RI",
+          "zip_code": "03324",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-1843",
+        "expiry": "09/29",
+        "cvv": "706"
+      },
+      "account_status": "active",
+      "credit_limit": 10000,
+      "current_balance": 4475.77
+    },
+    {
+      "customer_id": "CUST1025",
+      "personal_info": {
+        "first_name": "Theresa",
+        "last_name": "Russo",
+        "email": "vpalmer@example.org",
+        "phone": "677-688-3032",
+        "date_of_birth": "1956-10-27"
+      },
+      "home_address": {
+        "street": "26705 Davis Causeway",
+        "city": "North Amandaville",
+        "state": "MO",
+        "zip_code": "71470",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Reed-Olson",
+        "position": "Sub",
+        "work_email": "nicole71@goodwin.com",
+        "work_phone": "4858323541",
+        "work_address": {
+          "street": "403 Trevino Ramp Suite 307",
+          "city": "North Amandaville",
+          "state": "MO",
+          "zip_code": "41846",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-1722",
+        "expiry": "06/28",
+        "cvv": "607"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 5000,
+      "current_balance": 15826.55
+    },
+    {
+      "customer_id": "CUST1026",
+      "personal_info": {
+        "first_name": "Nicholas",
+        "last_name": "Dunn",
+        "email": "jlong@example.org",
+        "phone": "001-581-215-2732",
+        "date_of_birth": "1984-01-25"
+      },
+      "home_address": {
+        "street": "562 Marks Field Suite 465",
+        "city": "Andersonfurt",
+        "state": "AZ",
+        "zip_code": "23065",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Garcia Inc",
+        "position": "Engineer, production",
+        "work_email": "lawrencemiller@cox.net",
+        "work_phone": "8759849299",
+        "work_address": {
+          "street": "22289 Patrick Ports Suite 928",
+          "city": "East Rebecca",
+          "state": "TN",
+          "zip_code": "64759",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-8916",
+        "expiry": "06/26",
+        "cvv": "287"
+      },
+      "account_status": "active",
+      "credit_limit": 15000,
+      "current_balance": 18304.36
+    },
+    {
+      "customer_id": "CUST1027",
+      "personal_info": {
+        "first_name": "Jeffrey",
+        "last_name": "Welch",
+        "email": "higginsjessica@example.org",
+        "phone": "(988)692-4746",
+        "date_of_birth": "1997-09-06"
+      },
+      "home_address": {
+        "street": "77005 Bell Island",
+        "city": "West Jaredland",
+        "state": "KY",
+        "zip_code": "56565",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Weeks LLC",
+        "position": "Therapist, music",
+        "work_email": "qmedina@hicks.com",
+        "work_phone": "+1-923-964-5108x51695",
+        "work_address": {
+          "street": "3027 Tracy Ports Apt. 283",
+          "city": "West Jaredland",
+          "state": "KY",
+          "zip_code": "12649",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-1486",
+        "expiry": "04/29",
+        "cvv": "493"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 15000,
+      "current_balance": 2677.59
+    },
+    {
+      "customer_id": "CUST1028",
+      "personal_info": {
+        "first_name": "James",
+        "last_name": "Mosley",
+        "email": "wesparza@example.net",
+        "phone": "5425276051",
+        "date_of_birth": "1938-08-08"
+      },
+      "home_address": {
+        "street": "310 Cody Mill",
+        "city": "Mirandastad",
+        "state": "PA",
+        "zip_code": "66354",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Carr Inc",
+        "position": "Clothing/textile technologist",
+        "work_email": "sierrabowen@oliver.net",
+        "work_phone": "646-756-0762",
+        "work_address": {
+          "street": "59244 Elliott Meadow Apt. 103",
+          "city": "Lake Edward",
+          "state": "GA",
+          "zip_code": "79454",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-2646",
+        "expiry": "07/30",
+        "cvv": "986"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 15000,
+      "current_balance": 3165.36
+    },
+    {
+      "customer_id": "CUST1029",
+      "personal_info": {
+        "first_name": "Jennifer",
+        "last_name": "Scott",
+        "email": "vrichardson@example.com",
+        "phone": "001-350-614-0821x98560",
+        "date_of_birth": "1963-02-18"
+      },
+      "home_address": {
+        "street": "95456 Ray Point Suite 408",
+        "city": "Sandyberg",
+        "state": "DC",
+        "zip_code": "07159",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Young LLC",
+        "position": "Public librarian",
+        "work_email": "kennedystacy@pierce.net",
+        "work_phone": "+1-466-569-0942",
+        "work_address": {
+          "street": "85142 Kevin Trail Suite 737",
+          "city": "Sandyberg",
+          "state": "DC",
+          "zip_code": "83097",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-5398",
+        "expiry": "10/27",
+        "cvv": "424"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 10000,
+      "current_balance": 5174.15
+    },
+    {
+      "customer_id": "CUST1030",
+      "personal_info": {
+        "first_name": "Daniel",
+        "last_name": "Reed",
+        "email": "castillorichard@example.com",
+        "phone": "847.352.6591",
+        "date_of_birth": "1989-07-16"
+      },
+      "home_address": {
+        "street": "0736 Stevens Points Apt. 582",
+        "city": "New Tiffany",
+        "state": "WA",
+        "zip_code": "94963",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Poole and Sons",
+        "position": "Geophysical data processor",
+        "work_email": "brownvictoria@lowe-bailey.com",
+        "work_phone": "+1-351-964-2116x751",
+        "work_address": {
+          "street": "0440 Terri Island",
+          "city": "New Tiffany",
+          "state": "WA",
+          "zip_code": "48402",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-6467",
+        "expiry": "06/29",
+        "cvv": "201"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 5000,
+      "current_balance": 10801.38
+    },
+    {
+      "customer_id": "CUST1031",
+      "personal_info": {
+        "first_name": "George",
+        "last_name": "Roberts",
+        "email": "murrayadrian@example.org",
+        "phone": "001-365-983-2887x2199",
+        "date_of_birth": "1959-03-17"
+      },
+      "home_address": {
+        "street": "0372 Payne Burg Suite 923",
+        "city": "Singhport",
+        "state": "SC",
+        "zip_code": "74176",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Vaughn-Harper",
+        "position": "Chartered accountant",
+        "work_email": "matthewjones@vega.com",
+        "work_phone": "001-214-768-3717x6956",
+        "work_address": {
+          "street": "620 Gallegos Rapids Suite 711",
+          "city": "Singhport",
+          "state": "SC",
+          "zip_code": "52839",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-6964",
+        "expiry": "01/29",
+        "cvv": "490"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 5000,
+      "current_balance": 1230.66
+    },
+    {
+      "customer_id": "CUST1032",
+      "personal_info": {
+        "first_name": "Christina",
+        "last_name": "Rowe",
+        "email": "ryanjohnson@example.org",
+        "phone": "420-372-6911",
+        "date_of_birth": "1990-09-03"
+      },
+      "home_address": {
+        "street": "998 Roy Parkway Apt. 264",
+        "city": "Port Luke",
+        "state": "KY",
+        "zip_code": "34333",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Maxwell Ltd",
+        "position": "Patent examiner",
+        "work_email": "vwhitaker@shaw-serrano.org",
+        "work_phone": "(751)564-0660x60632",
+        "work_address": {
+          "street": "11352 John Land",
+          "city": "Port Luke",
+          "state": "KY",
+          "zip_code": "16703",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-1898",
+        "expiry": "10/29",
+        "cvv": "471"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 20000,
+      "current_balance": 14695.39
+    },
+    {
+      "customer_id": "CUST1033",
+      "personal_info": {
+        "first_name": "Jon",
+        "last_name": "Daniel",
+        "email": "gonzalezkimberly@example.org",
+        "phone": "9582024754",
+        "date_of_birth": "1965-09-22"
+      },
+      "home_address": {
+        "street": "0714 Walker Knolls",
+        "city": "Charleneside",
+        "state": "ND",
+        "zip_code": "62072",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Fritz, Turner and Brown",
+        "position": "Restaurant manager, fast food",
+        "work_email": "alexander39@miller.com",
+        "work_phone": "7063207485",
+        "work_address": {
+          "street": "19989 Antonio Ferry",
+          "city": "South Kim",
+          "state": "WY",
+          "zip_code": "65566",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-7507",
+        "expiry": "04/30",
+        "cvv": "383"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 15000,
+      "current_balance": 17421.01
+    },
+    {
+      "customer_id": "CUST1034",
+      "personal_info": {
+        "first_name": "Helen",
+        "last_name": "Ruiz",
+        "email": "dwright@example.net",
+        "phone": "(889)236-2227x548",
+        "date_of_birth": "2003-03-09"
+      },
+      "home_address": {
+        "street": "79302 Foster Neck",
+        "city": "Lake Cheryl",
+        "state": "AL",
+        "zip_code": "90438",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Macias PLC",
+        "position": "Police officer",
+        "work_email": "michael00@edwards.com",
+        "work_phone": "001-708-829-5744x0098",
+        "work_address": {
+          "street": "481 Linda Trace",
+          "city": "East Anthony",
+          "state": "CO",
+          "zip_code": "31288",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-8190",
+        "expiry": "08/28",
+        "cvv": "775"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 10000,
+      "current_balance": 15505.73
+    },
+    {
+      "customer_id": "CUST1035",
+      "personal_info": {
+        "first_name": "Amanda",
+        "last_name": "Holmes",
+        "email": "patriciavelazquez@example.com",
+        "phone": "914.528.1015",
+        "date_of_birth": "1941-12-15"
+      },
+      "home_address": {
+        "street": "88739 Castro Streets",
+        "city": "South Robertborough",
+        "state": "GA",
+        "zip_code": "27884",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Yoder and Sons",
+        "position": "Race relations officer",
+        "work_email": "wlove@lloyd.com",
+        "work_phone": "623.401.6706",
+        "work_address": {
+          "street": "563 Lauren Ports Suite 225",
+          "city": "Norrisbury",
+          "state": "PW",
+          "zip_code": "55015",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-1112",
+        "expiry": "02/29",
+        "cvv": "765"
+      },
+      "account_status": "active",
+      "credit_limit": 5000,
+      "current_balance": 13896.22
+    },
+    {
+      "customer_id": "CUST1036",
+      "personal_info": {
+        "first_name": "Michael",
+        "last_name": "Torres",
+        "email": "blane@example.net",
+        "phone": "+1-904-715-9163x8472",
+        "date_of_birth": "1943-11-26"
+      },
+      "home_address": {
+        "street": "1798 Samantha Falls",
+        "city": "Lake Vernon",
+        "state": "SC",
+        "zip_code": "25049",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Rodgers-Boyd",
+        "position": "Psychotherapist, child",
+        "work_email": "michaelkoch@johnson-martin.com",
+        "work_phone": "485-244-1614x123",
+        "work_address": {
+          "street": "749 Jones Islands Apt. 840",
+          "city": "Lake Vernon",
+          "state": "SC",
+          "zip_code": "95375",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-9504",
+        "expiry": "06/27",
+        "cvv": "726"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 12791.95
+    },
+    {
+      "customer_id": "CUST1037",
+      "personal_info": {
+        "first_name": "Dennis",
+        "last_name": "Rice",
+        "email": "idecker@example.com",
+        "phone": "001-872-649-1646x766",
+        "date_of_birth": "1965-05-12"
+      },
+      "home_address": {
+        "street": "5449 Marc Glens",
+        "city": "Port Steven",
+        "state": "OH",
+        "zip_code": "60338",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Bailey-Thornton",
+        "position": "Wellsite geologist",
+        "work_email": "zoe13@mclean-jackson.biz",
+        "work_phone": "700-949-6839",
+        "work_address": {
+          "street": "59973 Ashley Mountains",
+          "city": "Port Steven",
+          "state": "OH",
+          "zip_code": "79549",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-4034",
+        "expiry": "07/27",
+        "cvv": "15"
+      },
+      "account_status": "active",
+      "credit_limit": 15000,
+      "current_balance": 1021.88
+    },
+    {
+      "customer_id": "CUST1038",
+      "personal_info": {
+        "first_name": "Matthew",
+        "last_name": "Brown",
+        "email": "marknielsen@example.net",
+        "phone": "612.203.7165x715",
+        "date_of_birth": "1997-06-26"
+      },
+      "home_address": {
+        "street": "748 Thomas Brook Suite 700",
+        "city": "East Kenneth",
+        "state": "MT",
+        "zip_code": "19843",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Smith, Jackson and Padilla",
+        "position": "Engineer, drilling",
+        "work_email": "arnoldkatie@wagner.com",
+        "work_phone": "906-523-6760",
+        "work_address": {
+          "street": "376 Brown Trace Suite 505",
+          "city": "East Kenneth",
+          "state": "MT",
+          "zip_code": "34019",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-7931",
+        "expiry": "09/28",
+        "cvv": "776"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 20000,
+      "current_balance": 10045.67
+    },
+    {
+      "customer_id": "CUST1039",
+      "personal_info": {
+        "first_name": "John",
+        "last_name": "Gonzalez",
+        "email": "angela88@example.com",
+        "phone": "+1-472-327-0125",
+        "date_of_birth": "1935-02-27"
+      },
+      "home_address": {
+        "street": "72349 Thomas Squares",
+        "city": "Williamsonport",
+        "state": "ME",
+        "zip_code": "96846",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Miller-Padilla",
+        "position": "Computer games developer",
+        "work_email": "lopezjoseph@stephenson.com",
+        "work_phone": "+1-569-871-5731x3484",
+        "work_address": {
+          "street": "336 Brent Route",
+          "city": "Williamsonport",
+          "state": "ME",
+          "zip_code": "77449",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-9649",
+        "expiry": "02/27",
+        "cvv": "335"
+      },
+      "account_status": "active",
+      "credit_limit": 15000,
+      "current_balance": 16397.95
+    },
+    {
+      "customer_id": "CUST1040",
+      "personal_info": {
+        "first_name": "George",
+        "last_name": "Winters",
+        "email": "john11@example.com",
+        "phone": "+1-295-654-1789x22062",
+        "date_of_birth": "1946-10-22"
+      },
+      "home_address": {
+        "street": "53143 Bailey Groves",
+        "city": "Rogersstad",
+        "state": "NV",
+        "zip_code": "82198",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Love and Sons",
+        "position": "Osteopath",
+        "work_email": "brianburnett@shelton-stephens.com",
+        "work_phone": "731.281.6510x3771",
+        "work_address": {
+          "street": "001 Brian Circles",
+          "city": "Deannaborough",
+          "state": "CA",
+          "zip_code": "83995",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-7893",
+        "expiry": "06/30",
+        "cvv": "60"
+      },
+      "account_status": "active",
+      "credit_limit": 15000,
+      "current_balance": 16844.8
+    },
+    {
+      "customer_id": "CUST1041",
+      "personal_info": {
+        "first_name": "Bryan",
+        "last_name": "Martinez",
+        "email": "sandersjustin@example.com",
+        "phone": "(312)863-5677x9301",
+        "date_of_birth": "1955-10-16"
+      },
+      "home_address": {
+        "street": "708 Lindsay Spur Apt. 753",
+        "city": "Mccallville",
+        "state": "MS",
+        "zip_code": "81594",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Jackson and Sons",
+        "position": "Field trials officer",
+        "work_email": "omiller@poole.com",
+        "work_phone": "+1-908-958-9397x92585",
+        "work_address": {
+          "street": "7044 Gutierrez Fall Suite 356",
+          "city": "East Crystal",
+          "state": "MP",
+          "zip_code": "55320",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-1764",
+        "expiry": "04/29",
+        "cvv": "335"
+      },
+      "account_status": "delinquent",
+      "credit_limit": 20000,
+      "current_balance": 19882.68
+    },
+    {
+      "customer_id": "CUST1042",
+      "personal_info": {
+        "first_name": "Daniel",
+        "last_name": "Hays",
+        "email": "joshuapeters@example.net",
+        "phone": "8342574480",
+        "date_of_birth": "1982-07-13"
+      },
+      "home_address": {
+        "street": "52393 Amy Shores Apt. 376",
+        "city": "Sheenafort",
+        "state": "AS",
+        "zip_code": "27604",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Haley PLC",
+        "position": "Patent attorney",
+        "work_email": "jamiepowell@mann.info",
+        "work_phone": "(922)574-9927",
+        "work_address": {
+          "street": "081 Tyler Walks Apt. 214",
+          "city": "Sheenafort",
+          "state": "AS",
+          "zip_code": "77976",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-2313",
+        "expiry": "04/27",
+        "cvv": "666"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 15000,
+      "current_balance": 15314.5
+    },
+    {
+      "customer_id": "CUST1043",
+      "personal_info": {
+        "first_name": "Gary",
+        "last_name": "Lopez",
+        "email": "jeffreysullivan@example.net",
+        "phone": "394-855-8682",
+        "date_of_birth": "1945-09-02"
+      },
+      "home_address": {
+        "street": "560 Jason Corner",
+        "city": "Robertview",
+        "state": "SD",
+        "zip_code": "84449",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Collins-Randall",
+        "position": "Lexicographer",
+        "work_email": "courtney93@winters-knight.org",
+        "work_phone": "+1-774-870-7322",
+        "work_address": {
+          "street": "2531 Dustin Drives Apt. 354",
+          "city": "Robertview",
+          "state": "SD",
+          "zip_code": "84214",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-2767",
+        "expiry": "12/29",
+        "cvv": "247"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 5000,
+      "current_balance": 7890.34
+    },
+    {
+      "customer_id": "CUST1044",
+      "personal_info": {
+        "first_name": "Sarah",
+        "last_name": "Castro",
+        "email": "llawrence@example.org",
+        "phone": "854-881-3788",
+        "date_of_birth": "1955-05-19"
+      },
+      "home_address": {
+        "street": "10673 Morgan Via",
+        "city": "Nicoleshire",
+        "state": "WV",
+        "zip_code": "37263",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Nelson, Davis and Young",
+        "position": "Human resources officer",
+        "work_email": "matthew00@davis-sharp.info",
+        "work_phone": "264-349-6230x5186",
+        "work_address": {
+          "street": "162 Matthews Ramp",
+          "city": "Nicoleshire",
+          "state": "WV",
+          "zip_code": "66250",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Visa",
+        "number": "****-****-****-522",
+        "expiry": "09/29",
+        "cvv": "672"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 25000,
+      "current_balance": 15225.56
+    },
+    {
+      "customer_id": "CUST1045",
+      "personal_info": {
+        "first_name": "Matthew",
+        "last_name": "Hill",
+        "email": "david68@example.net",
+        "phone": "246.707.2770x13453",
+        "date_of_birth": "1970-04-05"
+      },
+      "home_address": {
+        "street": "08998 Hughes Rue",
+        "city": "Lake Alvin",
+        "state": "NY",
+        "zip_code": "29633",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Bailey, Ramos and Walker",
+        "position": "Copywriter, advertising",
+        "work_email": "burchdaniel@jackson.info",
+        "work_phone": "377-802-6221x24147",
+        "work_address": {
+          "street": "569 Munoz Squares",
+          "city": "West Douglas",
+          "state": "MP",
+          "zip_code": "14139",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-2232",
+        "expiry": "12/29",
+        "cvv": "568"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 12258.9
+    },
+    {
+      "customer_id": "CUST1046",
+      "personal_info": {
+        "first_name": "Tim",
+        "last_name": "Jones",
+        "email": "justin35@example.com",
+        "phone": "903.660.0719x59223",
+        "date_of_birth": "1967-11-20"
+      },
+      "home_address": {
+        "street": "831 Patrick Village Apt. 315",
+        "city": "West Lance",
+        "state": "WY",
+        "zip_code": "81168",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Kim-Burton",
+        "position": "Nurse, adult",
+        "work_email": "wilsondan@moyer.com",
+        "work_phone": "001-255-205-7212x48183",
+        "work_address": {
+          "street": "15585 Page Circle Apt. 223",
+          "city": "Marquezshire",
+          "state": "MS",
+          "zip_code": "72832",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "Discover",
+        "number": "****-****-****-4850",
+        "expiry": "04/30",
+        "cvv": "143"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 10000,
+      "current_balance": 14637.29
+    },
+    {
+      "customer_id": "CUST1047",
+      "personal_info": {
+        "first_name": "Kimberly",
+        "last_name": "Miles",
+        "email": "jgarcia@example.com",
+        "phone": "920-251-9939x3238",
+        "date_of_birth": "1935-08-09"
+      },
+      "home_address": {
+        "street": "376 Lindsey Points Suite 784",
+        "city": "Port Michael",
+        "state": "VA",
+        "zip_code": "27814",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Lopez Ltd",
+        "position": "Financial planner",
+        "work_email": "hilljohn@kim.org",
+        "work_phone": "(378)279-1591x6951",
+        "work_address": {
+          "street": "1032 Anthony Drives Suite 605",
+          "city": "Port Michael",
+          "state": "VA",
+          "zip_code": "63093",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-9881",
+        "expiry": "05/30",
+        "cvv": "623"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 5399.02
+    },
+    {
+      "customer_id": "CUST1048",
+      "personal_info": {
+        "first_name": "Timothy",
+        "last_name": "Turner",
+        "email": "mikekane@example.net",
+        "phone": "865-441-3585x4164",
+        "date_of_birth": "1942-08-07"
+      },
+      "home_address": {
+        "street": "0559 Curtis Ville Apt. 899",
+        "city": "Julieland",
+        "state": "SD",
+        "zip_code": "05499",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Nelson LLC",
+        "position": "Insurance broker",
+        "work_email": "robertharrison@casey-garrett.net",
+        "work_phone": "(939)472-2581x9145",
+        "work_address": {
+          "street": "542 Clarke Pine Apt. 912",
+          "city": "Rogersstad",
+          "state": "MD",
+          "zip_code": "60889",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "American Express",
+        "number": "****-****-****-102",
+        "expiry": "09/26",
+        "cvv": "71"
+      },
+      "account_status": "in_collections",
+      "credit_limit": 25000,
+      "current_balance": 4042.9
+    },
+    {
+      "customer_id": "CUST1049",
+      "personal_info": {
+        "first_name": "Christopher",
+        "last_name": "Rose",
+        "email": "virginia29@example.com",
+        "phone": "(916)519-2628x36211",
+        "date_of_birth": "1971-04-21"
+      },
+      "home_address": {
+        "street": "00514 Williamson Bridge",
+        "city": "East Amberton",
+        "state": "CO",
+        "zip_code": "22917",
+        "country": "USA"
+      },
+      "employment": {
+        "company": "Valentine Group",
+        "position": "Air cabin crew",
+        "work_email": "qlamb@cain.org",
+        "work_phone": "3463785952",
+        "work_address": {
+          "street": "73664 Teresa Overpass",
+          "city": "Schroederbury",
+          "state": "MA",
+          "zip_code": "67906",
+          "country": "USA"
+        }
+      },
+      "credit_card": {
+        "type": "MasterCard",
+        "number": "****-****-****-9517",
+        "expiry": "08/28",
+        "cvv": "674"
+      },
+      "account_status": "over_limit",
+      "credit_limit": 20000,
+      "current_balance": 19179.79
+    }
+  ]
+}

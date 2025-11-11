@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1038",
+  "customer_id": "CUST1023",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-29T10:00:49",
+  "call_duration_seconds": 1581,
+  "agent_id": "AGENT002",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is William. How can I help you today?",
+      "timestamp": "2025-10-29T10:00:49",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "Hi, I'd like to make a payment on my credit card.",
+      "timestamp": "2025-10-29T10:00:59",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-29T10:01:09",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 2410.",
+      "timestamp": "2025-10-29T10:01:19",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-29T10:01:29",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "declined_insufficient_funds"
+}

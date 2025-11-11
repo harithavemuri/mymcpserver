@@ -1,0 +1,55 @@
+{
+  "call_id": "CALL1008",
+  "customer_id": "CUST1019",
+  "call_type": "inbound",
+  "call_timestamp": "2025-10-28T09:30:07",
+  "call_duration_seconds": 1247,
+  "agent_id": "AGENT019",
+  "call_summary": "ADA Policy Violation - Agent apologized after ADA disclosure",
+  "is_ada_related": true,
+  "ada_violation_occurred": true,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Jonathan. How can I help you today?",
+      "timestamp": "2025-10-28T09:30:07",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "Hi, I'd like to make a payment on my credit card.",
+      "timestamp": "2025-10-28T09:30:17",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I have a speech disability, please be patient with me",
+      "timestamp": "2025-10-28T09:30:27",
+      "metadata": {
+        "ada_disclosure": true
+      }
+    },
+    {
+      "speaker": "agent",
+      "text": "I apologize for the inconvenience. Let me see what I can do.",
+      "timestamp": "2025-10-28T09:30:37",
+      "metadata": {
+        "ada_violation": true,
+        "violation_type": "no_accommodation_offered"
+      }
+    },
+    {
+      "speaker": "customer",
+      "text": "That's not helpful. I need assistance now.",
+      "timestamp": "2025-10-28T09:30:47",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Let me transfer you to my supervisor.",
+      "timestamp": "2025-10-28T09:30:57",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "ada_policy_violation"
+}

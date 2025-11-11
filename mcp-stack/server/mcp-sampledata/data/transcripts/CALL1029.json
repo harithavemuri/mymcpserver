@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1029",
+  "customer_id": "CUST1021",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-07T20:44:38",
+  "call_duration_seconds": 884,
+  "agent_id": "AGENT019",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Laura. How can I help you today?",
+      "timestamp": "2025-10-07T20:44:38",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "Hello, I'm calling about a recent transaction on my card.",
+      "timestamp": "2025-10-07T20:44:48",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-07T20:44:58",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 137.",
+      "timestamp": "2025-10-07T20:45:08",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-07T20:45:18",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "payment_plan_created"
+}

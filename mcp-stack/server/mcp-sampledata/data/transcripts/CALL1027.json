@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1027",
+  "customer_id": "CUST1036",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-20T02:39:07",
+  "call_duration_seconds": 787,
+  "agent_id": "AGENT006",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Robert. How can I help you today?",
+      "timestamp": "2025-10-20T02:39:07",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "Hello, I'm calling about a recent transaction on my card.",
+      "timestamp": "2025-10-20T02:39:17",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-20T02:39:27",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 9244.",
+      "timestamp": "2025-10-20T02:39:37",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-20T02:39:47",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "fraud_suspected"
+}

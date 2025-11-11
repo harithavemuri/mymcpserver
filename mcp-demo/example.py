@@ -22,15 +22,10 @@ async def run_server(port: int = 8001):
     )
     
     # Configure specific tools if needed
-    config.tools[ToolName.TEXT_PROCESSOR].params.update({
-        "to_upper": True,
-        "to_lower": True,
-    })
+    config.text_processor.to_upper = True
+    config.text_processor.to_lower = True
     
-    config.tools[ToolName.KEYWORD_EXTRACTOR].params.update({
-        "top_n": 5,
-        "extract_named_entities": True,
-    })
+    config.keyword_extractor.top_n = 5
     
     # Create and run the server
     server = MCPServer(config)

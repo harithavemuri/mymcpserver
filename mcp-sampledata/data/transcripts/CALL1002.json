@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1002",
+  "customer_id": "CUST1032",
+  "call_type": "inbound",
+  "call_timestamp": "2025-10-16T21:48:54",
+  "call_duration_seconds": 1071,
+  "agent_id": "AGENT016",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Tina. How can I help you today?",
+      "timestamp": "2025-10-16T21:48:54",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I need help with my credit card payment.",
+      "timestamp": "2025-10-16T21:49:04",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-16T21:49:14",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 5637.",
+      "timestamp": "2025-10-16T21:49:24",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-16T21:49:34",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "declined_card_expired"
+}

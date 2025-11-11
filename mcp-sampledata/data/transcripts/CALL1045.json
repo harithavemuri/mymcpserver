@@ -1,0 +1,54 @@
+{
+  "call_id": "CALL1045",
+  "customer_id": "CUST1025",
+  "call_type": "outbound",
+  "call_timestamp": "2025-10-15T10:12:00",
+  "call_duration_seconds": 1294,
+  "agent_id": "AGENT010",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": true,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Alisha. How can I help you today?",
+      "timestamp": "2025-10-15T10:12:00",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I want to dispute a charge on my statement.",
+      "timestamp": "2025-10-15T10:12:10",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I have a hearing impairment, can you speak clearly?",
+      "timestamp": "2025-10-15T10:12:20",
+      "metadata": {
+        "ada_disclosure": true
+      }
+    },
+    {
+      "speaker": "agent",
+      "text": "I'll do my best to assist you. Please let me know if you need anything repeated.",
+      "timestamp": "2025-10-15T10:12:30",
+      "metadata": {
+        "ada_compliant": true
+      }
+    },
+    {
+      "speaker": "customer",
+      "text": "Thank you for your help.",
+      "timestamp": "2025-10-15T10:12:40",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "You're welcome. Is there anything else I can assist you with today?",
+      "timestamp": "2025-10-15T10:12:50",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "technical_issue"
+}

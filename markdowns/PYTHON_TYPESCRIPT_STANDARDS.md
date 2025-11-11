@@ -22,6 +22,20 @@
 - Write comprehensive docstrings and comments
 - Follow the [Code Modifications](./GLOBAL_RULES.md#code-modifications) guidelines in GLOBAL_RULES.md
 
+## Commandline Usage
+- Use `pip` for package management
+- Use `venv` for virtual environments
+- Use `git` for version control
+- Use `pytest` for testing
+- Run one command at a time
+- Always update the requirements.txt file after adding a new package
+- Use `pip freeze > requirements.txt` to update the requirements.txt file
+- Use `pip install -r requirements.txt` to install the required packages
+- Use `pip install --upgrade pip` to upgrade pip
+- Use `pip install --upgrade setuptools` to upgrade setuptools
+- Use `pip install --upgrade wheel` to upgrade wheel
+- Use `pip install --upgrade --force-reinstall -r requirements.txt` to upgrade all packages
+
 ## TypeScript Usage
 - Enable `strict` mode in `tsconfig.json`
 - Use interfaces for request/response types
@@ -34,6 +48,7 @@
 ## Python Standards
 - Follow PEP 8 style guide
 - Use type hints for all function parameters and return values
+- Use highest minor version of Python 3.11 if there is need for pydantic package in other situations use Python 3.12
 - Use Python 3.12+ features (pattern matching, type union operator, etc.)
 - Use dataclasses or Pydantic models for data structures
 - Use pathlib for file system operations

@@ -1,0 +1,44 @@
+{
+  "call_id": "CALL1030",
+  "customer_id": "CUST1022",
+  "call_type": "inbound",
+  "call_timestamp": "2025-10-23T04:13:37",
+  "call_duration_seconds": 946,
+  "agent_id": "AGENT020",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": false,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Dennis. How can I help you today?",
+      "timestamp": "2025-10-23T04:13:37",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I want to dispute a charge on my statement.",
+      "timestamp": "2025-10-23T04:13:47",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I can help you with that. Could you please confirm your account number?",
+      "timestamp": "2025-10-23T04:13:57",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "The last 4 digits are 4980.",
+      "timestamp": "2025-10-23T04:14:07",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "Thank you. I see your account now. How can I assist you today?",
+      "timestamp": "2025-10-23T04:14:17",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "fraud_suspected"
+}

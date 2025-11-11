@@ -67,7 +67,7 @@
 - Handle **all possible error cases**
 - Provide **meaningful error messages**
 - Log errors with **sufficient context**
-- Implement proper **error boundaries** in React
+- Implement proper **error boundaries**
 - Use **custom error types** for different error cases
 - Fail **fast and loud** in development, gracefully in production
 
@@ -182,12 +182,15 @@
 - Test with **different languages**
 
 ## Logging and Monitoring
+- Don't use print statements, use logging module instead
+- Use appropriate loglevels (debug, info, warning, error, critical)
 - Log **meaningful information**
-- Use **structured logging**
+- Use **structured logging** (json format)
 - Include **request IDs** for tracing
 - Set up **alerts** for critical errors
 - Monitor **application performance**
 - Keep logs **secure** and **private**
+- Make sure to use the correct loglevel for each log message
 
 ## Development Workflow
 - Use **lint-staged** for pre-commit hooks
@@ -230,6 +233,10 @@
 - Provide **example configuration** files
 - Validate configuration **at startup**
 - Document **all configuration options**
+- Store all URLs in environment files
+- Store all API keys in environment files
+- Store all database credentials in environment files
+- Store all other sensitive information in environment files  
 
 ## Error Tracking
 - Implement **client-side error tracking**

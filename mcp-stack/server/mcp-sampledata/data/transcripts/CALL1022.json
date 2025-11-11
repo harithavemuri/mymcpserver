@@ -1,0 +1,54 @@
+{
+  "call_id": "CALL1022",
+  "customer_id": "CUST1048",
+  "call_type": "inbound",
+  "call_timestamp": "2025-10-30T09:47:58",
+  "call_duration_seconds": 1360,
+  "agent_id": "AGENT006",
+  "call_summary": "Call regarding payment",
+  "is_ada_related": true,
+  "ada_violation_occurred": false,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is Daniel. How can I help you today?",
+      "timestamp": "2025-10-30T09:47:58",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I need help with my credit card payment.",
+      "timestamp": "2025-10-30T09:48:08",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I'm visually impaired, can you help me navigate the phone menu?",
+      "timestamp": "2025-10-30T09:48:18",
+      "metadata": {
+        "ada_disclosure": true
+      }
+    },
+    {
+      "speaker": "agent",
+      "text": "I understand you need accommodation. Let me help you with that.",
+      "timestamp": "2025-10-30T09:48:28",
+      "metadata": {
+        "ada_compliant": true
+      }
+    },
+    {
+      "speaker": "customer",
+      "text": "Thank you for your help.",
+      "timestamp": "2025-10-30T09:48:38",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "You're welcome. Is there anything else I can assist you with today?",
+      "timestamp": "2025-10-30T09:48:48",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "declined_insufficient_funds"
+}

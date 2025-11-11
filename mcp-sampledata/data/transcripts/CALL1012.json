@@ -1,0 +1,55 @@
+{
+  "call_id": "CALL1012",
+  "customer_id": "CUST1009",
+  "call_type": "inbound",
+  "call_timestamp": "2025-10-26T09:50:51",
+  "call_duration_seconds": 156,
+  "agent_id": "AGENT018",
+  "call_summary": "ADA Policy Violation - Agent failed to offer accommodation",
+  "is_ada_related": true,
+  "ada_violation_occurred": true,
+  "transcript": [
+    {
+      "speaker": "agent",
+      "text": "Thank you for calling Premier Card Services. My name is John. How can I help you today?",
+      "timestamp": "2025-10-26T09:50:51",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "Hello, I'm calling about a recent transaction on my card.",
+      "timestamp": "2025-10-26T09:51:01",
+      "metadata": {}
+    },
+    {
+      "speaker": "customer",
+      "text": "I have a hearing impairment, can you speak clearly?",
+      "timestamp": "2025-10-26T09:51:11",
+      "metadata": {
+        "ada_disclosure": true
+      }
+    },
+    {
+      "speaker": "agent",
+      "text": "I'm sorry, but I can't help with that. Please call our disability services line.",
+      "timestamp": "2025-10-26T09:51:21",
+      "metadata": {
+        "ada_violation": true,
+        "violation_type": "apology_after_disclosure"
+      }
+    },
+    {
+      "speaker": "customer",
+      "text": "That's not helpful. I need assistance now.",
+      "timestamp": "2025-10-26T09:51:31",
+      "metadata": {}
+    },
+    {
+      "speaker": "agent",
+      "text": "I'll make a note of your concern.",
+      "timestamp": "2025-10-26T09:51:41",
+      "metadata": {}
+    }
+  ],
+  "call_resolution": "ada_policy_violation"
+}
