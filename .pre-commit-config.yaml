@@ -1,0 +1,19 @@
+repos:
+  # Basic hygiene: whitespace, EOF, and file format checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+
+  # Secret detection using detect-secrets via a local hook
+  - repo: local
+    hooks:
+      - id: detect-secrets-local
+        name: detect-secrets
+        entry: python -m detect_secrets scan
+        language: system
+        types: [text]
+        pass_filenames: true

@@ -1,0 +1,4 @@
+# Core tooling dependencies for this repo
+pre-commit==4.5.0
+# Secret scanning
+detect-secrets==1.5.0
