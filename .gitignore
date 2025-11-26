@@ -72,8 +72,4 @@ wheels/
 .installed.cfg
 *.egg
 
-# Project specific
-mcp-stack/server/data/
-mcp-stack/server/uploads/
-mcp-stack/host/models/
-mcp-stack/host/data/
+.cache_ggshield

@@ -1,0 +1,26 @@
+version: 2
+
+# Ignore specific patterns in values
+matches-ignore:
+  - name: ignore_placeholder_values
+    regex: REPLACEME
+
+# Ignore specific files or paths
+paths-ignore:
+  - "**/.git/**"
+  - "**/node_modules/**"
+  - "**/__pycache__/**"
+  - "**/.venv/**"
+  - "**/venv/**"
+  - "**/.pytest_cache/**"
+  - "**/.mypy_cache/**"
+  - "**/.vscode/**"
+  - "**/.idea/**"
+  - "**/.gitignore"
+  - "**/.pre-commit-config.yaml"
+  - "**/.gitguardian.yaml"
+
+# Configure scanning
+show-secrets: false
+all-policies: true
+exit-zero: false
