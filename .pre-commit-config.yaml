@@ -7,3 +7,14 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-json
+
+  # Secret detection using GitGuardian ggshield
+  - repo: https://github.com/GitGuardian/ggshield
+    rev: v1.25.0
+    hooks:
+      - id: ggshield
+        name: GitGuardian secrets scan
+        # Only scan staged files
+        pass_filenames: true
+        # Exclude common directories that don't need secret scanning
+        exclude: ^(node_modules|\.venv|\venv|__pycache__|.git|.github|.cache|.pytest_cache|.mypy_cache|.vscode|.idea)/
