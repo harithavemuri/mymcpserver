@@ -62,14 +62,14 @@ def generate_customer(customer_id: int) -> dict:
     same_city = random.choice([True, False])
     home_city = fake.city()
     home_state = fake.state_abbr()
-    
+
     if same_city:
         work_city = home_city
         work_state = home_state
     else:
         work_city = fake.city()
         work_state = fake.state_abbr()
-    
+
     return {
         "customer_id": f"CUST{1000 + customer_id}",
         "personal_info": {
@@ -116,7 +116,7 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
     call_duration = random.randint(120, 1800)  # 2 to 30 minutes
     is_ada_call = random.choice([True, False, False, False])  # 25% chance
     is_ada_violation = is_ada_call and random.choice([True, False])  # 50% chance of violation if ADA call
-    
+
     # Start building transcript
     transcript = {
         "call_id": f"CALL{1000 + call_id}",
@@ -130,18 +130,18 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
         "ada_violation_occurred": is_ada_violation,
         "transcript": []
     }
-    
+
     # Add initial greeting
     agent_name = fake.first_name()
     time_of_day = "morning" if 5 <= call_time.hour < 12 else "afternoon" if 12 <= call_time.hour < 17 else "evening"
-    
+
     transcript["transcript"].append({
         "speaker": "agent",
         "text": f"Thank you for calling Premier Card Services. My name is {agent_name}. How can I help you today?",
         "timestamp": call_time.isoformat(),
         "metadata": {}
     })
-    
+
     # Customer's initial message
     customer_message = {
         "speaker": "customer",
@@ -155,7 +155,7 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
         "metadata": {}
     }
     transcript["transcript"].append(customer_message)
-    
+
     # Handle ADA-related calls
     if is_ada_call:
         # Customer mentions ADA issue
@@ -168,7 +168,7 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
                 "ada_disclosure": True
             }
         })
-        
+
         if is_ada_violation:
             # Agent violates ADA policy
             violation_response = random.choice(ADA_VIOLATION_RESPONSES)
@@ -181,7 +181,7 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
                     "violation_type": "apology_after_disclosure" if "sorry" in violation_response.lower() else "no_accommodation_offered"
                 }
             })
-            
+
             # Add resolution
             transcript["call_resolution"] = "ada_policy_violation"
             transcript["call_summary"] = "ADA Policy Violation - " + random.choice([
@@ -189,7 +189,7 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
                 "Agent failed to offer accommodation",
                 "ADA accommodation not provided"
             ])
-            
+
             # Add more conversation
             transcript["transcript"].extend([
                 {
@@ -224,7 +224,7 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
                     "ada_compliant": True
                 }
             })
-            
+
             # Continue with normal call flow
             transcript["call_resolution"] = random.choice(CALL_RESOLUTIONS)
             transcript["transcript"].extend([
@@ -264,34 +264,34 @@ def generate_transcript(call_id: int, customer: dict) -> dict:
                 "metadata": {}
             }
         ])
-    
+
     return transcript
 
 def main():
     """Generate sample data and save to files."""
     print("Generating sample data...")
-    
+
     # Generate customers
     num_customers = 50
     customers = [generate_customer(i) for i in range(num_customers)]
-    
+
     # Save customers to file
     with open(CUSTOMERS_FILE, 'w') as f:
         json.dump({"customers": customers}, f, indent=2)
-    
+
     print(f"Generated {num_customers} customer records in {CUSTOMERS_FILE}")
-    
+
     # Generate transcripts
     num_transcripts = 50
     for i in range(num_transcripts):
         customer = random.choice(customers)
         transcript = generate_transcript(i, customer)
-        
+
         # Save transcript to file
         transcript_file = TRANSCRIPTS_DIR / f"{transcript['call_id']}.json"
         with open(transcript_file, 'w') as f:
             json.dump(transcript, f, indent=2)
-    
+
     print(f"Generated {num_transcripts} call transcripts in {TRANSCRIPTS_DIR}")
     print("Sample data generation complete!")
 

@@ -55,7 +55,7 @@ app.prompts = {
     "extract_action_items": "Extract action items from the following text: {text}",
     "categorize_issue": "Categorize the following customer issue: {issue_description}",
     "generate_response": "Generate a professional response to the following message: {message}",
-    
+
     # Customer-related prompts
     "find_customer_by_id": "Retrieve customer details for customer ID: {customer_id}",
     "find_customer_by_email": "Find customer with email address: {email}",
@@ -77,12 +77,12 @@ app.prompts = {
 async def gemini_generate(prompt: str, model: str = "gemini-1.5-flash", temperature: float = 0.7, ctx: Context = None) -> str:
     """
     Generate text using Google's Gemini AI.
-    
+
     Args:
         prompt: The prompt to send to the model
         model: The Gemini model to use (default: gemini-1.5-flash)
         temperature: Sampling temperature (0.0 to 1.0)
-        
+
     Returns:
         The generated text response from Gemini AI
     """
@@ -91,7 +91,7 @@ async def gemini_generate(prompt: str, model: str = "gemini-1.5-flash", temperat
     try:
         # Initialize the model
         model = genai.GenerativeModel(model)
-        
+
         # Generate content
         response = model.generate_content(
             prompt,
@@ -112,10 +112,10 @@ async def gemini_generate(prompt: str, model: str = "gemini-1.5-flash", temperat
 async def analyze_sentiment(text: str) -> Dict[str, float]:
     """
     Analyze the sentiment of the given text.
-    
+
     Args:
         text: The text to analyze
-        
+
     Returns:
         A dictionary containing 'polarity' and 'subjectivity' scores
     """
@@ -127,10 +127,10 @@ async def analyze_sentiment(text: str) -> Dict[str, float]:
 async def get_customer(customer_id: str) -> Dict[str, Any]:
     """
     Retrieve a customer by their ID.
-    
+
     Args:
         customer_id: The ID of the customer to retrieve
-        
+
     Returns:
         A dictionary containing the customer's information
     """
@@ -163,7 +163,7 @@ async def search_customers(
 ) -> Dict[str, Any]:
     """
     Advanced search for customers with full-text search and multiple filters.
-    
+
     Args:
         query: Full-text search across name, email, company, and address
         name: Filter by customer name (partial match, case-insensitive)
@@ -179,7 +179,7 @@ async def search_customers(
         sort_order: Sort order ('asc' or 'desc')
         limit: Maximum number of results to return (default: 10)
         offset: Number of results to skip (for pagination)
-        
+
     Returns:
         A dictionary containing:
         - results: List of matching customers with relevance scores
@@ -199,23 +199,23 @@ async def search_customers(
             limit=limit,
             offset=offset
         )
-        
+
         # Convert to dicts and add additional data
         customer_dicts = []
         for customer in customers:
             customer_data = customer.dict()
-            
+
             # Get transcripts for this customer
             transcripts = data_loader.search_transcripts(customer_id=customer.customer_id)
             transcript_count = len(transcripts)
-            
+
             # Add transcript metadata
             customer_data['transcript_count'] = transcript_count
             customer_data['last_contact'] = (
-                max(t.call_timestamp for t in transcripts).isoformat() 
+                max(t.call_timestamp for t in transcripts).isoformat()
                 if transcripts else None
             )
-            
+
             # Calculate relevance score based on query match
             relevance = 0
             if query:
@@ -227,17 +227,17 @@ async def search_customers(
                     customer_data.get('employment', {}).get('company', '').lower(),
                     f"{customer_data.get('home_address', {}).get('city', '')}, {customer_data.get('home_address', {}).get('state', '')}".lower()
                 ]
-                
+
                 # Simple relevance scoring
                 for field in fields_to_search:
                     if query in field:
                         relevance += 1
                     if field.startswith(query):
                         relevance += 2  # Higher score for prefix matches
-            
+
             customer_data['_relevance'] = relevance
             customer_dicts.append(customer_data)
-        
+
         # Apply additional filters
         filtered_customers = []
         for customer in customer_dicts:
@@ -246,20 +246,20 @@ async def search_customers(
                 has_transcripts_bool = customer['transcript_count'] > 0
                 if has_transcripts != has_transcripts_bool:
                     continue
-            
+
             # Apply min_transcripts filter
             if min_transcripts is not None and customer['transcript_count'] < min_transcripts:
                 continue
-                
+
             # Apply last_contact_days filter
             if last_contact_days is not None and customer['last_contact']:
                 from datetime import datetime, timedelta
                 last_contact = datetime.fromisoformat(customer['last_contact'].replace('Z', '+00:00'))
                 if (datetime.now(last_contact.tzinfo) - last_contact).days > last_contact_days:
                     continue
-            
+
             filtered_customers.append(customer)
-        
+
         # Sort results
         reverse_sort = sort_order.lower() == 'desc'
         if sort_by == 'relevance' and query:
@@ -280,21 +280,21 @@ async def search_customers(
                 key=lambda x: x.get('transcript_count', 0),
                 reverse=reverse_sort
             )
-        
+
         # Apply pagination
         paginated_results = filtered_customers[offset:offset + limit]
-        
+
         # Remove internal fields before returning
         for customer in paginated_results:
             customer.pop('_relevance', None)
-        
+
         return {
             'results': paginated_results,
             'total': len(filtered_customers),
             'limit': limit,
             'offset': offset
         }
-        
+
     except Exception as e:
         logger.error(f"Error in advanced customer search: {str(e)}", exc_info=True)
         return {
@@ -309,10 +309,10 @@ async def search_customers(
 async def get_customer_transcripts(customer_id: str) -> List[Dict[str, Any]]:
     """
     Get all transcripts for a specific customer.
-    
+
     Args:
         customer_id: The ID of the customer
-        
+
     Returns:
         A list of the customer's call transcripts with sentiment and context analysis
     """
@@ -321,7 +321,7 @@ async def get_customer_transcripts(customer_id: str) -> List[Dict[str, Any]]:
         customer = data_loader.get_customer(customer_id)
         if not customer:
             return [{"error": f"Customer with ID {customer_id} not found"}]
-            
+
         # Get all transcripts for this customer
         transcripts = data_loader.search_transcripts(customer_id=customer_id)
         return [t.dict() for t in transcripts]
@@ -355,7 +355,7 @@ async def search_transcripts(
 ) -> Dict[str, Any]:
     """
     Advanced search for call transcripts with comprehensive filtering and sorting.
-    
+
     Args:
         query: Full-text search across call summary and transcript content
         customer_id: Filter by customer ID
@@ -378,7 +378,7 @@ async def search_transcripts(
         offset: Number of results to skip (for pagination)
         include_summary: Whether to include call summary in results (default: True)
         include_transcript: Whether to include full transcript content (default: False)
-        
+
     Returns:
         A dictionary containing:
         - results: List of matching transcripts
@@ -397,26 +397,26 @@ async def search_transcripts(
             limit=limit,
             offset=offset
         )
-        
+
         # Convert to dicts and add additional data
         transcript_dicts = []
         call_types = set()
         sentiment_scores = []
-        
+
         for transcript in transcripts:
             transcript_data = transcript.dict()
-            
+
             # Get customer data if needed
             if customer_name or query:
                 customer = data_loader.get_customer(transcript.customer_id)
                 if customer:
                     transcript_data['customer'] = customer.dict()
-            
+
             # Calculate relevance score if query is provided
             relevance = 0
             if query:
                 query = query.lower()
-                
+
                 # Search in call summary
                 if 'call_summary' in transcript_data and transcript_data['call_summary']:
                     summary = transcript_data['call_summary'].lower()
@@ -424,72 +424,72 @@ async def search_transcripts(
                         relevance += summary.count(query) * 2  # More occurrences = higher score
                         if summary.startswith(query):
                             relevance += 5  # Bonus for prefix match in summary
-                
+
                 # Search in transcript content if included
                 if include_transcript and 'transcript' in transcript_data:
                     for entry in transcript_data['transcript']:
                         if 'text' in entry and query in entry['text'].lower():
                             relevance += 1
-            
+
             transcript_data['_relevance'] = relevance
-            
+
             # Track call types and sentiment for aggregations
             call_type = transcript_data.get('call_type')
             if call_type:
                 call_types.add(call_type)
-            
+
             sentiment = transcript_data.get('sentiment', {}).get('polarity', 0)
             sentiment_scores.append(sentiment)
-            
+
             transcript_dicts.append(transcript_data)
-        
+
         # Apply additional filters
         filtered_transcripts = []
         for t in transcript_dicts:
             # Apply call type filter
             if call_type and t.get('call_type') != call_type:
                 continue
-                
+
             # Apply duration filters
             duration = t.get('call_duration_seconds', 0)
             if min_duration is not None and duration < min_duration:
                 continue
             if max_duration is not None and duration > max_duration:
                 continue
-                
+
             # Apply sentiment filters
             sentiment = t.get('sentiment', {}).get('polarity', 0)
             if min_sentiment is not None and sentiment < min_sentiment:
                 continue
             if max_sentiment is not None and sentiment > max_sentiment:
                 continue
-                
+
             # Apply context filters
             contexts = t.get('contexts', [])
             if has_context is not None:
                 has_contexts = bool(contexts)
                 if has_context != has_contexts:
                     continue
-                    
+
             if context and context.lower() not in [c.lower() for c in contexts]:
                 continue
-                
+
             # Apply ADA filters
             if is_ada_related is not None and t.get('is_ada_related') != is_ada_related:
                 continue
-                
+
             if ada_violation_occurred is not None and t.get('ada_violation_occurred') != ada_violation_occurred:
                 continue
-                
+
             # Filter by customer name if provided
             if customer_name and 'customer' in t:
                 customer = t['customer']
                 full_name = f"{customer.get('personal_info', {}).get('first_name', '')} {customer.get('personal_info', {}).get('last_name', '')}"
                 if customer_name.lower() not in full_name.lower():
                     continue
-            
+
             filtered_transcripts.append(t)
-        
+
         # Sort results
         reverse_sort = sort_order.lower() == 'desc'
         if sort_by == 'date':
@@ -512,25 +512,25 @@ async def search_transcripts(
                 key=lambda x: x.get('_relevance', 0),
                 reverse=True  # Always sort by relevance in descending order
             )
-        
+
         # Apply pagination
         paginated_results = filtered_transcripts[offset:offset + limit]
-        
+
         # Clean up the results
         for t in paginated_results:
             # Remove internal fields
             t.pop('_relevance', None)
-            
+
             # Include/exclude fields based on parameters
             if not include_summary and 'call_summary' in t:
                 t.pop('call_summary')
-                
+
             if not include_transcript and 'transcript' in t:
                 t.pop('transcript')
-        
+
         # Prepare aggregations
         aggregations = {
-            'call_types': {t: sum(1 for x in filtered_transcripts if x.get('call_type') == t) 
+            'call_types': {t: sum(1 for x in filtered_transcripts if x.get('call_type') == t)
                           for t in call_types},
             'sentiment': {
                 'min': min(sentiment_scores) if sentiment_scores else None,
@@ -541,7 +541,7 @@ async def search_transcripts(
             'total_duration': sum(t.get('call_duration_seconds', 0) for t in filtered_transcripts),
             'total_count': len(filtered_transcripts)
         }
-        
+
         return {
             'results': paginated_results,
             'total': len(filtered_transcripts),
@@ -549,7 +549,7 @@ async def search_transcripts(
             'offset': offset,
             'aggregations': aggregations
         }
-        
+
     except Exception as e:
         logger.error(f"Error in advanced transcript search: {str(e)}", exc_info=True)
         return {
@@ -564,29 +564,29 @@ async def search_transcripts(
 def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
     """
     Create and configure the MCP application.
-    
+
     Args:
         config: Optional configuration object. If not provided, default values will be used.
-        
+
     Returns:
         FastMCP: The configured FastMCP application instance.
     """
     if config is None:
         config = MCPConfig()
-    
+
     # Configure logging
     logging.basicConfig(
         level=getattr(logging, config.log_level.upper()),
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         stream=sys.stderr
     )
-    
+
     # Initialize FastMCP
     mcp_app = FastMCP(
         name="mcp-server",
         version="0.1.0"
     )
-    
+
     # Define prompts
     prompts = {
         # General prompts
@@ -595,7 +595,7 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
         "extract_action_items": "Extract action items from the following text: {text}",
         "categorize_issue": "Categorize the following customer issue: {issue_description}",
         "generate_response": "Generate a professional response to the following message: {message}",
-        
+
         # Customer-related prompts
         "find_customer_by_id": "Retrieve customer details for customer ID: {customer_id}",
         "find_customer_by_email": "Find customer with email address: {email}",
@@ -612,7 +612,7 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
         "get_customer_support_tickets": "Retrieve all support tickets for customer ID: {customer_id}",
         "find_customers_needing_followup": "Identify customers who need follow-up based on {criteria}"
     }
-    
+
     # Add prompts to the app
     mcp_app.prompts = prompts
     @mcp_app.tool()
@@ -629,7 +629,7 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
                 "app_type": str(type(mcp_app)),
                 "app_dir": dir(mcp_app)
             }
-            
+
             # Try to get prompts using get_prompts method if it exists
             if debug_info["has_get_prompts"]:
                 try:
@@ -641,12 +641,12 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
                         debug_info["prompts_found"] = True
                 except Exception as e:
                     debug_info["get_prompts_error"] = str(e)
-            
+
             # Fall back to prompts attribute if no prompts found yet
             if not debug_info["prompts_found"] and debug_info["has_prompts_attr"]:
                 debug_info["prompts"] = mcp_app.prompts
                 debug_info["prompts_found"] = bool(mcp_app.prompts)
-            
+
             # Check for get_prompts method
             if hasattr(mcp_app, 'get_prompts'):
                 debug_info["available_methods"].append("get_prompts")
@@ -658,7 +658,7 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
                     debug_info["prompts_found"] = bool(result)
                 except Exception as e:
                     debug_info["get_prompts_error"] = str(e)
-            
+
             # Check for prompts attribute
             if hasattr(mcp_app, 'prompts'):
                 debug_info["available_attributes"].append("prompts")
@@ -670,18 +670,18 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
                     debug_info["prompts_found"] = bool(prompts)
                 except Exception as e:
                     debug_info["prompts_attribute_error"] = str(e)
-            
+
             # Check for add_prompt method (common in some MCP implementations)
             if hasattr(mcp_app, 'add_prompt'):
                 debug_info["available_methods"].append("add_prompt")
-                
+
             # Include all callable methods and their docstrings
             debug_info["callable_methods"] = {
                 name: getattr(mcp_app, name).__doc__ or "No docstring"
                 for name in dir(mcp_app)
                 if callable(getattr(mcp_app, name)) and not name.startswith('_')
             }
-            
+
             # If no prompts found, include all non-callable attributes
             if not debug_info["prompts_found"]:
                 debug_info["all_attributes"] = {
@@ -689,9 +689,9 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
                     for name in dir(mcp_app)
                     if not name.startswith('_') and not callable(getattr(mcp_app, name))
                 }
-            
+
             return debug_info
-            
+
         except Exception as e:
             logger.error(f"Error in list_mcp_prompts: {str(e)}", exc_info=True)
             raise HTTPException(
@@ -702,13 +702,13 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
                     "available_methods": [m for m in dir(mcp_app) if callable(getattr(mcp_app, m)) and not m.startswith('_')]
                 }
             )
-    
+
     # Register tools
     @mcp_app.tool()
     async def get_customer_tool(customer_id: str) -> Dict[str, Any]:
         """Retrieve a customer by their ID."""
         return await get_customer(customer_id)
-        
+
     @mcp_app.tool()
     async def search_customers_tool(
         query: Optional[str] = None,
@@ -743,15 +743,15 @@ def create_app(config: Optional[MCPConfig] = None) -> FastMCP:
             limit=limit,
             offset=offset
         )
-    
+
     # Add more tool registrations as needed...
-    
+
     return mcp_app
 
 def run_server(host: str = "0.0.0.0", port: int = 8000, reload: bool = False):
     """Run the MCP server."""
     import uvicorn
-    
+
     uvicorn.run(
         "app.mcp_server:app",
         host=host,

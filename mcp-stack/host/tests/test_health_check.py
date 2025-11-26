@@ -32,7 +32,7 @@ async def test_converse_health_check(client):
         "Is the server up and running?",
         "Verify server health"
     ]
-    
+
     for query in test_queries:
         response = await client.post(
             "/api/converse",
@@ -40,15 +40,15 @@ async def test_converse_health_check(client):
         )
         assert response.status_code == 200
         data = response.json()
-        
+
         # Check response structure
         assert "response" in data
         assert "data" in data
         assert "context" in data
-        
+
         # Check if the response indicates the server is healthy
         assert "up and running" in data["response"] or "trouble reaching" in data["response"]
-        
+
         # If we got a successful response, the status should be in the data
         if "up and running" in data["response"]:
             assert data["data"].get("status") == "ok"
@@ -57,22 +57,22 @@ async def test_converse_health_check(client):
 async def test_converse_health_check_with_error():
     """Test health check when the server is down."""
     from src.conversation import ConversationHandler, QueryIntent
-    
+
     # Create a mock that will simulate a connection error
     async with patch('httpx.AsyncClient.get') as mock_get:
         # Configure the mock to raise a connection error
         mock_get.side_effect = httpx.ConnectError("Connection error")
-        
+
         # Initialize the conversation handler
         handler = ConversationHandler()
-        
+
         # Test with a health check query
         query_params = handler.parse_query("Is the server healthy?")
         assert query_params.intent == QueryIntent.HEALTH_CHECK
-        
+
         # The format_response should handle the error case
         response = await handler.format_response(
-            query_params.intent, 
+            query_params.intent,
             {"status": "error", "error": "Connection error"}
         )
         assert "trouble reaching" in response or "down" in response

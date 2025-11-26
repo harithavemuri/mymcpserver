@@ -19,7 +19,7 @@ class QueryParameters(BaseModel):
 
 class ConversationHandler:
     """Handles natural language conversations and converts them to MCP queries."""
-    
+
     def __init__(self):
         # Templates for different intents
         self.intent_templates = {
@@ -49,7 +49,7 @@ class ConversationHandler:
                 "filters": {"search": "{search_term}"}
             }
         }
-    
+
     def process_query(self, query: str) -> Dict[str, Any]:
         """Process a natural language query and return query parameters.
 
@@ -64,7 +64,7 @@ class ConversationHandler:
         """
         # Classify the intent of the query
         intent, confidence = intent_classifier.classify_intent(query)
-        
+
         # If no intent matched or confidence is too low
         if intent is None or confidence < 0.5:
             return None
@@ -98,25 +98,25 @@ class ConversationHandler:
             if not search_terms:
                 raise ValueError("No search terms found in query")
             return self._create_search_query(search_terms)
-            
+
         return None
-    
+
     def _extract_entities(self, query: str, intent: QueryIntent) -> Dict[str, str]:
         """Extract entities from the query based on the detected intent."""
         entities = {}
-        
+
         # Extract customer IDs (e.g., CUST123)
         if intent == QueryIntent.GET_CUSTOMER:
             customer_match = re.search(r'CUST\d+', query, re.IGNORECASE)
             if customer_match:
                 entities['customer_id'] = customer_match.group(0)
-        
+
         # Extract call IDs (e.g., CALL123)
         elif intent == QueryIntent.GET_TRANSCRIPT:
             call_match = re.search(r'CALL\d+', query, re.IGNORECASE)
             if call_match:
                 entities['call_id'] = call_match.group(0)
-        
+
         # Extract search terms
         elif intent == QueryIntent.SEARCH:
             # Remove common search terms to get the actual search query
@@ -126,46 +126,46 @@ class ConversationHandler:
             search_query = search_query.strip()
             if search_query:
                 entities['search_term'] = search_query
-        
+
         return entities
-    
+
     def parse_query(self, query: str) -> QueryParameters:
         """
         Parse a natural language query into structured parameters using AI.
-        
+
         Args:
             query: The user's natural language query
-            
+
         Returns:
             QueryParameters object with the detected intent and extracted parameters
         """
         query = query.strip()
         if not query:
             return QueryParameters(intent=QueryIntent.UNKNOWN)
-        
+
         # Use AI to classify the intent
         intent, confidence = intent_classifier.classify_intent(query)
-        
+
         # Initialize parameters with default values
         params = QueryParameters(
             intent=intent,
             search_terms=query.split()
         )
-        
+
         # If we have a valid intent, extract entities and apply template
         if intent != QueryIntent.UNKNOWN and intent in self.intent_templates:
             # Extract entities based on intent
             entities = self._extract_entities(query, intent)
-            
+
             # Get the template for this intent
             template = self.intent_templates[intent].copy()
-            
+
             # Apply template values
             if "source_id" in template:
                 params.filters["source_id"] = template["source_id"]
             if "limit" in template:
                 params.limit = template["limit"]
-            
+
             # Format filters with extracted entities
             if "filters" in template:
                 for key, value in template["filters"].items():
@@ -174,15 +174,15 @@ class ConversationHandler:
                     except (KeyError, AttributeError):
                         # If we can't format the value, use it as-is
                         params.filters[key] = value
-            
+
             # Set additional parameters from entities
             if 'customer_id' in entities:
                 params.customer_id = entities['customer_id']
             if 'search_term' in entities:
                 params.search_terms = [entities['search_term']]
-        
+
         return params
-    
+
     async def format_response(self, intent: QueryIntent, data: Dict) -> str:
         """Format the response based on the intent and data."""
         try:
@@ -197,21 +197,21 @@ class ConversationHandler:
                     "- 'Find customer with email example@domain.com'\n"
                     "- 'Is the server healthy?'"
                 )
-                
+
             if intent == QueryIntent.HEALTH_CHECK:
                 if data and (data.get("status") == "ok" or data.get("status") == "healthy"):
                     return "The server is up and running! 🟢"
                 else:
                     return "I'm having trouble reaching the server. It might be down. 🔴"
-                    
+
             elif intent == QueryIntent.LIST_CUSTOMERS:
                 if not data:
                     return "I couldn't retrieve any customer data."
-                    
+
                 items = data.get("items", [])
                 if not items:
                     return "I couldn't find any matching customer records."
-            
+
                 customer_list = "\n".join(
                     f"- {item.get('data', {}).get('firstName', 'Unknown')} "
                     f"{item.get('data', {}).get('lastName', '')} "
@@ -219,11 +219,11 @@ class ConversationHandler:
                     for item in items if isinstance(item, dict)
                 )
                 return f"Here are the customers I found:\n{customer_list}"
-            
+
             elif intent == QueryIntent.GET_CUSTOMER:
                 if not data or not isinstance(data, dict):
                     return "I couldn't retrieve the customer data."
-                    
+
                 if "items" in data:
                     items = data["items"]
                     if not items:
@@ -236,15 +236,15 @@ class ConversationHandler:
                         f"Phone: {customer.get('phone', 'N/A')}"
                     )
                 return "I couldn't find the customer data in the response."
-            
+
             elif intent == QueryIntent.LIST_TRANSCRIPTS:
                 if not data or not isinstance(data, dict) or not data.get("items"):
                     return "I couldn't retrieve any call transcripts."
-                    
+
                 items = data.get("items", [])
                 if not items:
                     return "I couldn't find any call transcripts."
-                    
+
                 transcript_list = "\n".join(
                     f"- Call {item.get('data', {}).get('callId', 'unknown')} "
                     f"({item.get('data', {}).get('callTimestamp', 'no date')}): "
@@ -252,20 +252,20 @@ class ConversationHandler:
                     for item in items if isinstance(item, dict)
                 )
                 return f"Here are the call transcripts I found:\n{transcript_list}"
-            
+
             elif intent == QueryIntent.SEARCH:
                 if not data or not isinstance(data, dict) or not data.get("items"):
                     return "I couldn't find any matching results for your search."
-                    
+
                 items = data.get("items", [])
                 if not items:
                     return "I couldn't find any matching results for your search."
-                    
+
                 # Check if this is customer data or transcript data
                 if items and isinstance(items[0], dict) and "data" in items[0] and "customerId" in items[0]["data"]:
                     return await self.format_response(QueryIntent.LIST_CUSTOMERS, data)
                 return await self.format_response(QueryIntent.LIST_TRANSCRIPTS, data)
-            
+
             return f"Here's what I found: {data}"
         except Exception as e:
             return f"I'm sorry, I encountered an error formatting the response: {str(e)}"

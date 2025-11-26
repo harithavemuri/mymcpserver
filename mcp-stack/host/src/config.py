@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """Application settings."""
-    
+
     # Add CORS_ORIGINS at the class level to ensure it's always available
     CORS_ORIGINS: List[str] = ["*"]
 
@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     DEBUG: bool = Field(False, env="DEBUG")
     ENVIRONMENT: str = Field("development", env="ENVIRONMENT")
     HOST_NAME: str = Field("mcp-host-01", env="HOST_NAME")
-    
+
     # Security settings
     SECRET_KEY: str = Field(
         default="your-secret-key-here",
@@ -47,7 +47,7 @@ class Settings(BaseSettings):
         description="Default rate limit for API endpoints (requests per minute)"
     )
     VERSION: str = Field("0.1.0", env="VERSION")
-    
+
     # MCP Server settings
     MCP_SERVER_URL: str = Field(
         default="http://localhost:8005",
@@ -55,19 +55,19 @@ class Settings(BaseSettings):
         description="URL of the MCP Server"
     )
     API_KEY: Optional[str] = Field(None, env="API_KEY")
-    
+
     # Model settings
     MODEL_DIR: Path = Field(
         default=Path("models").resolve(),
         description="Directory to store model files"
     )
-    
+
     # Data settings
     DATA_DIR: Path = Field(
         default=Path("data").resolve(),
         description="Directory to store data files"
     )
-    
+
     # CORS settings (comma-separated string of origins, e.g., "http://localhost:3000,http://localhost:8000")
     cors_origins: List[str] = Field(
         default_factory=lambda: ["*"],
@@ -75,7 +75,7 @@ class Settings(BaseSettings):
         description="Comma-separated list of allowed CORS origins",
         alias="CORS_ORIGINS"
     )
-    
+
     @validator("cors_origins", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str], None]) -> List[str]:
         if v is None:
@@ -93,25 +93,25 @@ class Settings(BaseSettings):
         elif isinstance(v, list):
             return v
         raise ValueError(f"Invalid CORS_ORIGINS value: {v}")
-    
+
     def __init__(self, **data):
         super().__init__(**data)
         # Ensure CORS_ORIGINS is always set
         if not hasattr(self, 'CORS_ORIGINS') or not self.CORS_ORIGINS:
             self.CORS_ORIGINS = self.cors_origins if hasattr(self, 'cors_origins') else ["*"]
-    
+
     # Model registration settings
     AUTO_REGISTER_MODELS: bool = Field(
         default=True,
         description="Automatically register models on startup"
     )
-    
+
     # Health check settings
     HEALTH_CHECK_INTERVAL: int = Field(
         default=30,
         description="Health check interval in seconds"
     )
-    
+
     # Logging settings
     LOG_LEVEL: str = Field(
         default="INFO",
@@ -121,19 +121,19 @@ class Settings(BaseSettings):
         default="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         description="Log format string"
     )
-    
+
     @validator('MODEL_DIR', 'DATA_DIR', pre=True)
     def resolve_paths(cls, v):
         if isinstance(v, str):
             return Path(v).resolve()
         return v.resolve() if v.exists() else v
-    
+
     class Config:
         """Pydantic config."""
         case_sensitive = True
         env_file = ".env"
         env_file_encoding = "utf-8"
-        
+
         @classmethod
         def customise_sources(
             cls,

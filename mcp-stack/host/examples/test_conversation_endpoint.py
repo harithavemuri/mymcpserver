@@ -50,26 +50,26 @@ async def test_conversation():
             print(f"\n{'='*50}")
             print(f"Test: {test_case['description']}")
             print(f"Request: {json.dumps(test_case, indent=2)}")
-            
+
             try:
                 response = await client.post(
                     CONVERSATION_ENDPOINT,
                     json=test_case,
                     timeout=30.0
                 )
-                
+
                 print(f"Status: {response.status_code}")
                 print("Response:")
                 print(json.dumps(response.json(), indent=2))
-                
+
             except Exception as e:
                 print(f"Error: {str(e)}")
-            
+
             print("="*50)
 
 if __name__ == "__main__":
     print("Testing MCP Host Conversation Endpoint")
     print(f"Endpoint: {CONVERSATION_ENDPOINT}")
     print("-" * 50)
-    
+
     asyncio.run(test_conversation())

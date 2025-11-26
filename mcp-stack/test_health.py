@@ -6,7 +6,7 @@ def test_health_check():
     """Test the GraphQL health check endpoint."""
     url = 'http://localhost:8005/graphql'
     headers = {'Content-Type': 'application/json'}
-    
+
     # GraphQL query
     query = '''
     query {
@@ -17,14 +17,14 @@ def test_health_check():
         }
     }
     '''
-    
+
     # Send the request
     response = requests.post(
         url,
         json={'query': query},
         headers=headers
     )
-    
+
     # Print the response
     print("Status Code:", response.status_code)
     print("Response:", json.dumps(response.json(), indent=2))

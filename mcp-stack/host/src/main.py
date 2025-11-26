@@ -31,8 +31,8 @@ from .protocol import MCPHost
 from .routers import conversation  # Import the conversation router
 from .models import ModelConfig, ModelInfo, PredictionRequest, PredictionResponse
 from .text_transform import (
-    TextTransformRequest, 
-    TextTransformResponse, 
+    TextTransformRequest,
+    TextTransformResponse,
     text_transform_client,
     MCPTextTransformClient
 )
@@ -70,7 +70,7 @@ app.add_middleware(
 
 class MCPClient:
     """Client for interacting with the MCP Server."""
-    
+
     def __init__(self, base_url: str, api_key: Optional[str] = None):
         """Initialize the MCP client."""
         self.base_url = base_url.rstrip("/")
@@ -80,11 +80,11 @@ class MCPClient:
             headers={"Authorization": f"Bearer {api_key}"} if api_key else {},
             timeout=30.0,
         )
-    
+
     async def close(self):
         """Close the HTTP client."""
         await self.client.aclose()
-    
+
     async def query_data(
         self,
         query: str,
@@ -98,9 +98,9 @@ class MCPClient:
         }
         if operation_name:
             payload["operationName"] = operation_name
-            
+
         logger.debug(f"Executing GraphQL query: {query[:200]}...")
-        
+
         try:
             response = await self.client.post(
                 "/graphql",
@@ -109,16 +109,16 @@ class MCPClient:
             )
             response.raise_for_status()
             result = response.json()
-            
+
             if "errors" in result and result["errors"]:
                 logger.error(f"GraphQL errors: {result['errors']}")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail={"errors": result["errors"]},
                 )
-                
+
             return result.get("data", {})
-            
+
         except httpx.HTTPStatusError as e:
             logger.error(f"HTTP error: {e}")
             raise HTTPException(
@@ -131,7 +131,7 @@ class MCPClient:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to execute query: {str(e)}"
             )
-    
+
     async def query_data_items(
         self,
         source_id: Optional[str] = None,
@@ -144,9 +144,9 @@ class MCPClient:
         """Query data items with filtering, sorting, and pagination."""
         query = """
         query GetItems(
-            $sourceId: String, 
-            $limit: Int, 
-            $offset: Int, 
+            $sourceId: String,
+            $limit: Int,
+            $offset: Int,
             $filters: JSON,
             $sortBy: String,
             $sortOrder: String
@@ -165,7 +165,7 @@ class MCPClient:
             }
         }
         """
-        
+
         variables = {
             "sourceId": source_id,
             "limit": limit,
@@ -174,7 +174,7 @@ class MCPClient:
             "sortBy": sort_by,
             "sortOrder": sort_order.lower()
         }
-        
+
         try:
             result = await self.query_data(query, variables)
             return result.get("items", {"data": [], "total": 0, "hasMore": False})
@@ -184,7 +184,7 @@ class MCPClient:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to query data: {str(e)}"
             )
-            
+
     async def get_data_sources(self) -> List[Dict[str, Any]]:
         """
         Get all available data sources from the MCP Server.
@@ -212,7 +212,7 @@ class MCPClient:
                 "type": "TOOL"
             }
         ]
-    
+
     async def search_customers(
         self,
         name: Optional[str] = None,
@@ -223,25 +223,25 @@ class MCPClient:
     ) -> List[Dict[str, Any]]:
         """
         Search for customers with the ability to specify which fields to return.
-        
+
         Args:
             name: Optional name to search for
             fields: List of fields to include in the response
             limit: Maximum number of results to return
             offset: Number of results to skip
             **filters: Additional filter parameters (e.g., email, phone, state)
-            
+
         Returns:
             List of customer dictionaries with only the requested fields
         """
         # Default fields to include if none specified
         if not fields:
             fields = ['id', 'firstName', 'lastName', 'email']
-            
+
         # Always include id field if not already specified
         if 'id' not in fields and 'customerId' not in fields:
             fields.append('id')
-            
+
         # Map field names to match GraphQL schema if needed
         field_mapping = {
             'id': 'customerId',
@@ -255,13 +255,13 @@ class MCPClient:
             'zip': 'zipCode',
             'country': 'country'
         }
-        
+
         # Map fields to their GraphQL equivalents
         graphql_fields = [field_mapping.get(f, f) for f in fields]
-        
+
         # Construct the GraphQL query
         fields_str = '\n'.join(f'        {f}' for f in graphql_fields)
-        
+
         query = f"""
         query SearchCustomers($filter: CustomerFilterInput!) {{
             searchCustomers(filter: $filter) {{
@@ -269,31 +269,31 @@ class MCPClient:
             }}
         }}
         """
-        
+
         # Build filter object with provided parameters
         filter_args = {
             'name': name,
             'limit': limit,
             'offset': offset
         }
-        
+
         # Add additional filters if provided
         valid_filters = ['email', 'phone', 'state', 'city', 'country']
         for key, value in filters.items():
             if key in valid_filters and value is not None:
                 filter_args[key] = value
-        
+
         variables = {
             "filter": {k: v for k, v in filter_args.items() if v is not None}
         }
-        
+
         try:
             response = await self.query_data(query, variables)
             customers = response.get("searchCustomers", [])
-            
+
             # Map back to the original field names
             reverse_mapping = {v: k for k, v in field_mapping.items()}
-            
+
             result = []
             for customer in customers:
                 mapped_customer = {}
@@ -301,13 +301,13 @@ class MCPClient:
                     field_name = reverse_mapping.get(gql_field, gql_field)
                     mapped_customer[field_name] = value
                 result.append(mapped_customer)
-                
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Error searching customers: {str(e)}")
             return []
-    
+
     async def query_data_items(
         self,
         source_id: Optional[str] = None,
@@ -319,7 +319,7 @@ class MCPClient:
     ) -> Dict[str, Any]:
         """
         Query data items with filtering and pagination.
-        
+
         Args:
             source_id: The type of data to query (e.g., 'customers', 'transcripts', 'tools')
             limit: Maximum number of items to return
@@ -327,13 +327,13 @@ class MCPClient:
             filters: Dictionary of filters to apply
             sort_by: Field to sort by
             sort_order: Sort order ('asc' or 'desc')
-            
+
         Returns:
             Dictionary containing the query results and pagination info
         """
         # Default empty result
         result = {"items": [], "totalCount": 0, "hasNextPage": False}
-        
+
         try:
             if source_id == "customers":
                 # Query for customers
@@ -356,10 +356,10 @@ class MCPClient:
                         # Add any additional filter criteria here
                     }
                 }
-                
+
                 response = await self.query_data(query, variables)
                 items = response.get("searchCustomers", [])
-                
+
                 # Transform to match expected format
                 result["items"] = [{
                     "id": item.get("customerId"),
@@ -369,7 +369,7 @@ class MCPClient:
                     "createdAt": None,
                     "updatedAt": None
                 } for item in items]
-                
+
             elif source_id == "transcripts":
                 # Query for transcripts
                 query = """
@@ -390,10 +390,10 @@ class MCPClient:
                         # Add any additional filter criteria here
                     }
                 }
-                
+
                 response = await self.query_data(query, variables)
                 items = response.get("searchTranscripts", [])
-                
+
                 # Transform to match expected format
                 result["items"] = [{
                     "id": item.get("callId"),
@@ -403,7 +403,7 @@ class MCPClient:
                     "createdAt": None,
                     "updatedAt": None
                 } for item in items]
-                
+
             elif source_id == "tools":
                 # Query for tools
                 query = """
@@ -419,7 +419,7 @@ class MCPClient:
                 # Note: listTools might not require a filter, but check the schema to confirm
                 response = await self.query_data(query, {"limit": limit, "offset": offset})
                 items = response.get("listTools", [])
-                
+
                 # Transform to match expected format
                 result["items"] = [{
                     "id": item.get("id"),
@@ -429,14 +429,14 @@ class MCPClient:
                     "createdAt": None,
                     "updatedAt": None
                 } for item in items]
-                
+
             # Update total count based on returned items
             result["totalCount"] = len(result["items"])
             result["hasNextPage"] = len(result["items"]) >= limit
-                
+
         except Exception as e:
             logger.error(f"Error querying data items: {str(e)}")
-            
+
         return result
 
 # Initialize MCP client

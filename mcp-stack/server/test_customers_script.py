@@ -20,23 +20,23 @@ async def test_get_customers_with_transcripts():
         }
     }
     """
-    
+
     result = await schema.execute(query)
-    
+
     # Check for errors
     if result.errors:
         print("Query failed with errors:")
         for error in result.errors:
             print(f"- {error}")
         return
-    
+
     # Get the result data
     customers_data = result.data.get("getCustomersWithTranscripts", [])
-    
+
     if not customers_data:
         print("No customers with transcripts found")
         return
-    
+
     print(f"Found {len(customers_data)} customers with transcripts:")
     for customer in customers_data:
         print(f"\nCustomer: {customer['firstName']} {customer['lastName']} ({customer['email']})")

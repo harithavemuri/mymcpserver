@@ -17,10 +17,10 @@ async def test_health_check_success():
     """Test the health check method with a successful response."""
     mock_response = MagicMock()
     mock_response.json.return_value = {"status": "ok"}
-    
+
     with patch('httpx.AsyncClient.get', new_callable=AsyncMock) as mock_get:
         mock_get.return_value = mock_response
-        
+
         async with MPCHost() as host:
             is_healthy = await host.health_check()
             assert is_healthy is True
@@ -38,10 +38,10 @@ async def test_process_text_success():
             "metadata": {"tools_executed": ["text_processor"]}
         }
     }
-    
+
     with patch('httpx.AsyncClient.post', new_callable=AsyncMock) as mock_post:
         mock_post.return_value = mock_response
-        
+
         async with MPCHost() as host:
             response = await host.process_text("test")
             assert response.success is True
@@ -63,7 +63,7 @@ async def test_process_texts_batch():
             error=None
         )
     )
-    
+
     response2 = TextResponse(
         success=True,
         result=ProcessingResult(
@@ -74,7 +74,7 @@ async def test_process_texts_batch():
             error=None
         )
     )
-    
+
     # Create a mock for the process_text method
     async def mock_process_text(text, params=None):
         if text == "test1":
@@ -82,22 +82,22 @@ async def test_process_texts_batch():
         elif text == "test2":
             return response2
         return TextResponse(success=False, error="Unexpected input")
-    
+
     # Patch the process_text method
     with patch.object(MPCHost, 'process_text', side_effect=mock_process_text):
         async with MPCHost() as host:
             # Call the method under test
             results = await host.process_texts(["test1", "test2"])
-            
+
             # Verify the results
             assert len(results) == 2
             assert all(isinstance(r, TextResponse) for r in results)
-            
+
             # Check the first result
             assert results[0].success is True
             assert results[0].result.original_text == "test1"
             assert results[0].result.results["text_processor"]["processed_text"] == "TEST1"
-            
+
             # Check the second result
             assert results[1].success is True
             assert results[1].result.original_text == "test2"

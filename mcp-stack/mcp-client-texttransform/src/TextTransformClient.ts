@@ -26,7 +26,7 @@ export class TextTransformClient {
 
   constructor(options: TextTransformOptions = {}) {
     this.baseURL = options.baseURL || 'http://localhost:8002';
-    
+
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout: options.timeout || 5000,
@@ -77,7 +77,7 @@ export class TextTransformClient {
             data: error.response?.data
           }
         };
-        
+
         logger.error('Response error:', errorData);
         return Promise.reject(error);
       }

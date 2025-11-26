@@ -61,7 +61,7 @@ class MCPConfig(BaseModel):
         default_factory=lambda: ["*"],
         description="List of allowed origins for CORS."
     )
-    
+
     # Tool configurations
     text_processor: TextProcessorConfig = Field(
         default_factory=TextProcessorConfig,
@@ -75,7 +75,7 @@ class MCPConfig(BaseModel):
         default_factory=KeywordExtractorConfig,
         description="Configuration for the keyword extractor tool"
     )
-    
+
     # Pydantic v2 config
     model_config = ConfigDict(
         use_enum_values=True,

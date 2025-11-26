@@ -37,7 +37,7 @@ async def test_format_customer_response_with_transformations(mock_client):
             "notes": "Important customer"
         }
     ]
-    
+
     # Context with transformation requests
     context = {
         "transformations": {
@@ -45,7 +45,7 @@ async def test_format_customer_response_with_transformations(mock_client):
             "phone": ["mask"]
         }
     }
-    
+
     # Call the function
     result = await format_customer_response(
         customers=customers,
@@ -53,18 +53,18 @@ async def test_format_customer_response_with_transformations(mock_client):
         requested_fields={"id", "name", "email", "phone"},
         context=context
     )
-    
+
     # Print the results
     print("\n=== Test Results ===")
     print(f"Original customer data: {customers[0]}")
     print(f"Transformed customer data: {result['data'][0]}")
-    
+
     # Verify the transformations
     transformed = result["data"][0]
     assert transformed["email"] == "j***e@example.com", f"Email not masked correctly: {transformed['email']}"
     assert transformed["phone"] == "(***) ***-****", f"Phone not masked correctly: {transformed['phone']}"
     assert transformed["name"] == "John Doe", "Name should not be modified"
-    
+
     print("\n✅ All tests passed!")
 
 # Run the test

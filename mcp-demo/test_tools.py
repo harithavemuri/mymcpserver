@@ -30,7 +30,7 @@ async def main():
         (SentimentAnalyzer(), "SentimentAnalyzer"),
         (KeywordExtractor(), "KeywordExtractor"),
     ]
-    
+
     for tool, name in tools:
         success = await test_tool(tool, name)
         if not success:

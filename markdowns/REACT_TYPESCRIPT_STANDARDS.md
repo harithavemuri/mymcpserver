@@ -46,7 +46,7 @@ const MyComponent: React.FC<ComponentProps> = ({
   onAction,
 }) => {
   const [count, setCount] = useState<number>(0);
-  
+
   const handleClick = useCallback(() => {
     onAction(id);
     setCount(prev => prev + 1);

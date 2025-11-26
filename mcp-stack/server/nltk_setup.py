@@ -87,7 +87,7 @@ def setup_nltk():
 
         logger.info("NLTK setup complete!")
         return True
-        
+
     except Exception as e:
         logger.error(f"Error in NLTK setup: {str(e)}", exc_info=True)
         return False

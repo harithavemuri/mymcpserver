@@ -35,13 +35,13 @@ def sample_transcript_data() -> Dict[str, Any]:
         "ada_violation_occurred": False,
         "transcript": [
             {
-                "speaker": "customer", 
-                "text": "I'm very disappointed with my recent order. The product arrived late and was damaged.", 
+                "speaker": "customer",
+                "text": "I'm very disappointed with my recent order. The product arrived late and was damaged.",
                 "timestamp": "10:30:05"
             },
             {
-                "speaker": "agent", 
-                "text": "I'm sorry to hear that. Could you tell me what happened? We'll make this right.", 
+                "speaker": "agent",
+                "text": "I'm sorry to hear that. Could you tell me what happened? We'll make this right.",
                 "timestamp": "10:30:10"
             }
         ]
@@ -50,17 +50,17 @@ def sample_transcript_data() -> Dict[str, Any]:
 def test_transcript_creation(sample_transcript_data):
     """Test creation of CallTranscript with sentiment and contexts."""
     transcript = CallTranscript(**sample_transcript_data)
-    
+
     # Test basic fields
     assert transcript.call_id == "TEST123"
     assert transcript.customer_id == "CUST1000"
     assert len(transcript.transcript) == 2
-    
+
     # Test transcript entries
     assert transcript.transcript[0].speaker == "customer"
     assert "disappointed" in transcript.transcript[0].text.lower()
     assert transcript.transcript[1].speaker == "agent"
-    
+
     # Test sentiment analysis on the transcript
     assert hasattr(transcript, 'sentiment')
     assert isinstance(transcript.sentiment, dict)
@@ -68,7 +68,7 @@ def test_transcript_creation(sample_transcript_data):
     assert 'subjectivity' in transcript.sentiment
     assert -1 <= transcript.sentiment['polarity'] <= 1
     assert 0 <= transcript.sentiment['subjectivity'] <= 1
-    
+
     # Test contexts extraction
     assert hasattr(transcript, 'contexts')
     assert isinstance(transcript.contexts, list)
@@ -77,13 +77,13 @@ def test_transcript_creation(sample_transcript_data):
 def test_transcript_entry_sentiment(sample_transcript_data):
     """Test transcript entry structure."""
     transcript = CallTranscript(**sample_transcript_data)
-    
+
     # Test customer entry structure
     customer_entry = transcript.transcript[0]
     assert hasattr(customer_entry, 'speaker')
     assert hasattr(customer_entry, 'text')
     assert hasattr(customer_entry, 'timestamp')
-    
+
     # Test agent entry structure
     agent_entry = transcript.transcript[1]
     assert hasattr(agent_entry, 'speaker')
@@ -94,12 +94,12 @@ def test_transcript_entry_sentiment(sample_transcript_data):
 def test_transcript_entry_structure(sample_transcript_data):
     """Test transcript entry structure."""
     transcript = CallTranscript(**sample_transcript_data)
-    
+
     # Test customer entry
     customer_entry = transcript.transcript[0]
     assert customer_entry.speaker == "customer"
     assert "disappointed" in customer_entry.text.lower()
-    
+
     # Test agent entry
     agent_entry = transcript.transcript[1]
     assert agent_entry.speaker == "agent"
@@ -111,15 +111,15 @@ def test_sentiment_analysis_edge_cases():
     empty_sentiment = analyze_sentiment("")
     assert empty_sentiment["polarity"] == 0.0
     assert empty_sentiment["subjectivity"] == 0.0
-    
+
     # Test neutral text
     neutral_sentiment = analyze_sentiment("This is a test.")
     assert -0.1 <= neutral_sentiment["polarity"] <= 0.1
-    
+
     # Test very positive text
     positive_sentiment = analyze_sentiment("I'm extremely happy with this excellent service!")
     assert positive_sentiment["polarity"] > 0.5
-    
+
     # Test very negative text
     negative_sentiment = analyze_sentiment("This is absolutely terrible and I'm very angry!")
     assert negative_sentiment["polarity"] < -0.5
@@ -128,14 +128,14 @@ def test_context_extraction_edge_cases():
     """Test context extraction with edge cases."""
     # Test empty text
     assert extract_contexts("") == []
-    
+
     # Test very short text
     short_text = "Hello world"
     assert extract_contexts(short_text) == ["hello world"]
-    
+
     # Test text with stopwords only
     assert extract_contexts("the and or but") == []
-    
+
     # Test text with special characters
     special_text = "Order #1234 was delayed! Contact support@example.com"
     contexts = extract_contexts(special_text)
@@ -146,45 +146,45 @@ def test_with_actual_data():
     """Test with actual data from the data loader."""
     data_loader = DataLoader()
     transcripts = data_loader.load_transcripts()
-    
+
     # Test at least one transcript has the expected structure
     assert len(transcripts) > 0, "No transcripts found in the data loader"
-    
+
     # Test the first transcript with a summary
     for transcript in transcripts.values():
         if transcript.call_summary.strip():
             # Test transcript has required fields
             assert hasattr(transcript, 'call_id')
             assert hasattr(transcript, 'call_summary')
-            
+
             # Test sentiment analysis
             assert hasattr(transcript, 'sentiment')
             assert isinstance(transcript.sentiment, dict)
             assert 'polarity' in transcript.sentiment
             assert 'subjectivity' in transcript.sentiment
-            
+
             # Test contexts
             assert hasattr(transcript, 'contexts')
             assert isinstance(transcript.contexts, list)
-            
+
             # Test transcript entries have sentiment and contexts
             if hasattr(transcript, 'transcript') and transcript.transcript:
                 entry = transcript.transcript[0]
                 assert hasattr(entry, 'sentiment')
                 assert hasattr(entry, 'contexts')
-                
+
                 # Just verify the entry has the basic fields
                 assert hasattr(entry, 'text')
                 assert hasattr(entry, 'speaker')
                 assert hasattr(entry, 'timestamp')
-            
+
             break  # Only test the first valid transcript
 
 def test_with_actual_data():
     """Test with actual data from the data loader."""
     print("\n=== Testing with Actual Data ===")
     data_loader = DataLoader()
-    
+
     # Get the first transcript with a summary
     for transcript in data_loader.load_transcripts().values():
         if transcript.call_summary.strip():
@@ -207,7 +207,7 @@ if __name__ == "__main__":
         nltk.download('wordnet')
         nltk.download('averaged_perceptron_tagger')
         nltk.download('vader_lexicon')
-    
+
     # Run tests using pytest
     import pytest
     pytest.main([__file__, "-v"])

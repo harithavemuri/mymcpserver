@@ -78,7 +78,7 @@ class DataQuery:
         )
 
     """Data-related queries."""
-    
+
     @strawberry.field
     async def data_sources(self, info: Info) -> List[DataSourceType]:
         """Get all data sources."""
@@ -97,7 +97,7 @@ class DataQuery:
             )
             for source in sources
         ]
-    
+
     @strawberry.field
     async def data_source(
         self,
@@ -109,7 +109,7 @@ class DataQuery:
         source = await data_service.get_data_source(id)
         if not source:
             return None
-            
+
         return DataSourceType(
             id=source.id,
             name=source.name,
@@ -120,7 +120,7 @@ class DataQuery:
             created_at=source.created_at.isoformat(),
             updated_at=source.updated_at.isoformat(),
         )
-    
+
     @strawberry.field
     async def data_items(
         self,
@@ -130,7 +130,7 @@ class DataQuery:
     ) -> DataPageType:
         """Query data items with optional filtering and pagination."""
         data_service = get_data_service(info)
-        
+
         # Convert input to internal query object
         query_obj = DataQuery(
             limit=query.limit if query else 100,
@@ -139,13 +139,13 @@ class DataQuery:
             sort_by=query.sort_by if query else None,
             sort_order=query.sort_order if query else "asc",
         )
-        
+
         # Execute query
         result = await data_service.query_data_items(
             query=query_obj,
             source_id=source_id,
         )
-        
+
         # Convert to GraphQL types
         items = [
             DataItemType(
@@ -158,7 +158,7 @@ class DataQuery:
             )
             for item in result.items
         ]
-        
+
         return DataPageType(
             items=items,
             total=result.total,
@@ -166,7 +166,7 @@ class DataQuery:
             size=result.size,
             has_more=result.has_more,
         )
-    
+
     @strawberry.field
     async def search_data_items(
         self,
@@ -182,7 +182,7 @@ class DataQuery:
             fields=fields,
             limit=limit,
         )
-        
+
         return [
             DataItemType(
                 id=item.id,

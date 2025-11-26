@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 def download_nltk_data():
     """Download required NLTK data."""
     import nltk
-    
+
     # List of NLTK data packages to download
     nltk_data = [
         'punkt',
@@ -12,7 +12,7 @@ def download_nltk_data():
         'averaged_perceptron_tagger',
         'vader_lexicon'  # For sentiment analysis
     ]
-    
+
     print("Downloading NLTK data...")
     for data in nltk_data:
         try:

@@ -8,29 +8,29 @@ async def test_sentiment():
     """Test the sentiment analyzer with a specific text."""
     port = 8002
     text = "I am very sad"
-    
+
     print(f"Testing sentiment analysis for text: {text}")
-    
+
     async with MPCHost(f"http://localhost:{port}") as host:
         # Check if server is healthy
         if not await host.health_check():
             print("Error: MCP server is not running or not healthy")
             return
-        
+
         print("\nProcessing text...")
         response = await host.process_text(text)
-        
+
         # Print the raw response for debugging
         print("\nRaw response:")
         import json
         print(json.dumps(response.model_dump(), indent=2))
-        
+
         if response.success and response.result:
             print("\nProcessing successful!")
-            
+
             # Get the results from the response
             results = getattr(response.result, 'results', {})
-            
+
             # Print sentiment analysis results
             sentiment = results.get('sentiment_analyzer', {})
             if sentiment:

@@ -69,7 +69,7 @@ The example demonstrates a text processing pipeline that can handle both single 
 
 ### Single Text Processing
 - `POST /process`: Process a single text through the MCP workflow
-  - Request body: 
+  - Request body:
     ```json
     {
       "text": "Your input text here",

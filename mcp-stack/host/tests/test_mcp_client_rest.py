@@ -64,13 +64,13 @@ class TestMCPClientREST:
         # Create test customer
         customer_data = TEST_CUSTOMER.copy()
         customer_data["customerId"] = test_customer_id
-        
+
         # Test create customer
         create_response = await client.post("/customers", json=customer_data)
         assert create_response.status_code in [200, 201], f"Failed to create customer: {create_response.text}"
         created_customer = create_response.json()
         assert created_customer["customerId"] == test_customer_id
-        
+
         # Test get customer
         get_response = await client.get(f"/customers/{test_customer_id}")
         assert get_response.status_code == 200
@@ -86,7 +86,7 @@ class TestMCPClientREST:
         data = response.json()
         assert "data" in data
         assert any(cust["customerId"] == test_customer_id for cust in data["data"])
-        
+
         # Search by state
         response = await client.get("/customers/search?state=TS")
         assert response.status_code == 200
@@ -130,11 +130,11 @@ class TestMCPClientREST:
         customer_data = TEST_CUSTOMER.copy()
         customer_data["customerId"] = f"DELETE_{test_customer_id}"
         await create_test_customer(client, customer_data)
-        
+
         # Test delete
         delete_response = await client.delete(f"/customers/DELETE_{test_customer_id}")
         assert delete_response.status_code in [200, 204]
-        
+
         # Verify deletion
         get_response = await client.get(f"/customers/DELETE_{test_customer_id}")
         assert get_response.status_code == 404

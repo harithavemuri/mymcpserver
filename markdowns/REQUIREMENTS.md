@@ -62,7 +62,7 @@ A web-based dashboard for tracking project tasks and timelines, with data source
 
 ### Backend (Node.js + TypeScript with Python)
 - **Coding Standards**: [Python + TypeScript Backend Standards](./PYTHON_TYPESCRIPT_STANDARDS.md)
-- **Runtime**: 
+- **Runtime**:
   - Node.js 18+ with TypeScript for API layer
   - Python 3.12+ for data processing
 - **API Framework**:
@@ -125,11 +125,11 @@ project/
    ```bash
    # Clone the repository
    git clone <repository-url>
-   
+
    # Install frontend dependencies
    cd client
    npm install
-   
+
    # Install backend dependencies
    cd ../server
    npm install
@@ -145,7 +145,7 @@ project/
    # Start frontend development server
    cd client
    npm run dev
-   
+
    # Start backend server (in a separate terminal)
    cd ../server
    npm run dev

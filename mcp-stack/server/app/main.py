@@ -42,7 +42,7 @@ def configure_app() -> None:
     async def health_check() -> Dict[str, str]:
         """Health check endpoint."""
         return {"status": "healthy", "version": "0.1.0"}
-    
+
     # List MCP prompts endpoint
 @app.get("/mcp/prompts")
 async def list_mcp_prompts() -> Dict[str, Any]:
@@ -73,22 +73,22 @@ async def list_mcp_prompts() -> Dict[str, Any]:
                     tools = await tools_coro
                 else:
                     tools = tools_coro
-                
+
                 # Handle both sync and async tool lists
                 if hasattr(tools, '__aiter__'):
                     tools = [t async for t in tools]
                 elif not isinstance(tools, (list, tuple)):
                     tools = list(tools) if hasattr(tools, '__iter__') else [tools]
-                    
-                return {"tools": [{"name": getattr(t, "__name__", str(t)), 
-                                "description": getattr(t, "__doc__", "")} 
+
+                return {"tools": [{"name": getattr(t, "__name__", str(t)),
+                                "description": getattr(t, "__doc__", "")}
                                for t in tools]}
             elif hasattr(mcp_app, 'tools') and isinstance(mcp_app.tools, (list, tuple)):
-                return {"tools": [{"name": getattr(t, "__name__", str(t)), 
-                                "description": getattr(t, "__doc__", "")} 
+                return {"tools": [{"name": getattr(t, "__name__", str(t)),
+                                "description": getattr(t, "__doc__", "")}
                                for t in mcp_app.tools]}
             else:
-                return {"error": "No tools found. Available attributes:", 
+                return {"error": "No tools found. Available attributes:",
                        "attributes": [attr for attr in dir(mcp_app) if not attr.startswith('_')]}
         except Exception as e:
             logger.error(f"Error listing MCP tools: {str(e)}", exc_info=True)
@@ -114,10 +114,10 @@ configure_app()
 async def get_customer_endpoint(customer_id: str = Path(..., description="The ID of the customer to retrieve")):
     """
     Get customer details by ID.
-    
+
     Args:
         customer_id: The ID of the customer to retrieve
-        
+
     Returns:
         A dictionary containing the customer's information
     """

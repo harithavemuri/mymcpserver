@@ -7,7 +7,7 @@ def test_converse(query: str):
     url = "http://localhost:8000/api/converse"
     headers = {"Content-Type": "application/json"}
     data = {"query": query}
-    
+
     try:
         response = requests.post(url, headers=headers, json=data, timeout=10)
         print(f"Status Code: {response.status_code}")

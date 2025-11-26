@@ -9,12 +9,12 @@ import sys
 def setup_nltk_data():
     """Download and set up NLTK data."""
     print("Setting up NLTK data...")
-    
+
     # Set NLTK data path to a directory where we have write permissions
     nltk_data_dir = os.path.join(os.path.expanduser('~'), 'nltk_data')
     os.makedirs(nltk_data_dir, exist_ok=True)
     nltk.data.path.append(nltk_data_dir)
-    
+
     # List of NLTK data packages to download
     nltk_packages = [
         'punkt',         # For tokenization
@@ -23,7 +23,7 @@ def setup_nltk_data():
         'averaged_perceptron_tagger',  # For part-of-speech tagging
         'vader_lexicon'  # For sentiment analysis
     ]
-    
+
     # Download each package if not already present
     for package in nltk_packages:
         try:
@@ -36,16 +36,16 @@ def setup_nltk_data():
                 print(f"✓ Successfully downloaded {package}")
             except Exception as e:
                 print(f"✗ Failed to download {package}: {str(e)}")
-    
+
     # Update NLTK data path
     nltk.data.path.append(nltk_data_dir)
-    
+
     # Set environment variable for NLTK to find the data
     os.environ['NLTK_DATA'] = nltk_data_dir
-    
+
     print("\nNLTK data setup complete!")
     print(f"NLTK data directory: {nltk_data_dir}")
-    
+
     # Verify the data can be found
     print("\nVerifying NLTK data...")
     try:

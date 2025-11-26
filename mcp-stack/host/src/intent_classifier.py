@@ -20,11 +20,11 @@ class QueryIntent(str, Enum):
 
 class AIIntentClassifier:
     """AI-based intent classifier using sentence transformers."""
-    
+
     def __init__(self):
         """Initialize the intent classifier with the rule-based approach."""
         self.intent_examples = self._get_intent_examples()
-    
+
     def _get_intent_examples(self) -> Dict[str, List[str]]:
         """Get example queries for each intent."""
         return {
@@ -70,28 +70,28 @@ class AIIntentClassifier:
                 "find calls about billing"
             ]
         }
-    
-    
+
+
     def classify_intent(self, query: str, threshold: float = 0.6) -> Tuple[QueryIntent, float]:
         """Classify the intent of a natural language query using a rule-based approach.
-        
+
         Args:
             query: The natural language query to classify
             threshold: Minimum confidence score (unused in rule-based approach, kept for compatibility)
-            
+
         Returns:
             A tuple of (intent, confidence_score) where confidence_score is always 1.0 for rule-based
             Returns (None, 0.0) if no intent can be determined
         """
-        
+
         # Rule-based approach
         query = query.lower()
-        
+
         # Check for health check queries
         health_terms = ['health', 'status', 'alive', 'running', 'up', 'down', 'server']
         if any(term in query for term in health_terms):
             return QueryIntent.HEALTH_CHECK, 1.0
-            
+
         # Check for customer-related queries
         customer_terms = ['customer', 'client', 'buyer', 'purchaser']
         if any(term in query for term in customer_terms):
@@ -99,7 +99,7 @@ class AIIntentClassifier:
                 return QueryIntent.LIST_CUSTOMERS, 1.0
             else:
                 return QueryIntent.GET_CUSTOMER, 1.0
-                
+
         # Check for transcript-related queries
         transcript_terms = ['transcript', 'call', 'recording', 'conversation']
         if any(term in query for term in transcript_terms):
@@ -107,7 +107,7 @@ class AIIntentClassifier:
                 return QueryIntent.LIST_TRANSCRIPTS, 1.0
             else:
                 return QueryIntent.GET_TRANSCRIPT, 1.0
-                
+
         # Check for search queries
         search_terms = ['find', 'search', 'look for', 'who is', 'show me']
         if any(term in query for term in search_terms):

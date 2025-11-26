@@ -6,7 +6,7 @@ from pathlib import Path
 def find_latest_transcript(customer_id):
     transcripts_dir = Path("mcp-sampledata/data/transcripts")
     customer_transcripts = []
-    
+
     for transcript_file in transcripts_dir.glob("*.json"):
         try:
             with open(transcript_file, 'r', encoding='utf-8') as f:
@@ -21,10 +21,10 @@ def find_latest_transcript(customer_id):
                     })
         except Exception as e:
             print(f"Error processing {transcript_file}: {e}")
-    
+
     if not customer_transcripts:
         return None
-    
+
     # Sort by timestamp in descending order (newest first)
     customer_transcripts.sort(key=lambda x: x['timestamp'], reverse=True)
     return customer_transcripts[0]
@@ -32,7 +32,7 @@ def find_latest_transcript(customer_id):
 if __name__ == "__main__":
     customer_id = "CUST1000"
     latest = find_latest_transcript(customer_id)
-    
+
     if latest:
         print(f"Latest transcript found in {latest['file']}")
         print(f"Call ID: {latest['data']['call_id']}")
@@ -42,7 +42,7 @@ if __name__ == "__main__":
         print(f"Agent ID: {latest['data']['agent_id']}")
         print("\nCall Summary:")
         print(latest['data'].get('call_summary', 'No summary available'))
-        
+
         # Print transcript if available
         if 'transcript' in latest['data']:
             print("\nTranscript:")

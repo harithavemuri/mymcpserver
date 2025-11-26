@@ -23,7 +23,7 @@ async def test_format_customer_response_with_transformations():
             "notes": "Important customer"
         }
     ]
-    
+
     # Mock message and context with transformation request
     message = "Show me all customers with masked emails and phone numbers"
     context = {
@@ -32,10 +32,10 @@ async def test_format_customer_response_with_transformations():
             "phone": ["mask"]
         }
     }
-    
+
     # Mock the text_transform_client
     from src.routers import conversation
-    
+
     # Create a mock for the transform method
     async def mock_transform(text, operation):
         if operation == "mask":
@@ -49,11 +49,11 @@ async def test_format_customer_response_with_transformations():
                     'transformed': "(***) ***-****"
                 })
         return type('obj', (object,), {'transformed': text})
-    
+
     # Patch the text_transform_client
     conversation.text_transform_client = MagicMock()
     conversation.text_transform_client.transform = mock_transform
-    
+
     # Call the function
     result = await format_customer_response(
         customers=customers,
@@ -61,24 +61,24 @@ async def test_format_customer_response_with_transformations():
         requested_fields={"id", "name", "email", "phone"},
         context=context
     )
-    
+
     # Assertions
     assert "response" in result
     assert "data" in result
     assert len(result["data"]) == 1
-    
+
     # Check if the email and phone were transformed
     transformed_customer = result["data"][0]
     assert "email" in transformed_customer
     assert "phone" in transformed_customer
-    
+
     # The email should be masked (e.g., j***e@example.com)
     assert transformed_customer["email"] != customers[0]["email"]
     assert "***" in transformed_customer["email"]
-    
+
     # The phone should be masked
     assert transformed_customer["phone"] == "(***) ***-****"
-    
+
     # The original data should not be modified
     assert customers[0]["email"] == "john.doe@example.com"
     assert customers[0]["phone"] == "(123) 456-7890"
@@ -94,18 +94,18 @@ async def test_format_customer_response_no_transformations():
             "email": "jane.smith@example.com"
         }
     ]
-    
+
     # Call the function without any transformation context
     result = await format_customer_response(
         customers=customers,
         message="Show me all customers",
         requested_fields={"id", "name", "email"}
     )
-    
+
     # Assertions
     assert "response" in result
     assert "data" in result
     assert len(result["data"]) == 1
-    
+
     # The data should be unchanged
     assert result["data"][0] == customers[0]

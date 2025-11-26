@@ -19,22 +19,22 @@ async def make_graphql_query(query: str, variables: Dict[str, Any] = None) -> Di
     payload = {"query": query}
     if variables:
         payload["variables"] = variables
-    
+
     print(f"\nSending GraphQL request to {GRAPHQL_ENDPOINT}")
     print(f"Query: {query.strip()}")
     if variables:
         print(f"Variables: {variables}")
-    
+
     try:
         async with aiohttp.ClientSession() as session:
             async with session.post(GRAPHQL_ENDPOINT, json=payload, headers=headers) as response:
                 response_data = await response.json()
                 print(f"Response status: {response.status}")
                 print(f"Response data: {response_data}")
-                
+
                 if "errors" in response_data:
                     print(f"GraphQL Errors: {response_data['errors']}")
-                
+
                 return response_data
     except Exception as e:
         print(f"Error making GraphQL request: {str(e)}")
@@ -44,7 +44,7 @@ async def make_graphql_query(query: str, variables: Dict[str, Any] = None) -> Di
 async def test_health_check():
     """
     Test the health check endpoint.
-    
+
     This test verifies that:
     1. The health endpoint is accessible
     2. Returns a valid response with expected fields
@@ -60,31 +60,31 @@ async def test_health_check():
         }
     }
     """
-    
+
     # Make the request
     response = await make_graphql_query(query)
-    
+
     # Basic response validation
     assert "data" in response, "Response should contain 'data' field"
     assert "health" in response["data"], "Response should contain 'health' field"
-    
+
     # Get health data
     health_data = response["data"]["health"]
-    
+
     # Validate fields
     assert "status" in health_data, "Health response should contain 'status' field"
     assert "timestamp" in health_data, "Health response should contain 'timestamp' field"
     assert "version" in health_data, "Health response should contain 'version' field"
-    
+
     # Validate status
     assert health_data["status"] == "ok", "Health status should be 'ok'"
-    
+
     # Validate timestamp format (ISO 8601)
     try:
         datetime.fromisoformat(health_data["timestamp"].replace('Z', '+00:00'))
     except ValueError:
         pytest.fail(f"Invalid timestamp format: {health_data['timestamp']}")
-    
+
     # Validate version format (semantic versioning)
     import re
     version_pattern = r'^\d+\.\d+\.\d+$'  # Basic semver pattern
@@ -105,7 +105,7 @@ async def test_list_tools():
         }
     }
     """
-    
+
     response = await make_graphql_query(query)
     assert "data" in response, "Response should contain 'data' field"
     assert "listTools" in response["data"], "Response should contain 'listTools' field"
@@ -124,10 +124,10 @@ async def test_get_customer():
         }
     }
     """
-    
+
     variables = {"customerId": TEST_CUSTOMER_ID}
     response = await make_graphql_query(query, variables)
-    
+
     assert "data" in response, "Response should contain 'data' field"
     assert "getCustomer" in response["data"], "Response should contain 'getCustomer' field"
     customer = response["data"]["getCustomer"]
@@ -148,10 +148,10 @@ async def test_get_transcript():
         }
     }
     """
-    
+
     variables = {"callId": TEST_CALL_ID}
     response = await make_graphql_query(query, variables)
-    
+
     assert "data" in response, "Response should contain 'data' field"
     assert "getTranscript" in response["data"], "Response should contain 'getTranscript' field"
     transcript = response["data"]["getTranscript"]
@@ -172,21 +172,21 @@ async def test_search_customers():
         }
     }
     """
-    
+
     variables = {
         "filter": {
             "state": "CA",
             "limit": 3
         }
     }
-    
+
     response = await make_graphql_query(query, variables)
-    
+
     assert "data" in response, "Response should contain 'data' field"
     assert "searchCustomers" in response["data"], "Response should contain 'searchCustomers' field"
     customers = response["data"]["searchCustomers"]
     assert isinstance(customers, list), "Should return a list of customers"
-    
+
     if customers:  # If there are customers in CA
         for customer in customers:
             assert customer["state"] == "CA", "All customers should be from CA"

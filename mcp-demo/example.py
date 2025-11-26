@@ -20,13 +20,13 @@ async def run_server(port: int = 8001):
         port=port,
         debug=True
     )
-    
+
     # Configure specific tools if needed
     config.text_processor.to_upper = True
     config.text_processor.to_lower = True
-    
+
     config.keyword_extractor.top_n = 5
-    
+
     # Create and run the server
     server = MCPServer(config)
     print(f"Starting MCP server on port {port}...")
@@ -41,13 +41,13 @@ async def run_client(port: int = 8008, text: str = None):
         if not await host.health_check():
             print("Error: MCP server is not running or not healthy")
             return
-        
+
         # List available tools
         tools = await host.list_tools()
         print("\nAvailable tools:")
         for tool_name, tool_info in tools.items():
             print(f"- {tool_name}: {tool_info['description']}")
-        
+
         # Use provided text or default example
         if not text:
             text = """
@@ -57,28 +57,28 @@ async def run_client(port: int = 8008, text: str = None):
             easily chain together different processing steps and create sophisticated
             AI pipelines.
             """
-        
+
         print("\nProcessing text...")
         response = await host.process_text(text)
-        
+
         # Print the raw response for debugging
         print("\nRaw response:")
         print(json.dumps(response.model_dump(), indent=2))
-        
+
         if response.success and response.result:
             print("\nProcessing successful!")
-            
+
             # Get the results from the response
             results = getattr(response.result, 'results', {})
-            
+
             # Print formatted results
             print("\n=== Text Analysis Results ===")
-            
+
             # Get original text
             original_text = getattr(response.result, 'original_text', 'N/A')
             if isinstance(original_text, str):
                 print(f"Original text: {original_text[:100]}...")
-            
+
             # Print sentiment analysis results
             sentiment = results.get(ToolName.SENTIMENT_ANALYZER)
             if sentiment:
@@ -87,14 +87,14 @@ async def run_client(port: int = 8008, text: str = None):
                 print(f"  - Subjectivity: {sentiment.get('subjectivity', 'N/A'):.2f}")
                 print(f"  - Word Count: {sentiment.get('word_count', 'N/A')}")
                 print(f"  - Sentence Count: {sentiment.get('sentence_count', 'N/A')}")
-            
+
             # Print keyword extraction results
             keywords = results.get(ToolName.KEYWORD_EXTRACTOR)
             if keywords and 'keywords' in keywords:
                 print("\nTop Keywords:")
                 for kw in keywords['keywords'][:5]:
                     print(f"  - {kw.get('phrase', 'N/A')} (score: {kw.get('score', 0):.2f})")
-            
+
             # Print text processing results
             text_processing = results.get(ToolName.TEXT_PROCESSOR)
             if text_processing:
@@ -105,7 +105,7 @@ async def run_client(port: int = 8008, text: str = None):
                     print(f"  - Lowercase: {text_processing['lowercase'][:100]}...")
                 if 'word_count' in text_processing:
                     print(f"  - Word Count: {text_processing['word_count']}")
-        
+
         else:
             print(f"\nError: {response.error}")
 
@@ -113,10 +113,10 @@ async def run_client(port: int = 8008, text: str = None):
 async def main():
     """Main entry point."""
     import argparse
-    
+
     parser = argparse.ArgumentParser(description="MCP Example")
     parser.add_argument(
-        "--server", 
+        "--server",
         action="store_true",
         help="Run the MCP server"
     )
@@ -132,9 +132,9 @@ async def main():
         default=None,
         help="Text to analyze (default: uses example text)"
     )
-    
+
     args = parser.parse_args()
-    
+
     try:
         if args.server:
             await run_server(args.port)

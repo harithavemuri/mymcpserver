@@ -47,7 +47,7 @@ if __name__ == "__main__":
             "": {"handlers": ["console", "file"], "level": "DEBUG"},
         },
     }
-    
+
     # Start the server with debug logging
     uvicorn.run(
         "src.main:app",

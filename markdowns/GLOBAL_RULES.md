@@ -236,7 +236,7 @@
 - Store all URLs in environment files
 - Store all API keys in environment files
 - Store all database credentials in environment files
-- Store all other sensitive information in environment files  
+- Store all other sensitive information in environment files
 
 ## Error Tracking
 - Implement **client-side error tracking**

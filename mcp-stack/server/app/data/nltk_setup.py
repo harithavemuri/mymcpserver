@@ -33,7 +33,7 @@ def setup_nltk_data():
         return None
 
     import nltk
-    
+
     # Define required NLTK data packages
     required_data = [
         'punkt',
@@ -42,14 +42,14 @@ def setup_nltk_data():
         'averaged_perceptron_tagger',
         'vader_lexicon'
     ]
-    
+
     # Try multiple possible NLTK data locations
     possible_paths = [
         Path.home() / 'nltk_data',
         Path(__file__).parent / 'nltk_data',
         Path.cwd() / 'nltk_data'
     ]
-    
+
     # Create directories and add to NLTK path
     nltk_data_dirs = []
     for path in possible_paths:
@@ -59,14 +59,14 @@ def setup_nltk_data():
             print(f"✓ Using NLTK data directory: {path}")
         except Exception as e:
             print(f"⚠ Could not create NLTK data directory at {path}: {e}")
-    
+
     if not nltk_data_dirs:
         print("❌ No valid NLTK data directories could be created")
         return None
-    
+
     # Add all valid paths to NLTK's data path
     nltk.data.path = nltk_data_dirs + nltk.data.path
-    
+
     # Download required NLTK data
     for data in required_data:
         try:
@@ -74,7 +74,7 @@ def setup_nltk_data():
             print(f"✓ Downloaded NLTK data: {data}")
         except Exception as e:
             print(f"⚠ Failed to download NLTK data '{data}': {e}")
-    
+
     # Handle punkt_tab for Windows
     if platform.system() == 'Windows':
         try:
@@ -84,7 +84,7 @@ def setup_nltk_data():
                 if punkt_path.exists():
                     punkt_dir = punkt_path
                     break
-            
+
             if punkt_dir:
                 punkt_tab_dir = punkt_dir.parent / 'punkt_tab'
                 if not punkt_tab_dir.exists():
@@ -94,7 +94,7 @@ def setup_nltk_data():
                     print(f"✓ punkt_tab already exists at {punkt_tab_dir}")
         except Exception as e:
             print(f"⚠ Could not create punkt_tab: {e}")
-    
+
     return nltk_data_dirs[0]
 
 # Run the setup when this module is imported

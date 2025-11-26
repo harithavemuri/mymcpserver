@@ -32,11 +32,11 @@ async def main():
         # Register a model using natural language
         response = await client.chat("Register a new model named sentiment-analysis version 1.0.0")
         print(f"Model registered: {response}")
-        
+
         # List all models
         models = await client.chat("Show me all available models")
         print(f"Available models: {models}")
-        
+
         # Make a prediction
         prediction = await client.chat("Predict sentiment for: I love this product!")
         print(f"Prediction: {prediction}")

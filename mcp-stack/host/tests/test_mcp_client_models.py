@@ -6,7 +6,7 @@ from typing import Dict, Any, List, Optional
 from unittest.mock import AsyncMock, patch, MagicMock
 
 from src.models import (
-    Customer, PersonalInfo, Address, Employment, 
+    Customer, PersonalInfo, Address, Employment,
     CallTranscript, TranscriptEntry, Sentiment,
     CustomerListResponse, TranscriptListResponse
 )
@@ -88,10 +88,10 @@ async def test_get_customer(mock_client):
     """Test getting a customer by ID."""
     # Mock the response from the server
     mock_client.query_data.return_value = {"getCustomer": TEST_CUSTOMER_DATA}
-    
+
     # Call the method under test
     customer = await mock_client.get_customer("CUST123")
-    
+
     # Verify the result
     assert isinstance(customer, Customer)
     assert customer.customer_id == "CUST123"
@@ -100,7 +100,7 @@ async def test_get_customer(mock_client):
     assert customer.home_address.city == "Anytown"
     assert customer.employment.company == "ACME Corp"
     assert customer.created_at == datetime(2023, 1, 1, tzinfo=timezone.utc)
-    
+
     # Verify the query was made correctly
     mock_client.query_data.assert_awaited_once()
     args, kwargs = mock_client.query_data.await_args
@@ -114,7 +114,7 @@ async def test_search_customers(mock_client):
     mock_client.query_data.return_value = {
         "searchCustomers": [TEST_CUSTOMER_DATA]
     }
-    
+
     # Call the method under test
     response = await mock_client.search_customers(
         name="John Doe",
@@ -123,13 +123,13 @@ async def test_search_customers(mock_client):
         limit=10,
         offset=0
     )
-    
+
     # Verify the result
     assert isinstance(response, CustomerListResponse)
     assert len(response.items) == 1
     customer = response.items[0]
     assert customer.customer_id == "CUST123"
-    
+
     # Verify the query was made correctly
     mock_client.query_data.assert_awaited_once()
     args, kwargs = mock_client.query_data.await_args
@@ -147,10 +147,10 @@ async def test_get_transcript(mock_client):
     """Test getting a transcript by ID."""
     # Mock the response from the server
     mock_client.query_data.return_value = {"getTranscript": TEST_TRANSCRIPT_DATA}
-    
+
     # Call the method under test
     transcript = await mock_client.get_transcript("CALL456")
-    
+
     # Verify the result
     assert isinstance(transcript, CallTranscript)
     assert transcript.call_id == "CALL456"
@@ -160,7 +160,7 @@ async def test_get_transcript(mock_client):
     assert transcript.transcript[0].speaker == "agent"
     assert transcript.sentiment.polarity == 0.8
     assert "account_inquiry" in transcript.contexts
-    
+
     # Verify the query was made correctly
     mock_client.query_data.assert_awaited_once()
     args, kwargs = mock_client.query_data.await_args
@@ -174,7 +174,7 @@ async def test_search_transcripts(mock_client):
     mock_client.query_data.return_value = {
         "searchTranscripts": [TEST_TRANSCRIPT_DATA]
     }
-    
+
     # Call the method under test
     response = await mock_client.search_transcripts(
         customer_id="CUST123",
@@ -184,14 +184,14 @@ async def test_search_transcripts(mock_client):
         limit=10,
         offset=0
     )
-    
+
     # Verify the result
     assert isinstance(response, TranscriptListResponse)
     assert len(response.items) == 1
     transcript = response.items[0]
     assert transcript.call_id == "CALL456"
     assert transcript.customer_id == "CUST123"
-    
+
     # Verify the query was made correctly
     mock_client.query_data.assert_awaited_once()
     args, kwargs = mock_client.query_data.await_args
@@ -215,15 +215,15 @@ async def test_get_customer_with_transcripts(mock_client):
         total_count=1,
         has_next_page=False
     ))
-    
+
     # Call the method under test
     customer = await mock_client.get_customer_with_transcripts("CUST123")
-    
+
     # Verify the result
     assert customer.customer_id == "CUST123"
     assert len(customer.transcripts) == 1
     assert customer.transcripts[0].call_id == "CALL456"
-    
+
     # Verify the methods were called correctly
     mock_client.get_customer.assert_awaited_once_with("CUST123")
     mock_client.search_transcripts.assert_awaited_once_with(customer_id="CUST123")

@@ -82,17 +82,17 @@ async def main():
     """Run all tests"""
     print("Starting MCP Client REST API Tests...")
     print(f"Base URL: {BASE_URL}")
-    
+
     # Run tests
     await test_health()
     await test_list_customers()
     await test_search_customers()
-    
+
     # Test with a specific customer ID (you may need to update this)
     test_customer_id = "CUST123"
     await test_get_customer(test_customer_id)
     await test_customer_transcripts(test_customer_id)
-    
+
     print("\n=== Tests Complete ===")
 
 if __name__ == "__main__":

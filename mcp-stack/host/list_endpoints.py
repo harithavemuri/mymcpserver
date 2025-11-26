@@ -26,9 +26,9 @@ async def list_endpoints():
         "/redoc",
         "/openapi.json"
     ]
-    
+
     logger.info("Testing available endpoints on the host server...")
-    
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         for endpoint in endpoints:
             url = f"{base_url}{endpoint}"

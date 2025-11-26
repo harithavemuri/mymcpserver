@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, patch, MagicMock
 from fastapi import status
 
 from src.models import (
-    Customer, PersonalInfo, Address, Employment, 
+    Customer, PersonalInfo, Address, Employment,
     CallTranscript, TranscriptEntry, Sentiment,
     CustomerListResponse, TranscriptListResponse
 )
@@ -81,16 +81,16 @@ async def test_get_customer(client, mock_mcp_client):
     # Setup mock
     customer = Customer(**TEST_CUSTOMER_DATA)
     mock_mcp_client.get_customer = AsyncMock(return_value=customer)
-    
+
     # Make request
     response = await client.get("/api/customers/CUST123")
-    
+
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert data["customerId"] == "CUST123"
     assert data["personalInfo"]["firstName"] == "John"
-    
+
     # Verify the client was called correctly
     mock_mcp_client.get_customer.assert_awaited_once_with("CUST123")
 
@@ -105,7 +105,7 @@ async def test_search_customers(client, mock_mcp_client):
         has_next_page=False
     )
     mock_mcp_client.search_customers = AsyncMock(return_value=mock_response)
-    
+
     # Make request
     params = {
         "name": "John Doe",
@@ -114,7 +114,7 @@ async def test_search_customers(client, mock_mcp_client):
         "offset": 0
     }
     response = await client.get("/api/customers", params=params)
-    
+
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
@@ -122,7 +122,7 @@ async def test_search_customers(client, mock_mcp_client):
     assert data["items"][0]["customerId"] == "CUST123"
     assert data["totalCount"] == 1
     assert not data["hasNextPage"]
-    
+
     # Verify the client was called correctly
     mock_mcp_client.search_customers.assert_awaited_once_with(
         name="John Doe",
@@ -138,17 +138,17 @@ async def test_get_transcript(client, mock_mcp_client):
     # Setup mock
     transcript = CallTranscript(**TEST_TRANSCRIPT_DATA)
     mock_mcp_client.get_transcript = AsyncMock(return_value=transcript)
-    
+
     # Make request
     response = await client.get("/api/transcripts/CALL456")
-    
+
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert data["callId"] == "CALL456"
     assert data["customerId"] == "CUST123"
     assert len(data["transcript"]) == 2
-    
+
     # Verify the client was called correctly
     mock_mcp_client.get_transcript.assert_awaited_once_with("CALL456")
 
@@ -163,7 +163,7 @@ async def test_search_transcripts(client, mock_mcp_client):
         has_next_page=False
     )
     mock_mcp_client.search_transcripts = AsyncMock(return_value=mock_response)
-    
+
     # Make request
     params = {
         "customer_id": "CUST123",
@@ -173,7 +173,7 @@ async def test_search_transcripts(client, mock_mcp_client):
         "offset": 0
     }
     response = await client.get("/api/transcripts", params=params)
-    
+
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
@@ -181,7 +181,7 @@ async def test_search_transcripts(client, mock_mcp_client):
     assert data["items"][0]["callId"] == "CALL456"
     assert data["totalCount"] == 1
     assert not data["hasNextPage"]
-    
+
     # Verify the client was called correctly
     mock_mcp_client.search_transcripts.assert_awaited_once_with(
         customer_id="CUST123",
@@ -198,24 +198,24 @@ async def test_get_customer_with_transcripts(client, mock_mcp_client):
     # Setup mocks
     customer = Customer(**TEST_CUSTOMER_DATA)
     transcript = CallTranscript(**TEST_TRANSCRIPT_DATA)
-    
+
     mock_mcp_client.get_customer = AsyncMock(return_value=customer)
     mock_mcp_client.search_transcripts = AsyncMock(return_value=TranscriptListResponse(
         items=[transcript],
         total_count=1,
         has_next_page=False
     ))
-    
+
     # Make request
     response = await client.get("/api/customers/CUST123/transcripts")
-    
+
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert data["customerId"] == "CUST123"
     assert len(data["transcripts"]) == 1
     assert data["transcripts"][0]["callId"] == "CALL456"
-    
+
     # Verify the client was called correctly
     mock_mcp_client.get_customer.assert_awaited_once_with("CUST123")
     mock_mcp_client.search_transcripts.assert_awaited_once_with(customer_id="CUST123")

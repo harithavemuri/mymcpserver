@@ -8,7 +8,7 @@ def test_model_loading():
         print("Loading sentence-transformers model...")
         model = SentenceTransformer('all-MiniLM-L6-v2')
         print("Model loaded successfully!")
-        
+
         # Test encoding
         text = "This is a test sentence."
         embedding = model.encode(text)

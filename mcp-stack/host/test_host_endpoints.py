@@ -26,7 +26,7 @@ async def test_endpoint(url, method="GET", json_data=None):
             else:
                 logger.error(f"Unsupported HTTP method: {method}")
                 return False, None
-            
+
             logger.info(f"{method} {url} - Status: {response.status_code}")
             logger.debug(f"Response: {response.text}")
             return response.status_code == 200, response.text
@@ -44,27 +44,27 @@ async def test_all_endpoints():
         {"path": "/api/converse", "method": "POST", "json": {"query": "List all customers"}},
         {"path": "/api/endpoints", "method": "GET"}
     ]
-    
+
     results = {}
     for endpoint in endpoints:
         url = urljoin(base_url, endpoint["path"])
         method = endpoint.get("method", "GET")
         json_data = endpoint.get("json")
-        
+
         logger.info(f"\n{'='*80}")
         logger.info(f"Testing {method} {url}")
         if json_data:
             logger.debug(f"Request data: {json_data}")
-            
+
         success, response = await test_endpoint(url, method, json_data)
         results[url] = {"success": success, "response": response}
-    
+
     return results
 
 if __name__ == "__main__":
     logger.info("Testing host server endpoints...")
     results = asyncio.run(test_all_endpoints())
-    
+
     # Print summary
     logger.info("\n" + "="*80)
     logger.info("Test Summary:")
@@ -74,5 +74,5 @@ if __name__ == "__main__":
         logger.info(f"{url}: {status}")
         if not result["success"]:
             logger.error(f"  Error: {result['response']}")
-    
+
     logger.info("\nTesting completed.")

@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 async def test_mcp_health():
     """Test the MCP server's health endpoint."""
     url = "http://localhost:8005/health"
-    
+
     async with httpx.AsyncClient(timeout=30.0) as client:
         try:
             logger.info(f"Testing MCP server health at {url}")

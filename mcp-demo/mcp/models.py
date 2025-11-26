@@ -38,7 +38,7 @@ class ProcessingResult(BaseModel):
         default_factory=dict,
         description="Additional metadata about the processing"
     )
-    
+
     # Pydantic v2 model configuration
     model_config = {
         # Allow extra fields to be included in the model
@@ -132,7 +132,7 @@ class MCPConfig(BaseModel):
         default_factory=lambda: ["*"],
         description="List of allowed origins for CORS."
     )
-    
+
     # Tool configurations
     text_processor: TextProcessorConfig = Field(
         default_factory=TextProcessorConfig,
@@ -146,7 +146,7 @@ class MCPConfig(BaseModel):
         default_factory=KeywordExtractorConfig,
         description="Configuration for the keyword extractor tool"
     )
-    
+
     # Pydantic v2 config
     model_config = {
         "use_enum_values": True,
@@ -170,7 +170,7 @@ class WorkflowState(BaseModel):
         default=None,
         description="Error message if any tool fails"
     )
-    
+
     # Pydantic v2 model configuration
     model_config = {
         # Allow extra fields to be included in the model

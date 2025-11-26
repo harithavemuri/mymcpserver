@@ -35,7 +35,7 @@ class TestMCPClient:
                 }
             },
         )
-        
+
         client = MCPClient("http://testserver")
         query = """
         query GetDataSources {
@@ -45,14 +45,14 @@ class TestMCPClient:
             }
         }
         """
-        
+
         result = await client.query_data(query)
-        
+
         assert "dataSources" in result
         assert len(result["dataSources"]) > 0
         assert "id" in result["dataSources"][0]
         assert "name" in result["dataSources"][0]
-    
+
     @pytest.mark.asyncio
     async def test_query_data_error(self, httpx_mock):
         """Test GraphQL query with errors."""
@@ -63,14 +63,14 @@ class TestMCPClient:
             status_code=400,
             json={"errors": [{"message": "Invalid query"}]},
         )
-        
+
         client = MCPClient("http://testserver")
-        
+
         with pytest.raises(HTTPException) as exc_info:
             await client.query_data("invalid query")
-        
+
         assert exc_info.value.status_code == 400
-    
+
     @pytest.mark.asyncio
     async def test_get_data_sources(self, httpx_mock):
         """Test getting data sources."""
@@ -93,15 +93,15 @@ class TestMCPClient:
                 }
             },
         )
-        
+
         client = MCPClient("http://testserver")
         result = await client.get_data_sources()
-        
+
         assert isinstance(result, list)
         assert len(result) > 0
         assert "id" in result[0]
         assert "name" in result[0]
-    
+
     @pytest.mark.asyncio
     async def test_query_data_items(self, httpx_mock):
         """Test querying data items."""
@@ -130,10 +130,10 @@ class TestMCPClient:
                 }
             },
         )
-        
+
         client = MCPClient("http://testserver")
         result = await client.query_data_items()
-        
+
         assert "items" in result
         assert "total" in result
         assert "page" in result
@@ -143,17 +143,17 @@ class TestMCPClient:
         assert "id" in result["items"][0]
         assert "sourceId" in result["items"][0]
         assert "data" in result["items"][0]
-    
+
     @pytest.mark.asyncio
     async def test_close_client(self):
         """Test closing the client."""
         client = MCPClient("http://testserver")
-        
+
         # Mock the close method
         with patch.object(client.client, 'aclose') as mock_close:
             await client.close()
             mock_close.assert_called_once()
-    
+
     @pytest.mark.asyncio
     async def test_http_errors(self, httpx_mock):
         """Test handling of HTTP errors."""
@@ -164,13 +164,13 @@ class TestMCPClient:
             status_code=500,
             json={"error": "Internal Server Error"},
         )
-        
+
         client = MCPClient("http://testserver")
-        
+
         with pytest.raises(HTTPException) as exc_info:
             await client.query_data("query { test }")
         assert exc_info.value.status_code == 500
-    
+
     @pytest.mark.asyncio
     async def test_graphql_errors(self, httpx_mock):
         """Test handling of GraphQL errors."""
@@ -184,11 +184,11 @@ class TestMCPClient:
                 ]
             },
         )
-        
+
         client = MCPClient("http://testserver")
-        
+
         with pytest.raises(HTTPException) as exc_info:
             await client.get_data_sources()
-        
+
         # The error should be a 400 Bad Request
         assert exc_info.value.status_code == 500

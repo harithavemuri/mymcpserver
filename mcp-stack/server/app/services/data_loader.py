@@ -11,13 +11,13 @@ from ..models.data_models import DataItem, DataSource, DataSourceType
 
 class DataLoader:
     """Loads data from various file formats."""
-    
+
     @classmethod
     def detect_source_type(cls, file_path: Union[str, Path]) -> DataSourceType:
         """Detect the type of data source from file extension."""
         path = Path(file_path)
         ext = path.suffix.lower()
-        
+
         if ext == '.json':
             return DataSourceType.JSON
         elif ext == '.csv':
@@ -26,7 +26,7 @@ class DataLoader:
             return DataSourceType.PARQUET
         else:
             raise ValueError(f"Unsupported file format: {ext}")
-    
+
     @classmethod
     def load_json_file(cls, file_path: Path) -> List[Dict[str, Any]]:
         """Load data from a JSON file."""
@@ -39,7 +39,7 @@ class DataLoader:
         except json.JSONDecodeError as e:
             logger.error(f"Error decoding JSON file {file_path}: {e}")
             raise
-    
+
     @classmethod
     def load_csv_file(cls, file_path: Path) -> List[Dict[str, Any]]:
         """Load data from a CSV file."""
@@ -49,7 +49,7 @@ class DataLoader:
         except Exception as e:
             logger.error(f"Error loading CSV file {file_path}: {e}")
             raise
-    
+
     @classmethod
     def load_parquet_file(cls, file_path: Path) -> List[Dict[str, Any]]:
         """Load data from a Parquet file."""
@@ -59,16 +59,16 @@ class DataLoader:
         except Exception as e:
             logger.error(f"Error loading Parquet file {file_path}: {e}")
             raise
-    
+
     @classmethod
     def load_file(cls, file_path: Union[str, Path]) -> List[Dict[str, Any]]:
         """Load data from a file, automatically detecting the format."""
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"File not found: {path}")
-        
+
         source_type = cls.detect_source_type(path)
-        
+
         if source_type == DataSourceType.JSON:
             return cls.load_json_file(path)
         elif source_type == DataSourceType.CSV:
@@ -77,7 +77,7 @@ class DataLoader:
             return cls.load_parquet_file(path)
         else:
             raise ValueError(f"Unsupported file type: {source_type}")
-    
+
     @classmethod
     def load_directory(
         cls,
@@ -89,10 +89,10 @@ class DataLoader:
         dir_path = Path(directory)
         if not dir_path.is_dir():
             raise NotADirectoryError(f"Not a directory: {directory}")
-        
+
         result = {}
         glob_pattern = "**/" + pattern if recursive else pattern
-        
+
         for file_path in dir_path.glob(glob_pattern):
             if file_path.is_file():
                 try:
@@ -102,9 +102,9 @@ class DataLoader:
                 except Exception as e:
                     logger.warning(f"Skipping file {file_path}: {e}")
                     continue
-        
+
         return result
-    
+
     @classmethod
     def create_data_items(
         cls,

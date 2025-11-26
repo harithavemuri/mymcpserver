@@ -38,7 +38,7 @@ for package in required_data:
 try:
     punkt_dir = os.path.join(nltk_data_dir, 'tokenizers', 'punkt')
     punkt_tab_dir = os.path.join(nltk_data_dir, 'tokenizers', 'punkt_tab')
-    
+
     if os.path.exists(punkt_dir) and not os.path.exists(punkt_tab_dir):
         print("Creating punkt_tab symlink...")
         if os.name == 'nt':  # Windows

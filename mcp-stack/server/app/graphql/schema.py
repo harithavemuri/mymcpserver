@@ -101,7 +101,7 @@ class Query:
             status="ok",
             timestamp=datetime.now().isoformat()
         )
-        
+
     @strawberry.field
     async def list_tools(
         self,
@@ -113,13 +113,13 @@ class Query:
     ) -> List[ToolType]:
         """
         List all available tools with optional filtering.
-        
+
         Args:
             category: Filter tools by category
             available_only: Only return tools that are currently available
             limit: Maximum number of tools to return
             offset: Number of tools to skip for pagination
-            
+
         Returns:
             List of ToolType objects
         """
@@ -145,17 +145,17 @@ class Query:
                 updated_at=datetime.now().isoformat()
             )
         ]
-        
+
         # Apply filters
         filtered_tools = [
             tool for tool in mock_tools
             if (not available_only or tool.is_available) and
                (not category or tool.category == category)
         ]
-        
+
         # Apply pagination
         return filtered_tools[offset:offset + limit]
-        
+
     @strawberry.field
     async def get_model(self, info: Info, id: str) -> Optional[ModelType]:
         """Get a model by ID."""
@@ -225,7 +225,7 @@ class Query(DataQueryType):
             status="ok",
             timestamp=datetime.now().isoformat()
         )
-    
+
     @strawberry.field
     async def list_tools(
         self,
@@ -257,13 +257,13 @@ class Query(DataQueryType):
                 updated_at=datetime.now().isoformat()
             )
         ]
-        
+
         # Apply filters
         if category:
             mock_tools = [t for t in mock_tools if t.category == category]
         if available_only:
             mock_tools = [t for t in mock_tools if t.is_available]
-            
+
         # Apply pagination
         return mock_tools[offset:offset + limit]
 

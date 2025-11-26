@@ -456,7 +456,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8005 --reload --log-level debug
 uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
 python example.py --server
 python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
- 
+
  change to mcp-stack\server folder
  remove the virtual environment folder
  clear plan

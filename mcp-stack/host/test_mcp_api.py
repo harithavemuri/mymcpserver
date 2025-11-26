@@ -34,7 +34,7 @@ async def test_mcp_server_connection() -> bool:
     """Test connection to the MCP server"""
     print("\n=== MCP Server Connection Test ===")
     print(f"MCP Server URL: {MCP_SERVER_URL}")
-    
+
     # Test GraphQL endpoint
     query = """
     query {
@@ -44,13 +44,13 @@ async def test_mcp_server_connection() -> bool:
         }
     }
     """
-    
+
     try:
         async with httpx.AsyncClient() as client:
             headers = {"Content-Type": "application/json"}
             if MCP_API_KEY:
-                headers["Authorization"] = f"Bearer {MCP_API_KEY}" 
-            
+                headers["Authorization"] = f"Bearer {MCP_API_KEY}"
+
             # Test GraphQL endpoint
             response = await client.post(
                 f"{MCP_SERVER_URL}/graphql",
@@ -58,7 +58,7 @@ async def test_mcp_server_connection() -> bool:
                 headers=headers,
                 timeout=5.0
             )
-            
+
             if response.status_code == 200:
                 data = response.json()
                 if "data" in data and "health" in data["data"]:
@@ -72,17 +72,17 @@ async def test_mcp_server_connection() -> bool:
             else:
                 print(f"❌ Failed to connect to MCP Server (HTTP {response.status_code}):")
                 print(response.text)
-                
+
     except Exception as e:
         print(f"❌ Error connecting to MCP Server: {str(e)}")
-    
+
     return False
 
 async def test_get_sources():
     """Test getting available data sources"""
     print("\n=== Data Sources ===")
     print(f"Testing endpoint: {BASE_URL}/api/data/sources")
-    
+
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(
@@ -91,7 +91,7 @@ async def test_get_sources():
                 timeout=5.0
             )
             print(f"Status: {response.status_code}")
-            
+
             if response.status_code == 200:
                 sources = response.json()
                 print("Available data sources:")
@@ -101,7 +101,7 @@ async def test_get_sources():
             else:
                 print(f"Error: {response.status_code} - {response.text}")
                 return False
-                
+
         except Exception as e:
             print(f"Error getting data sources: {str(e)}")
             return False
@@ -109,15 +109,15 @@ async def test_get_sources():
 async def test_get_customers():
     """Test getting customer data"""
     print("\n=== Customer Data ===")
-    
+
     # First try the MCP host endpoint
     print(f"Testing MCP Host endpoint: {BASE_URL}/api/data/items?source_id=customers")
-    
+
     params = {
         "source_id": "customers",
         "limit": 2
     }
-    
+
     async with httpx.AsyncClient() as client:
         try:
             # Test MCP host endpoint
@@ -127,10 +127,10 @@ async def test_get_customers():
                 headers=HEADERS,
                 timeout=5.0
             )
-            
+
             print(f"MCP Host Response ({response.status_code}):")
             data = response.json()
-            
+
             if response.status_code == 200:
                 items = data.get('items', [])
                 print(f"Found {len(items)} customers")
@@ -141,15 +141,15 @@ async def test_get_customers():
                     print("1. The MCP server has no customer data")
                     print("2. The MCP host is not properly connected to the MCP server")
                     print(f"3. The MCP server at {MCP_SERVER_URL} is not returning customer data")
-                    
+
                     # Try to query MCP server directly for customers
                     print("\nAttempting to query MCP server directly...")
                     await query_mcp_server_directly("customers")
             else:
                 print(f"Error: {response.status_code} - {response.text}")
-            
+
             return response.status_code == 200
-            
+
         except Exception as e:
             print(f"Error getting customer data: {str(e)}")
             return False
@@ -179,30 +179,30 @@ async def query_mcp_server_directly(data_type: str):
         }
         """
     }
-    
+
     if data_type not in query_map:
         print(f"No direct query available for {data_type}")
         return
-    
+
     query = query_map[data_type]
     variables = {"limit": 2, "offset": 0}
-    
+
     try:
         async with httpx.AsyncClient() as client:
             headers = {"Content-Type": "application/json"}
             if MCP_API_KEY:
                 headers["Authorization"] = f"Bearer {MCP_API_KEY}"
-                
+
             print(f"\nQuerying MCP Server directly at {MCP_SERVER_URL}/graphql")
             print(f"Query: {query.strip()}")
-            
+
             response = await client.post(
                 f"{MCP_SERVER_URL}/graphql",
                 json={"query": query, "variables": variables},
                 headers=headers,
                 timeout=5.0
             )
-            
+
             if response.status_code == 200:
                 result = response.json()
                 if "errors" in result:
@@ -218,22 +218,22 @@ async def query_mcp_server_directly(data_type: str):
             else:
                 print(f"Error querying MCP server: {response.status_code}")
                 print(response.text)
-                
+
     except Exception as e:
         print(f"Error querying MCP server: {str(e)}")
 
 async def test_get_transcripts():
     """Test getting transcript data"""
     print("\n=== Transcript Data ===")
-    
+
     # First try the MCP host endpoint
     print(f"Testing MCP Host endpoint: {BASE_URL}/api/data/items?source_id=transcripts")
-    
+
     params = {
         "source_id": "transcripts",
         "limit": 2
     }
-    
+
     async with httpx.AsyncClient() as client:
         try:
             # Test MCP host endpoint
@@ -243,10 +243,10 @@ async def test_get_transcripts():
                 headers=HEADERS,
                 timeout=5.0
             )
-            
+
             print(f"MCP Host Response ({response.status_code}):")
             data = response.json()
-            
+
             if response.status_code == 200:
                 items = data.get('items', [])
                 print(f"Found {len(items)} transcripts")
@@ -257,15 +257,15 @@ async def test_get_transcripts():
                     print("1. The MCP server has no transcript data")
                     print("2. The MCP host is not properly connected to the MCP server")
                     print(f"3. The MCP server at {MCP_SERVER_URL} is not returning transcript data")
-                    
+
                     # Try to query MCP server directly for transcripts
                     print("\nAttempting to query MCP server directly...")
                     await query_mcp_server_directly("transcripts")
             else:
                 print(f"Error: {response.status_code} - {response.text}")
-            
+
             return response.status_code == 200
-            
+
         except Exception as e:
             print(f"Error getting transcript data: {str(e)}")
             return False
@@ -278,22 +278,22 @@ async def main():
     print(f"MCP Host URL: {BASE_URL}")
     print(f"MCP Server URL: {MCP_SERVER_URL}")
     print("-" * 60)
-    
+
     # Run tests
     test_results = {}
-    
+
     # Test MCP host health
     test_results["host_health"] = await test_health()
-    
+
     # Test MCP server connection
     test_results["server_connection"] = await test_mcp_server_connection()
-    
+
     # Only continue if server connection is successful
     if test_results["server_connection"]:
         test_results["data_sources"] = await test_get_sources()
         test_results["customers"] = await test_get_customers()
         test_results["transcripts"] = await test_get_transcripts()
-    
+
     # Print summary
     print("\n" + "=" * 60)
     print("TEST SUMMARY")
@@ -301,11 +301,11 @@ async def main():
     for test_name, passed in test_results.items():
         status = "✅ PASS" if passed else "❌ FAIL"
         print(f"{status} - {test_name.replace('_', ' ').title()}")
-    
+
     print("\n" + "=" * 60)
     print("NEXT STEPS")
     print("=" * 60)
-    
+
     if not test_results.get("server_connection", False):
         print("1. Check if the MCP server is running at:", MCP_SERVER_URL)
         print("2. Verify the MCP_SERVER_URL in your environment variables")
@@ -315,7 +315,7 @@ async def main():
         print("   You may need to add test data to the MCP server")
         print("2. Check the MCP server logs for any errors")
         print("3. Verify the GraphQL queries in the MCP host match the server schema")
-    
+
     print("\nTests complete!")
 
 if __name__ == "__main__":

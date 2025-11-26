@@ -56,19 +56,19 @@ def add_methods():
     @classmethod
     def from_model_transcript(cls, transcript):
         get_attr = lambda x, a: x[a] if isinstance(x, dict) else getattr(x, a, None)
-        
+
         transcript_data = get_attr(transcript, 'transcript') or []
         transcript_entries = []
         for entry in (transcript_data if isinstance(transcript_data, list) else []):
             if not isinstance(entry, dict):
                 continue
-                
+
             transcript_entries.append(TranscriptEntry(
                 speaker=entry.get('speaker', ''),
                 text=entry.get('text', ''),
                 timestamp=entry.get('timestamp', '')
             ))
-        
+
         # Get sentiment data
         sentiment_data = get_attr(transcript, 'sentiment') or {}
         sentiment = SentimentType(
@@ -76,12 +76,12 @@ def add_methods():
             subjectivity=float(sentiment_data.get('subjectivity', 0.0)),
             analyzer=sentiment_data.get('analyzer')
         )
-        
+
         # Get contexts
         contexts = get_attr(transcript, 'contexts') or []
         if not isinstance(contexts, list):
             contexts = []
-            
+
         return cls(
             call_id=get_attr(transcript, 'call_id') or '',
             customer_id=get_attr(transcript, 'customer_id') or '',
@@ -96,26 +96,26 @@ def add_methods():
             sentiment=sentiment,
             contexts=contexts
         )
-    
+
     # Add from_model to CustomerType
     @classmethod
     def from_model_customer(cls, customer, include_transcripts: bool = False):
         email = customer.personal_info.get('email', '')
         phone = customer.personal_info.get('phone', '')
-        
+
         if not email and hasattr(customer, 'home_address') and customer.home_address:
             email = customer.home_address.get('email', '')
         if not phone and hasattr(customer, 'home_address') and customer.home_address:
             phone = customer.home_address.get('phone', '')
-            
+
         city = customer.home_address.get('city', '') if hasattr(customer, 'home_address') and customer.home_address else ''
         state = customer.home_address.get('state', '') if hasattr(customer, 'home_address') and customer.home_address else ''
-        
+
         transcripts = []
         if include_transcripts:
             transcript_models = data_loader.search_transcripts(customer_id=customer.customer_id)
             transcripts = [CallTranscriptType.from_model(t) for t in transcript_models]
-        
+
         return cls(
             customer_id=customer.customer_id,
             first_name=customer.personal_info.get('first_name', ''),
@@ -126,7 +126,7 @@ def add_methods():
             state=state,
             transcripts=transcripts
         )
-    
+
     # Attach methods to classes
     CallTranscriptType.from_model = from_model_transcript
     CustomerType.from_model = from_model_customer
@@ -162,7 +162,7 @@ class DataQuery:
         if customer:
             return CustomerType.from_model(customer)
         return None
-    
+
     @strawberry.field
     async def search_customers(
         self,
@@ -176,14 +176,14 @@ class DataQuery:
             offset=filter.offset
         )
         return [CustomerType.from_model(c, include_transcripts=filter.include_transcripts) for c in customers]
-    
+
     @strawberry.field
     async def get_transcript(self, call_id: str) -> Optional[CallTranscriptType]:
         transcript = data_loader.get_transcript(call_id)
         if transcript:
             return CallTranscriptType.from_model(transcript)
         return None
-    
+
     @strawberry.field
     async def search_transcripts(
         self,
@@ -198,7 +198,7 @@ class DataQuery:
             offset=filter.offset
         )
         return [CallTranscriptType.from_model(t) for t in transcripts]
-        
+
     @strawberry.field
     async def get_customers_with_transcripts(self) -> List[CustomerType]:
         """Get all customers that have at least one transcript."""

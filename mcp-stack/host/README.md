@@ -233,18 +233,18 @@ import asyncio
 async def main():
     # Initialize the client
     client = MCPTextTransformClient(base_url="http://localhost:8002")
-    
+
     try:
         # Uppercase transformation
         result = await client.transform("hello world", operation="uppercase")
         print(f"Uppercase: {result.transformed}")
-        
+
         # Multiple transformations (chaining)
         text = "hello world"
         uppercase_result = await client.transform(text, operation="uppercase")
         reverse_result = await client.transform(uppercase_result.transformed, operation="reverse")
         print(f"Chained transformations: {reverse_result.transformed}")
-        
+
     finally:
         await client.client.aclose()
 
@@ -263,22 +263,22 @@ import asyncio
 async def main():
     # Initialize the client
     client = MCPTextTransformClient(base_url="http://localhost:8002")
-    
+
     try:
         # Simple transformation
         response = await client.transform("hello world", operation="uppercase")
         print(f"Response: {response.transformed}")
-        
+
         # Using the conversation endpoint
         from src.routers.conversation import process_conversation
-        
+
         messages = [
             {"role": "user", "content": "Convert this to title case: the quick brown fox"}
         ]
-        
+
         result = await process_conversation({"messages": messages})
         print(f"Assistant: {result.response}")
-        
+
     finally:
         await client.client.aclose()
 

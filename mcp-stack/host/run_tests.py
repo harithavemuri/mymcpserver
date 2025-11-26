@@ -36,22 +36,22 @@ async def run_tests():
         'tests.test_mcp_client_models',
         'tests.test_api_models'
     ]
-    
+
     total_tests = 0
     passed_tests = 0
     failed_tests = 0
-    
+
     for module_name in test_modules:
         print(f"\nRunning tests in {module_name}...")
         print("=" * 80)
-        
+
         test_functions = find_test_functions(module_name)
-        
+
         for test_func in test_functions:
             test_name = f"{module_name}.{test_func.__name__}"
             print(f"Running {test_name}...", end=" ")
             total_tests += 1
-            
+
             try:
                 await test_func()
                 print("✓ PASSED")
@@ -61,7 +61,7 @@ async def run_tests():
                 failed_tests += 1
                 import traceback
                 traceback.print_exc()
-    
+
     # Print summary
     print("\n" + "=" * 80)
     print("TEST SUMMARY")
@@ -71,7 +71,7 @@ async def run_tests():
     print(f"Failed: {failed_tests}")
     print(f"Success rate: {passed_tests / total_tests * 100:.1f}%" if total_tests > 0 else "No tests run")
     print("=" * 80)
-    
+
     return 0 if failed_tests == 0 else 1
 
 if __name__ == "__main__":

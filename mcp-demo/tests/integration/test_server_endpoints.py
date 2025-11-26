@@ -15,13 +15,13 @@ def test_process_batch_endpoint(async_client):
         params={"to_upper": True},
         max_concurrent=2
     ).model_dump()
-    
+
     # Make the request
     response = async_client.post("/process_batch", json=request_data)
-    
+
     # Assert the response
     assert response.status_code == status.HTTP_200_OK
-    
+
     # Parse the response
     response_data = response.json()
     assert "success" in response_data
@@ -29,13 +29,13 @@ def test_process_batch_endpoint(async_client):
     assert "processed_count" in response_data
     assert response_data["success"] is True
     assert response_data["processed_count"] == len(test_texts)
-    
+
     # Verify each result
     for i, result in enumerate(response_data["results"]):
         assert "success" in result
         assert "text" in result
         assert result["text"] == test_texts[i]
-        
+
         if result["success"]:
             assert "result" in result
             assert "original_text" in result["result"]
@@ -53,7 +53,7 @@ def test_process_batch_with_invalid_input(async_client):
     assert response_data["success"] is True
     assert response_data["processed_count"] == 0
     assert response_data["results"] == []
-    
+
     # Test with invalid max_concurrent - this should be caught by Pydantic validation
     # so we'll test with a value that's too low
     request_data = {
@@ -62,7 +62,7 @@ def test_process_batch_with_invalid_input(async_client):
     }
     response = async_client.post("/process_batch", json=request_data)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    
+
     # Test with invalid text input (not a string)
     request_data = {
         "texts": [123, 456],  # Should be a list of strings
@@ -79,33 +79,33 @@ def test_process_batch_with_mixed_results(async_client):
         "",  # Empty string should be handled gracefully
         "This is another test"  # Will be processed successfully
     ]
-    
+
     request_data = BatchTextRequest(
         texts=test_texts,
         max_concurrent=2
     ).model_dump()
-    
+
     # Make the request
     response = async_client.post("/process_batch", json=request_data)
-    
+
     # Assert the response
     assert response.status_code == status.HTTP_200_OK
     response_data = response.json()
-    
+
     # Verify the overall response structure
     assert "success" in response_data
     assert "results" in response_data
     assert "processed_count" in response_data
-    
+
     # The empty string should be filtered out by the text processor
     assert response_data["processed_count"] == 3
     assert len(response_data["results"]) == 3
-    
+
     # Check that we have the expected number of successful and failed results
     results = response_data["results"]
     success_count = sum(1 for r in results if r.get("success"))
     assert success_count >= 2  # At least 2 should succeed
-    
+
     # Check that the text processor was applied to successful results
     for result in results:
         if result["success"] and result["text"]:  # Only check non-empty successful results

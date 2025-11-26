@@ -88,7 +88,7 @@ class ModelSettings(BaseModel):
             path = v.resolve()
         else:
             raise ValueError(f"Expected str or Path, got {type(v)}")
-        
+
         # Create directory if it doesn't exist
         path.mkdir(parents=True, exist_ok=True)
         return path
@@ -102,11 +102,11 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = Field("development", env="ENVIRONMENT")
     HOST_NAME: str = Field(default_factory=lambda: f"mcp-host-{os.urandom(4).hex()}", env="HOST_NAME")
     VERSION: str = Field("0.1.0", env="VERSION")
-    
+
     # MCP Server settings
     MCP_SERVER_URL: str = Field("http://localhost:8005", env="MCP_SERVER_URL")
     API_KEY: Optional[str] = Field(None, env="API_KEY")
-    
+
     # Security settings
     SECRET_KEY: str = Field(
         default_factory=generate_secret_key,
@@ -122,46 +122,46 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(1440, env="ACCESS_TOKEN_EXPIRE_MINUTES")
     CORS_ORIGINS: List[str] = Field("*", env="CORS_ORIGINS")
     RATE_LIMIT: int = Field(60, env="RATE_LIMIT")
-    
+
     # Logging
     LOG_LEVEL: str = Field("INFO", env="LOG_LEVEL")
     LOG_FORMAT: str = Field("%(asctime)s - %(name)s - %(levelname)s - %(message)s", env="LOG_FORMAT")
-    
+
     # Model and data directories
     MODEL_DIR: Path = Field(Path("models").resolve(), env="MODEL_DIR")
     DATA_DIR: Path = Field(Path("data").resolve(), env="DATA_DIR")
-    
+
     # Feature flags
     AUTO_REGISTER_MODELS: bool = Field(True, env="AUTO_REGISTER_MODELS")
-    
+
     # Health check
     HEALTH_CHECK_INTERVAL: int = Field(30, env="HEALTH_CHECK_INTERVAL")
-    
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",
         "case_sensitive": True,
     }
-    
+
     def __init__(self, **data):
         # Handle CORS_ORIGINS as a comma-separated string
         if "CORS_ORIGINS" in data and isinstance(data["CORS_ORIGINS"], str):
             data["CORS_ORIGINS"] = [x.strip() for x in data["CORS_ORIGINS"].split(",")]
-            
+
         # Ensure paths are resolved
         if "MODEL_DIR" in data and isinstance(data["MODEL_DIR"], str):
             data["MODEL_DIR"] = Path(data["MODEL_DIR"]).resolve()
         if "DATA_DIR" in data and isinstance(data["DATA_DIR"], str):
             data["DATA_DIR"] = Path(data["DATA_DIR"]).resolve()
-            
+
         super().__init__(**data)
         self.validate()
-    
+
     def validate(self):
         """Validate all settings."""
         if self.ENVIRONMENT == "production":
             self._validate_production_settings()
-    
+
     def _validate_production_settings(self):
         """Validate production-specific settings."""
         if self.DEBUG:

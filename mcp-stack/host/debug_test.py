@@ -7,14 +7,14 @@ async def test_converse():
     """Test the /converse endpoint with detailed error output."""
     url = "http://localhost:8000/api/converse"
     headers = {"Content-Type": "application/json"}
-    
+
     test_queries = [
         "Check server status",
         "Is the server up?",
         "Show me all customers",
         "List call transcripts"
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for query in test_queries:
             print(f"\n{'='*50}")
@@ -27,9 +27,9 @@ async def test_converse():
                     headers=headers,
                     timeout=10.0
                 )
-                
+
                 print(f"Status: {response.status_code}")
-                
+
                 # Try to parse the response as JSON
                 try:
                     response_data = response.json()
@@ -37,12 +37,12 @@ async def test_converse():
                 except Exception as e:
                     print(f"Failed to parse JSON response: {e}")
                     print(f"Raw response: {response.text}")
-                
+
                 # Print response headers for debugging
                 print("\nResponse headers:")
                 for header, value in response.headers.items():
                     print(f"  {header}: {value}")
-                
+
             except httpx.HTTPStatusError as e:
                 print(f"HTTP error: {e}")
                 if hasattr(e, 'response'):

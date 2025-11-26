@@ -4,7 +4,7 @@ from fastmcp import FastMCP
 async def get_customer_details(customer_id):
     # Create a client connected to the MCP server
     client = FastMCP('http://localhost:8005/mcp')
-    
+
     try:
         # Call the get_customer tool
         result = await client.get_customer(customer_id=customer_id)

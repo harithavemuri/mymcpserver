@@ -23,10 +23,10 @@ def test_transcript_analysis():
             {"speaker": "agent", "text": "I'm sorry to hear that. Could you tell me what happened?", "timestamp": "10:30:10"}
         ]
     }
-    
+
     # Create transcript instance (this will trigger the analysis)
     transcript = CallTranscript(**sample_transcript)
-    
+
     # Print results
     print("\n=== Transcript Analysis ===")
     print(f"Call ID: {transcript.call_id}")
@@ -36,14 +36,14 @@ def test_transcript_analysis():
     print("\nExtracted Contexts:")
     for i, context in enumerate(transcript.contexts, 1):
         print(f"{i}. {context}")
-    
+
     print("\n=== End of Analysis ===")
 
 def test_with_actual_data():
     """Test with actual data from the data loader."""
     print("\n=== Testing with Actual Data ===")
     data_loader = DataLoader()
-    
+
     # Get the first transcript with a summary
     for transcript in data_loader.load_transcripts().values():
         if transcript.call_summary.strip():
@@ -58,6 +58,6 @@ if __name__ == "__main__":
     import nltk
     nltk.download('punkt')
     nltk.download('stopwords')
-    
+
     test_transcript_analysis()
     test_with_actual_data()

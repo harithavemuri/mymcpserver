@@ -18,19 +18,19 @@ async def test_health_check():
     """Test the health check functionality."""
     url = "http://localhost:8000/api/converse"
     headers = {"Content-Type": "application/json"}
-    
+
     test_queries = [
         "Check server status",
         "Is the server up?",
         "What's the server status?",
         "Is the server healthy?"
     ]
-    
+
     async with httpx.AsyncClient(timeout=30.0) as client:
         for query in test_queries:
             logger.info(f"\n{'='*80}")
             logger.info(f"Testing query: {query}")
-            
+
             try:
                 # Make the POST request
                 response = await client.post(
@@ -38,13 +38,13 @@ async def test_health_check():
                     json={"query": query},
                     headers=headers
                 )
-                
+
                 logger.info(f"Status: {response.status_code}")
-                
+
                 try:
                     response_data = response.json()
                     logger.info(f"Response: {response_data}")
-                    
+
                     # Check if the response contains an error
                     if "error" in response_data.get("data", {}):
                         logger.error(f"Error in response: {response_data['data']['error']}")
@@ -54,7 +54,7 @@ async def test_health_check():
                 except Exception as e:
                     logger.error(f"Failed to parse JSON response: {e}")
                     logger.info(f"Raw response: {response.text}")
-                
+
             except httpx.HTTPStatusError as e:
                 logger.error(f"HTTP error: {e}")
                 if hasattr(e, 'response'):

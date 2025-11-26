@@ -7,9 +7,9 @@ from datetime import datetime
 async def check_health():
     """Check the health of the MCP host."""
     base_url = "http://localhost:8000"
-    
+
     print("\n=== MCP Host Health Check ===\n")
-    
+
     # 1. Check REST health endpoint
     print("1. Checking REST health endpoint...")
     try:
@@ -21,7 +21,7 @@ async def check_health():
             print(f"   ✅ Version: {data.get('version', 'unknown')}")
     except Exception as e:
         print(f"   ❌ Error: {str(e)}")
-    
+
     # 2. Test health check through converse endpoint
     print("\n2. Testing health check through /converse endpoint...")
     test_queries = [
@@ -30,7 +30,7 @@ async def check_health():
         "Is the server up and running?",
         "Verify server health"
     ]
-    
+
     for query in test_queries:
         print(f"\n   Testing query: '{query}'")
         try:
@@ -42,13 +42,13 @@ async def check_health():
                 )
                 response.raise_for_status()
                 data = response.json()
-                
+
                 print(f"   ✅ Response: {data.get('response', 'No response')}")
                 if "data" in data:
                     print(f"   ✅ Data: {json.dumps(data['data'], indent=4)}")
         except Exception as e:
             print(f"   ❌ Error: {str(e)}")
-    
+
     print("\n=== Health Check Complete ===\n")
 
 if __name__ == "__main__":

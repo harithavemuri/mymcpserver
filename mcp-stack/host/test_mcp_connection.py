@@ -23,7 +23,7 @@ async def test_mcp_connection():
         "/api/health",
         "/api/v1/health"
     ]
-    
+
     async with httpx.AsyncClient(timeout=30.0) as client:
         for endpoint in endpoints:
             url = urljoin(base_url, endpoint)
@@ -38,7 +38,7 @@ async def test_mcp_connection():
                 logger.error(f"Error connecting to {url}: {e}")
             except Exception as e:
                 logger.error(f"Unexpected error: {e}")
-    
+
     return False, None
 
 if __name__ == "__main__":

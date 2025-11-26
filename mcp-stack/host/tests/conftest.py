@@ -48,40 +48,40 @@ def test_settings():
     # Clear any existing settings instance
     from src.config import _settings_instance, Settings
     _settings_instance = None
-    
+
     # Create a new settings instance with test values
     settings = Settings()
-    
+
     # Update the settings with test values, converting paths to Path objects
     for key, value in TEST_SETTINGS.items():
         if key in ['MODEL_DIR', 'DATA_DIR'] and isinstance(value, str):
             value = Path(value).resolve()
             value.mkdir(parents=True, exist_ok=True)
         setattr(settings, key, value)
-    
+
     # Ensure required directories exist
     if hasattr(settings, 'MODEL_DIR') and isinstance(settings.MODEL_DIR, (str, Path)):
         model_dir = Path(settings.MODEL_DIR).resolve()
         model_dir.mkdir(parents=True, exist_ok=True)
         settings.MODEL_DIR = model_dir
-    
+
     if hasattr(settings, 'DATA_DIR') and isinstance(settings.DATA_DIR, (str, Path)):
         data_dir = Path(settings.DATA_DIR).resolve()
         data_dir.mkdir(parents=True, exist_ok=True)
         settings.DATA_DIR = data_dir
-    
+
     # Add required attributes that might be missing
     if not hasattr(settings, 'VERSION'):
         settings.VERSION = '0.1.0'
     if not hasattr(settings, 'HOST_NAME'):
         settings.HOST_NAME = 'test-host'
-    
+
     # Update the singleton
     from src.config import get_settings
     _settings = get_settings()
     for key, value in settings.dict().items():
         setattr(_settings, key, value)
-    
+
     return _settings
 
 
@@ -91,12 +91,12 @@ def setup_test_environment(test_settings):
     # Create test directories
     TEST_MODEL_DIR.mkdir(exist_ok=True)
     TEST_DATA_DIR.mkdir(exist_ok=True)
-    
+
     # Override settings
     app.state.settings = test_settings
-    
+
     yield  # Test runs here
-    
+
     # Clean up after tests
     shutil.rmtree(TEST_MODEL_DIR, ignore_errors=True)
     shutil.rmtree(TEST_DATA_DIR, ignore_errors=True)
@@ -107,13 +107,13 @@ def test_client(test_settings):
     """Create a test client for the FastAPI app."""
     from fastapi.testclient import TestClient
     from src.main import app
-    
+
     # Ensure the app is using the test settings
     app.state.settings = test_settings
-    
+
     # Initialize the TestClient with the app
     client = TestClient(app)
-    
+
     try:
         yield client
     finally:
@@ -125,10 +125,10 @@ def test_client(test_settings):
 async def async_client(test_settings) -> AsyncGenerator[AsyncClient, None]:
     """Create an async test client."""
     from src.main import app
-    
+
     # Ensure the app is using the test settings
     app.state.settings = test_settings
-    
+
     # Create an AsyncClient with the app and base_url
     async with AsyncClient(app=app, base_url="http://test") as client:
         yield client
@@ -170,7 +170,7 @@ def mock_mcp_server(httpx_mock):
             }
         },
     )
-    
+
     # Mock data items response
     httpx_mock.add_response(
         method="POST",
@@ -196,5 +196,5 @@ def mock_mcp_server(httpx_mock):
             }
         },
     )
-    
+
     return httpx_mock

@@ -38,7 +38,7 @@ async def test_post_process_conversation():
             "context": {}
         }
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for test_case in test_cases:
             response = await client.post(
@@ -79,7 +79,7 @@ async def test_post_process_conversation_with_context():
             "context": {"app": {"version": "1.0.0", "environment": "test"}}
         }
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for test_case in test_cases:
             response = await client.post(
@@ -90,7 +90,7 @@ async def test_post_process_conversation_with_context():
             assert response.status_code == 200, f"Failed with context: {test_case['context']}"
             data = response.json()
             validate_conversation_response(data)
-            
+
             # Verify context was processed (if the endpoint modifies/uses it)
             if "context" in test_case and test_case["context"]:
                 assert "context" in data.get("metadata", {}), "Response metadata should include context"
@@ -110,7 +110,7 @@ async def test_post_process_invalid_request():
         # Invalid role
         ({"messages": [{"role": "invalid_role", "content": "test"}]}, 422, "invalid role")
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for payload, expected_status, description in test_cases:
             response = await client.post(
@@ -119,7 +119,7 @@ async def test_post_process_invalid_request():
                 timeout=10.0
             )
             assert response.status_code == expected_status, f"Failed test case: {description}"
-            
+
             # For validation errors, check the error structure
             if expected_status == 422:
                 error_data = response.json()
@@ -139,7 +139,7 @@ async def test_get_process_conversation():
         # With URL-encoded message
         ({"message": "Show me customers from NY", "role": "user"}, 200)
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for params, expected_status in test_cases:
             response = await client.get(
@@ -148,11 +148,11 @@ async def test_get_process_conversation():
                 timeout=10.0
             )
             assert response.status_code == expected_status, f"Failed with params: {params}"
-            
+
             if expected_status == 200:
                 data = response.json()
                 validate_conversation_response(data)
-                
+
                 # Verify the response contains the original message or part of it
                 original_message = params["message"].lower()
                 response_text = data["response"].lower()
@@ -173,7 +173,7 @@ async def test_get_process_error_cases():
         # Message too long
         ({"message": "a" * 1001}, 422, "message too long")
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for params, expected_status, description in test_cases:
             response = await client.get(
@@ -182,7 +182,7 @@ async def test_get_process_error_cases():
                 timeout=10.0
             )
             assert response.status_code == expected_status, f"Failed test case: {description}"
-            
+
             # For validation errors, check the error structure
             if expected_status == 422:
                 error_data = response.json()
@@ -205,7 +205,7 @@ async def test_conversation_flow():
         assert response.status_code == 200
         data1 = response.json()
         validate_conversation_response(data1)
-        
+
         # Follow-up message with conversation context
         response = await client.post(
             f"{BASE_URL}/process",
@@ -220,7 +220,7 @@ async def test_conversation_flow():
         assert response.status_code == 200
         data2 = response.json()
         validate_conversation_response(data2)
-        
+
         # Verify the conversation context was maintained
         assert data1["client_used"] == data2["client_used"], \
             "Client used should be consistent in a conversation"

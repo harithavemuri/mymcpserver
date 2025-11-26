@@ -6,14 +6,14 @@ async def test_converse():
     """Test the /converse endpoint with a health check query."""
     url = "http://localhost:8000/api/converse"
     headers = {"Content-Type": "application/json"}
-    
+
     test_queries = [
         "Check server status",
         "Is the server up?",
         "Show me all customers",
         "List call transcripts"
     ]
-    
+
     async with httpx.AsyncClient() as client:
         for query in test_queries:
             print(f"\nTesting query: {query}")

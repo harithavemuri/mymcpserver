@@ -13,10 +13,10 @@ from .models import TextRequest, TextResponse, ProcessingResult, ToolName, MCPCo
 
 class MPCHost:
     """MCP Host for interacting with MCP servers."""
-    
+
     def __init__(self, base_url: str = None):
         """Initialize the MCP Host.
-        
+
         Args:
             base_url: Base URL of the MCP server. Defaults to MCP_SERVER_URL environment variable or 'http://localhost:8001'
         """
@@ -27,19 +27,19 @@ class MPCHost:
             headers={
                 "Content-Type": "application/json",
                 "Accept": "application/json"
-            } 
+            }
         )
-    
+
     async def __aenter__(self):
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.close()
-    
+
     async def close(self):
         """Close the HTTP client."""
         await self.client.aclose()
-    
+
     async def health_check(self) -> bool:
         """Check if the MCP server is healthy."""
         try:
@@ -48,29 +48,29 @@ class MPCHost:
             return response.json().get("status") == "ok"
         except Exception as e:
             return False
-    
+
     async def list_tools(self) -> Dict[str, Any]:
         """List all available tools on the MCP server."""
         response = await self.client.get("/tools")
         response.raise_for_status()
         return response.json()
-    
+
     async def process_text(
-        self, 
-        text: str, 
+        self,
+        text: str,
         params: Optional[Dict[str, Any]] = None
     ) -> TextResponse:
         """Process text through the MCP workflow.
-        
+
         Args:
             text: The text to process
             params: Additional parameters for processing
-            
+
         Returns:
             TextResponse containing the processing results
         """
         request = TextRequest(text=text, params=params or {})
-        
+
         try:
             response = await self.client.post(
                 "/process",
@@ -95,32 +95,32 @@ class MPCHost:
                 success=False,
                 error=f"Error processing text: {str(e)}"
             )
-    
+
     async def process_texts(
-        self, 
+        self,
         texts: List[str],
         params: Optional[Dict[str, Any]] = None,
         max_concurrent: int = 5
     ) -> List[TextResponse]:
         """Process multiple texts in parallel.
-        
+
         Args:
             texts: List of texts to process
             params: Additional parameters for processing
             max_concurrent: Maximum number of concurrent requests
-            
+
         Returns:
             List of TextResponse objects
         """
         semaphore = asyncio.Semaphore(max_concurrent)
-        
+
         async def process_with_semaphore(text: str):
             async with semaphore:
                 return await self.process_text(text, params)
-        
+
         tasks = [process_with_semaphore(text) for text in texts]
         return await asyncio.gather(*tasks)
-    
+
     async def get_tool_result(
         self,
         response: TextResponse,
@@ -128,20 +128,20 @@ class MPCHost:
         default: Any = None
     ) -> Optional[Dict[str, Any]]:
         """Get the result for a specific tool from a TextResponse.
-        
+
         Args:
             response: The TextResponse from process_text
             tool_name: Name of the tool to get results for
             default: Default value if tool result not found
-            
+
         Returns:
             The tool's result or default if not found
         """
         if not response.success or not response.result:
             return default
-            
+
         tool_name = tool_name.value if isinstance(tool_name, ToolName) else tool_name
-        
+
         # Check if result is already a dictionary with the tool results
         if hasattr(response.result, 'results'):
             return response.result.results.get(tool_name, default)
@@ -166,39 +166,39 @@ async def example_usage():
         if not await host.health_check():
             print("MCP server is not healthy")
             return
-        
+
         # List available tools
         tools = await host.list_tools()
         print("Available tools:", list(tools.keys()))
-        
+
         # Process some text
         text = """
         The Model Context Protocol (MCP) is a powerful framework for building
         AI-powered applications. It enables seamless integration of multiple
         AI models and tools in a unified workflow.
         """
-        
+
         print("\nProcessing text...")
         response = await host.process_text(text)
-        
+
         if response.success:
             print("\nProcessing successful!")
-            
+
             # Get specific tool results
             sentiment = await host.get_tool_result(
-                response, 
+                response,
                 ToolName.SENTIMENT_ANALYZER
             )
-            
+
             keywords = await host.get_tool_result(
                 response,
                 ToolName.KEYWORD_EXTRACTOR
             )
-            
+
             print("\nSentiment Analysis:")
             print(f"  Polarity: {sentiment['sentiment']['polarity']:.2f}")
             print(f"  Subjectivity: {sentiment['sentiment']['subjectivity']:.2f}")
-            
+
             print("\nTop Keywords:")
             for kw in keywords['keywords'][:5]:
                 print(f"  - {kw['phrase']} (score: {kw['score']:.2f})")

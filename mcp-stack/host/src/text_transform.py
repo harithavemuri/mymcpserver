@@ -23,10 +23,10 @@ class TextTransformResponse(BaseModel):
 
 class MCPTextTransformClient:
     """Client for interacting with the MCP Text Transform service."""
-    
+
     def __init__(self, base_url: str = "http://localhost:8002", timeout: float = 10.0):
         """Initialize the MCP Text Transform client.
-        
+
         Args:
             base_url: Base URL of the MCP server
             timeout: Request timeout in seconds
@@ -42,28 +42,28 @@ class MCPTextTransformClient:
             }
         )
         logger.info(f"Initialized MCP Text Transform client with base URL: {self.base_url}")
-    
+
     async def transform(
-        self, 
-        text: str, 
-        operation: str = "uppercase", 
+        self,
+        text: str,
+        operation: str = "uppercase",
         options: Optional[Dict[str, Any]] = None
     ) -> TextTransformResponse:
         """Transform text using the specified operation.
-        
+
         Args:
             text: The text to transform
             operation: The transformation operation to perform (uppercase, lowercase, title, reverse, strip)
             options: Additional options for the transformation
-            
+
         Returns:
             TextTransformResponse containing the transformed text
-            
+
         Raises:
             httpx.HTTPStatusError: If the request fails
         """
         logger.info(f"Transforming text with operation '{operation}': {text[:50]}...")
-        
+
         # Map operation to server parameters
         params = {
             "to_upper": operation == "uppercase",
@@ -72,7 +72,7 @@ class MCPTextTransformClient:
             "reverse": operation == "reverse",
             "strip": operation == "strip"
         }
-        
+
         # Make the request to the server
         try:
             response = await self.client.post(
@@ -83,15 +83,15 @@ class MCPTextTransformClient:
                 }
             )
             response.raise_for_status()
-            
+
             # Parse the response
             result = response.json()
             logger.debug(f"Received response: {result}")
-            
+
             # Extract the transformed text from the response
             result_data = result.get("result", {})
             text_processor = result_data.get("results", {}).get("text_processor", {})
-            
+
             # Get the transformed text based on the operation
             transformed_text = text
             if operation == "uppercase":
@@ -104,7 +104,7 @@ class MCPTextTransformClient:
                 transformed_text = text_processor.get("reversed", text)
             elif operation == "strip":
                 transformed_text = text_processor.get("stripped", text)
-            
+
             return TextTransformResponse(
                 original=text,
                 transformed=transformed_text,
@@ -115,20 +115,20 @@ class MCPTextTransformClient:
             logger.error(f"Transform request failed: {e}")
             # Fallback to local transformation if MCP fails
             return self._local_transform(text, operation)
-    
+
     def _local_transform(self, text: str, operation: str) -> TextTransformResponse:
         """Fallback local text transformation with enhanced operations.
-        
+
         Args:
             text: Input text to transform
             operation: Transformation to apply
-            
+
         Returns:
             TextTransformResponse with the transformed text
         """
         try:
             transformed = text
-            
+
             # Core text transformations
             if operation == "uppercase":
                 transformed = text.upper()
@@ -158,14 +158,14 @@ class MCPTextTransformClient:
             else:
                 logger.warning(f"Unsupported operation: {operation}")
                 transformed = f"[Error: Unsupported operation: {operation}]"
-            
+
             return TextTransformResponse(
                 original=text,
                 transformed=transformed,
                 operation=operation,
                 timestamp=datetime.utcnow().isoformat()
             )
-            
+
         except Exception as e:
             logger.error(f"Local transform failed: {e}")
             return TextTransformResponse(
@@ -174,7 +174,7 @@ class MCPTextTransformClient:
                 operation=operation,
                 timestamp=datetime.utcnow().isoformat()
             )
-    
+
     async def health_check(self) -> bool:
         """Check if the MCP server is healthy."""
         try:
@@ -183,7 +183,7 @@ class MCPTextTransformClient:
         except Exception as e:
             logger.warning(f"Health check failed: {e}")
             return False
-    
+
     async def get_available_operations(self) -> list[str]:
         """Get the list of available transformation operations."""
         # These are the supported operations by the MCP server
@@ -194,7 +194,7 @@ class MCPTextTransformClient:
             "reverse",
             "trim"
         ]
-    
+
     async def close(self):
         """Close the HTTP client."""
         await self.client.aclose()

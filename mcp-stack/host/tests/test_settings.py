@@ -20,24 +20,24 @@ TEST_SETTINGS = {
     "ENVIRONMENT": "testing",
     "HOST_NAME": "mcp-host-test",
     "VERSION": "0.1.0",
-    
+
     # MCP Server settings
     "MCP_SERVER_URL": "http://localhost:8005",
     "API_KEY": "test-api-key",
-    
+
     # Path settings
     "MODEL_DIR": str(TEST_MODEL_DIR),
     "DATA_DIR": str(TEST_DATA_DIR),
-    
+
     # CORS settings
     "CORS_ORIGINS": ["*"],
-    
+
     # Feature flags
     "AUTO_REGISTER_MODELS": False,
-    
+
     # Health check settings
     "HEALTH_CHECK_INTERVAL": 30,
-    
+
     # Logging settings
     "LOG_LEVEL": "DEBUG",
     "LOG_FORMAT": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
