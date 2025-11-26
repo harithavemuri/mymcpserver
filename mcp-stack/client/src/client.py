@@ -142,6 +142,7 @@ class ClientConfig(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = True
+        extra = "ignore"  # Ignore extra fields instead of raising an error
 
 class MCPError(Exception):
     """Base exception for MCP client errors."""
@@ -439,84 +440,30 @@ class MCPClient:
         
         Args:
             file_path: Path to the file to upload
-            context_id: Optional context ID to associate with the file
-            metadata: Optional metadata to include with the file
+            context_id: Optional ID of the context for this file
+            metadata: Optional metadata for the file
             
         Returns:
-            Dictionary containing the file information
-        """
-        if not Path(file_path).exists():
-            raise MCPError(f"File not found: {file_path}")
-            
-        url = f"{self.server_url}/api/v1/files"
-        files = {"file": open(file_path, "rb")}
-        data = {}
-        if context_id:
-            data["context_id"] = context_id
-        if metadata:
-            data["metadata"] = json.dumps(metadata)
-            
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    url,
-                    files=files,
-                    data=data,
-                    headers={"Authorization": f"Bearer {self.api_key}"} if self.api_key else {},
-                    timeout=self.timeout,
-                )
-                response.raise_for_status()
-                return response.json()
-        except httpx.HTTPError as e:
-            raise MCPError(f"Failed to upload file: {e}") from e
-            
-    async def search_customers(
-        self,
-        name: Optional[str] = None,
-        state: Optional[str] = None,
-        limit: int = 10,
-        offset: int = 0
-    ) -> List[Dict[str, Any]]:
-        """
-        Search for customers with optional filters.
-        
-        Args:
-            name: Optional name to search for (partial match on first and last name)
-            state: Optional state to filter by
-            limit: Maximum number of results to return (default: 10)
-            offset: Number of results to skip (for pagination, default: 0)
-            
-        Returns:
-            List of customer dictionaries matching the search criteria
+            Dictionary containing the file upload response
         """
         query = """
-        query SearchCustomers($filter: CustomerFilterInput!) {
-            searchCustomers(filter: $filter) {
-                customerId
-                personalInfo {
-                    firstName
-                    lastName
-                    email
-                    phone
-                }
-                homeAddress {
-                    street
-                    city
-                    state
-                    zipCode
-                }
-                createdAt
-                updatedAt
+        mutation UploadFile($input: FileInput!) {
+            uploadFile(input: $input) {
+                id
+                name
+                size
+                type
+                created_at
+                updated_at
             }
         }
         """
         
         variables = {
-            "filter": {
-                "name": name,
-                "state": state,
-                "limit": limit,
-                "offset": offset
+            "input": {
+                "file": file_path,
+                "context_id": context_id,
+                "metadata": metadata
             }
         }
         
@@ -526,7 +473,114 @@ class MCPClient:
                 "/graphql",
                 data={"query": query, "variables": variables}
             )
-            return response.get("data", {}).get("searchCustomers", [])
+            return response.get("data", {}).get("uploadFile")
+        except Exception as e:
+            raise MCPError(f"Failed to upload file: {str(e)}")
+            
+    async def search_customers(
+        self,
+        name: Optional[str] = None,
+        state: Optional[str] = None,
+        limit: int = 10,
+        offset: int = 0,
+        requested_fields: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Search for customers with optional filters and field selection.
+        
+        Args:
+            name: Optional name to search for (partial match on first and last name)
+            state: Optional state to filter by
+            limit: Maximum number of results to return (default: 10)
+            offset: Number of results to skip (for pagination, default: 0)
+            requested_fields: List of fields to include in the response. If None, returns all fields.
+                             Available fields: id, name, email, phone, address, city, state, zipCode, country,
+                                            createdAt, updatedAt, transcripts
+            
+        Returns:
+            List of customer dictionaries with only the requested fields
+        """
+        # Default fields to include if none specified
+        if not requested_fields:
+            requested_fields = ['id', 'name', 'email', 'phone', 'state']
+        
+        # Map field names to their GraphQL representations
+        field_mapping = {
+            'id': 'id',
+            'name': 'name',
+            'email': 'email',
+            'phone': 'phone',
+            'address': 'address { street city state zipCode country }',
+            'city': 'address { city }',
+            'state': 'state',
+            'zipCode': 'address { zipCode }',
+            'country': 'address { country }',
+            'createdAt': 'createdAt',
+            'updatedAt': 'updatedAt',
+            'transcripts': 'transcripts { id callDate duration }'
+        }
+        
+        # Get the GraphQL fields to request
+        graphql_fields = []
+        for field in requested_fields:
+            if field in field_mapping:
+                graphql_fields.append(field_mapping[field])
+        
+        # Construct the GraphQL query
+        fields_str = '\n                '.join(graphql_fields)
+        
+        # Construct the GraphQL query with dynamic fields
+        query = f"""
+        query SearchCustomers($name: String, $state: String, $limit: Int, $offset: Int) {{
+            searchCustomers(
+                name: $name,
+                state: $state,
+                limit: $limit,
+                offset: $offset
+            ) {{
+                {fields_str}
+            }}
+        }}
+        """.format(fields_str=fields_str)
+        
+        # Build filter arguments
+        filter_args = {
+            'name': name,
+            'state': state,
+            'limit': limit,
+            'offset': offset
+        }
+        
+        # Remove None values
+        variables = {k: v for k, v in filter_args.items() if v is not None}
+        
+        try:
+            response = await self._make_request(
+                "POST",
+                "/graphql",
+                data={"query": query, "variables": variables}
+            )
+            
+            if "errors" in response:
+                error_messages = [e.get("message", "Unknown error") for e in response.get("errors", [])]
+                raise MCPError(f"GraphQL error: {', '.join(error_messages)}")
+                
+            customers = response.get("data", {}).get("searchCustomers", [])
+            
+            # Process the response to handle nested fields
+            processed_customers = []
+            for customer in customers:
+                processed_customer = {}
+                for field in requested_fields:
+                    if field in ['city', 'state', 'zipCode', 'country'] and 'address' in customer:
+                        # Handle address subfields
+                        processed_customer[field] = customer['address'].get(field) if field != 'state' else customer.get('state')
+                    else:
+                        processed_customer[field] = customer.get(field)
+                processed_customers.append(processed_customer)
+                
+            return processed_customers
+            
         except Exception as e:
             raise MCPError(f"Failed to search customers: {str(e)}")
             

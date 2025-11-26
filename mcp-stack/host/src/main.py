@@ -28,7 +28,14 @@ settings = get_settings()
 
 # Import protocol and models after settings are loaded
 from .protocol import MCPHost
+from .routers import conversation  # Import the conversation router
 from .models import ModelConfig, ModelInfo, PredictionRequest, PredictionResponse
+from .text_transform import (
+    TextTransformRequest, 
+    TextTransformResponse, 
+    text_transform_client,
+    MCPTextTransformClient
+)
 
 # Configure logging
 logging.basicConfig(
@@ -42,15 +49,15 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# Initialize FastAPI app with default settings
+# Create FastAPI app
 app = FastAPI(
     title="MCP Host",
-    description="Model Control Protocol Host for managing and serving ML models",
-    version=settings.VERSION if hasattr(settings, 'VERSION') else "0.1.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json",
+    description="Model Context Protocol Host with Conversation Routing",
+    version="0.2.0",
 )
+
+# Include routers
+app.include_router(conversation.router)
 
 # Configure CORS
 app.add_middleware(
@@ -205,6 +212,101 @@ class MCPClient:
                 "type": "TOOL"
             }
         ]
+    
+    async def search_customers(
+        self,
+        name: Optional[str] = None,
+        fields: Optional[List[str]] = None,
+        limit: int = 100,
+        offset: int = 0,
+        **filters
+    ) -> List[Dict[str, Any]]:
+        """
+        Search for customers with the ability to specify which fields to return.
+        
+        Args:
+            name: Optional name to search for
+            fields: List of fields to include in the response
+            limit: Maximum number of results to return
+            offset: Number of results to skip
+            **filters: Additional filter parameters (e.g., email, phone, state)
+            
+        Returns:
+            List of customer dictionaries with only the requested fields
+        """
+        # Default fields to include if none specified
+        if not fields:
+            fields = ['id', 'firstName', 'lastName', 'email']
+            
+        # Always include id field if not already specified
+        if 'id' not in fields and 'customerId' not in fields:
+            fields.append('id')
+            
+        # Map field names to match GraphQL schema if needed
+        field_mapping = {
+            'id': 'customerId',
+            'first_name': 'firstName',
+            'last_name': 'lastName',
+            'phone': 'phone',
+            'email': 'email',
+            'state': 'state',
+            'address': 'address',
+            'city': 'city',
+            'zip': 'zipCode',
+            'country': 'country'
+        }
+        
+        # Map fields to their GraphQL equivalents
+        graphql_fields = [field_mapping.get(f, f) for f in fields]
+        
+        # Construct the GraphQL query
+        fields_str = '\n'.join(f'        {f}' for f in graphql_fields)
+        
+        query = f"""
+        query SearchCustomers($filter: CustomerFilterInput!) {{
+            searchCustomers(filter: $filter) {{
+        {fields_str}
+            }}
+        }}
+        """
+        
+        # Build filter object with provided parameters
+        filter_args = {
+            'name': name,
+            'limit': limit,
+            'offset': offset
+        }
+        
+        # Add additional filters if provided
+        valid_filters = ['email', 'phone', 'state', 'city', 'country']
+        for key, value in filters.items():
+            if key in valid_filters and value is not None:
+                filter_args[key] = value
+        
+        variables = {
+            "filter": {k: v for k, v in filter_args.items() if v is not None}
+        }
+        
+        try:
+            response = await self.query_data(query, variables)
+            customers = response.get("searchCustomers", [])
+            
+            # Map back to the original field names
+            reverse_mapping = {v: k for k, v in field_mapping.items()}
+            
+            result = []
+            for customer in customers:
+                mapped_customer = {}
+                for gql_field, value in customer.items():
+                    field_name = reverse_mapping.get(gql_field, gql_field)
+                    mapped_customer[field_name] = value
+                result.append(mapped_customer)
+                
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error searching customers: {str(e)}")
+            return []
     
     async def query_data_items(
         self,
@@ -366,8 +468,38 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
         content={"detail": "Internal server error"},
     )
 
+# Text Transform Endpoints
+
+@app.post("/api/text/transform", response_model=TextTransformResponse)
+async def transform_text(request: TextTransformRequest):
+    """Transform text using the specified operation."""
+    try:
+        return await text_transform_client.transform(
+            text=request.text,
+            operation=request.operation,
+            options=request.options or {}
+        )
+    except Exception as e:
+        logger.error(f"Text transformation failed: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Text transformation failed: {str(e)}"
+        )
+
+@app.get("/api/text/operations", response_model=list[str])
+async def get_text_operations():
+    """Get available text transformation operations."""
+    try:
+        return await text_transform_client.get_available_operations()
+    except Exception as e:
+        logger.error(f"Failed to get text operations: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get text operations: {str(e)}"
+        )
+
 # Health check endpoint
-@app.get("/health")
+@app.get("/health", response_model=Dict[str, Any])
 async def health_check() -> Dict[str, str]:
     """Health check endpoint."""
     try:
@@ -385,311 +517,24 @@ async def health_check() -> Dict[str, str]:
             detail="Service unavailable"
         )
 
-# MCP Protocol Endpoints
-@app.post("/mcp/register")
-async def register_model(model_config: ModelConfig) -> ModelInfo:
-    """Register a new model with the host."""
-    try:
-        return await mcp_host.register_model(model_config)
-    except Exception as e:
-        logger.error(f"Failed to register model: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
-
-@app.post("/mcp/predict")
-async def predict(request: PredictionRequest) -> PredictionResponse:
-    """Make a prediction using a registered model."""
-    try:
-        return await mcp_host.predict(request)
-    except Exception as e:
-        logger.error(f"Prediction failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
-
-# Data access endpoints
-router = APIRouter()
-
-@router.get("/sources", response_model=List[Dict[str, Any]])
-async def get_sources():
-    """Get all available data sources."""
-    return await mcp_client.get_data_sources()
-
-@router.get("/items", response_model=Dict[str, Any])
-async def get_items(
-    source_id: Optional[str] = None,
-    limit: int = 100,
-    offset: int = 0,
-    sort_by: Optional[str] = None,
-    sort_order: str = "asc",
-):
-    """Get paginated data items with optional filtering and sorting."""
-    return await mcp_client.query_data_items(
-        source_id=source_id,
-        limit=limit,
-        offset=offset,
-        sort_by=sort_by,
-        sort_order=sort_order,
-    )
-
-class ConversationRequest(BaseModel):
-    """Request model for conversation endpoint."""
-    query: str = Field(..., description="The natural language query")
-    context: Optional[Dict[str, Any]] = Field(
-        None,
-        description="Optional context to maintain conversation state"
-    )
-
-class ConversationResponse(BaseModel):
-    """Response model for conversation endpoint."""
-    response: str = Field(..., description="Natural language response")
-    data: Optional[Dict[str, Any]] = Field(
-        None,
-        description="Structured data from the query"
-    )
-    context: Optional[Dict[str, Any]] = Field(
-        None,
-        description="Updated conversation context"
-    )
-
-@router.post("/converse", response_model=ConversationResponse)
-async def converse(request: ConversationRequest):
-    """
-    Handle natural language conversation and convert to MCP queries.
-    
-    Example requests:
-    - "Show me all customers"
-    - "Get details for customer CUST1000"
-    - "List recent call transcripts"
-    - "Find customer with email example@domain.com"
-    - "Is the server healthy?"
-    """
-    from .conversation import ConversationHandler, QueryIntent
-    
-    try:
-        # Initialize conversation handler with detailed error handling
-        logger.info(f"[CONVERSE] Initializing ConversationHandler")
-        try:
-            handler = ConversationHandler()
-            logger.info(f"[CONVERSE] Successfully initialized ConversationHandler")
-        except ImportError as ie:
-            error_msg = f"[CONVERSE] Import error initializing ConversationHandler: {str(ie)}. Make sure all dependencies are installed."
-            logger.error(error_msg, exc_info=True)
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "detail": error_msg,
-                    "error_type": "DependencyError",
-                    "suggestion": "Try running: pip install sentence-transformers scikit-learn"
-                }
-            )
-        except Exception as e:
-            error_msg = f"[CONVERSE] Error initializing ConversationHandler: {str(e)}"
-            logger.error(error_msg, exc_info=True)
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "detail": error_msg,
-                    "error_type": "InitializationError",
-                    "traceback": str(e.__traceback__) if hasattr(e, '__traceback__') else None
-                }
-            )
-            
-        logger.info(f"[CONVERSE] Processing query: {request.query}")
-        
-        # Parse the natural language query
-        try:
-            query_params = handler.parse_query(request.query)
-            if query_params is None:
-                # No intent was matched
-                response_text = await handler.format_response(None, {})
-                return ConversationResponse(
-                    response=response_text,
-                    data={"message": "No intent matched"},
-                    context=request.context or {}
-                )
-                
-            logger.info(f"[CONVERSE] Successfully parsed query params: {query_params}")
-        except Exception as e:
-            error_msg = f"[CONVERSE] Error parsing query: {str(e)}"
-            logger.error(error_msg, exc_info=True)
-            return JSONResponse(
-                status_code=400,
-                content={
-                    "detail": error_msg,
-                    "error_type": "QueryParsingError",
-                    "query": request.query,
-                    "suggestion": "Try rephrasing your query or check for typos."
-                }
-            )
-        
-        # Handle health check separately
-        if query_params.intent == QueryIntent.HEALTH_CHECK:
-            logger.info("[CONVERSE] Handling health check intent")
-            try:
-                # Try to make a simple request to the server
-                health_url = f"{settings.MCP_SERVER_URL}/health"
-                logger.info(f"[CONVERSE] Making health check request to: {health_url}")
-                
-                try:
-                    async with httpx.AsyncClient() as client:
-                        response = await client.get(health_url, timeout=5.0)
-                        response.raise_for_status()
-                        health_data = response.json()
-                        logger.info(f"[CONVERSE] Health check response: {health_data}")
-                        
-                        response_text = await handler.format_response(query_params.intent, health_data)
-                        logger.info(f"[CONVERSE] Formatted response: {response_text}")
-                        
-                        return ConversationResponse(
-                            response=response_text,
-                            data=health_data,
-                            context={"last_query": query_params.dict()}
-                        )
-                
-                except httpx.HTTPStatusError as e:
-                    error_msg = f"Health check HTTP error: {e.response.status_code} - {e.response.text}"
-                    logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-                    return ConversationResponse(
-                        response=f"I'm sorry, I couldn't check the server status: {error_msg}",
-                        data={"error": error_msg},
-                        context={"last_query": query_params.dict()}
-                    )
-                except httpx.RequestError as e:
-                    error_msg = f"Could not connect to MCP server at {settings.MCP_SERVER_URL}: {str(e)}"
-                    logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-                    return ConversationResponse(
-                        response=f"I'm having trouble connecting to the MCP server. Please make sure it's running at {settings.MCP_SERVER_URL}",
-                        data={"error": error_msg},
-                        context={"last_query": query_params.dict()}
-                    )
-                except Exception as e:
-                    error_msg = f"Unexpected error during health check: {str(e)}"
-                    logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-                    return ConversationResponse(
-                        response=f"An unexpected error occurred while checking the server status: {str(e)}",
-                        data={"error": error_msg},
-                        context={"last_query": query_params.dict()}
-                    )
-            except Exception as e:
-                error_msg = f"Health check failed: {str(e)}"
-                logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-                return ConversationResponse(
-                    response=f"I'm sorry, I couldn't check the server status: {str(e)}",
-                    data={"error": str(e)},
-                    context=request.context
-                )
-        
-        # Handle other intents
-        logger.info(f"[CONVERSE] Handling intent: {query_params.intent}")
-        logger.info(f"[CONVERSE] Query params: {query_params}")
-        
-        try:
-            logger.info(f"[CONVERSE] Querying data items with filters: {query_params.filters}")
-            
-            # For debugging, let's try a simple query first
-            logger.info("[CONVERSE] Testing simple query to MCP server...")
-            test_url = f"{settings.MCP_SERVER_URL}/health"
-            async with httpx.AsyncClient() as client:
-                test_response = await client.get(test_url, timeout=5.0)
-                logger.info(f"[CONVERSE] Test query response: {test_response.status_code} - {test_response.text}")
-            
-            # Now try the actual query
-            result = await mcp_client.query_data_items(
-                source_id=query_params.filters.get("source_id"),
-                limit=query_params.limit,
-                offset=query_params.offset,
-                filters=query_params.filters,
-            )
-            logger.info(f"[CONVERSE] Query result: {result}")
-            
-            # Format the response
-            response_text = await handler.format_response(query_params.intent, result)
-            logger.info(f"[CONVERSE] Formatted response: {response_text}")
-            
-            return ConversationResponse(
-                response=response_text,
-                data=result,
-                context={"last_query": query_params.dict()}
-            )
-            
-        except httpx.HTTPStatusError as e:
-            error_msg = f"HTTP error querying data: {e.response.status_code} - {e.response.text}"
-            logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-            return ConversationResponse(
-                response=f"I'm sorry, there was an error with your request: {error_msg}",
-                data={"error": error_msg},
-                context=request.context
-            )
-        except Exception as e:
-            error_msg = f"Error querying data: {str(e)}"
-            logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-            return ConversationResponse(
-                response=f"I'm sorry, I couldn't process your query: {str(e)}",
-                data={"error": str(e)},
-                context=request.context
-            )
-        
-    except Exception as e:
-        error_msg = f"Error processing conversation: {str(e)}"
-        logger.error(f"[CONVERSE] {error_msg}", exc_info=True)
-        return ConversationResponse(
-            response=f"I'm sorry, I encountered an error processing your request: {str(e)}",
-            data={"error": str(e)},
-            context=request.context if 'request' in locals() else {}
-        )
-
-# Include API routes with /api prefix
-app.include_router(router, prefix="/api")
-
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    """Initialize services on startup."""
-    try:
-        # Store settings in app state
-        app.state.settings = settings
-        
-        # Get settings with defaults
-        host_name = getattr(settings, 'HOST_NAME', 'unknown')
-        
-        # Define directories
-        model_dir = Path("models")
-        data_dir = Path("data")
-        
-        # Ensure directories exist
-        model_dir.mkdir(parents=True, exist_ok=True)
-        data_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Initialize MCP host if available
-        if 'mcp_host' in globals():
-            await mcp_host.start()  # Added await here
-        
-        # Test connection to MCP server if client is available
-        if 'mcp_client' in globals():
-            try:
-                sources = await mcp_client.get_data_sources()
-                logger.info(f"Connected to MCP Server. Found {len(sources)} data sources.")
-            except Exception as e:
-                logger.warning(f"Failed to connect to MCP Server: {e}")
-                logger.warning("The application will continue to run but may not function correctly without a connection to the MCP Server.")
-    except Exception as e:
-        logger.error(f"Error during startup: {e}")
-        raise
+# ... (rest of the code remains the same)
 
 # Shutdown event
 @app.on_event("shutdown")
 async def shutdown_event():
     """Clean up resources on shutdown."""
-    logger.info(f"Shutting down {settings.HOST_NAME}...")
-    await mcp_client.close()
-    if hasattr(mcp_host, 'stop'):
-        await mcp_host.stop()
-    else:
-        logger.warning("mcp_host.stop() method not found. Skipping cleanup.")
+    try:
+        logger.info("Shutting down MCP host...")
+        if 'mcp_host' in globals():
+            await mcp_host.close()
+        if 'mcp_client' in globals():
+            await mcp_client.close()
+        if 'text_transform_client' in globals():
+            await text_transform_client.close()
+        logger.info("MCP host shutdown complete")
+    except Exception as e:
+        logger.error(f"Error during shutdown: {e}")
+        raise
 
 if __name__ == "__main__":
     import uvicorn

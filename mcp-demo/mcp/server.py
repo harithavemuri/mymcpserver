@@ -166,19 +166,29 @@ class MCPServer:
                 # Log the available tools
                 logger.info(f"Available tools: {list(self.tools.keys())}")
                 
-                # Create initial workflow state with all required fields and tool parameters
+                # Create initial workflow state with parameters from the request
+                # Default parameters if none provided
+                default_params = {
+                    "to_upper": False,
+                    "to_lower": False,
+                    "title_case": False,
+                    "reverse": False,
+                    "strip": False
+                }
+                
+                # Merge default params with request params
+                request_params = request.params or {}
+                params = {**default_params, **request_params}
+                
+                # Log the parameters being used
+                logger.info(f"Using parameters: {params}")
+                
                 state = WorkflowState(
                     input_text=request.text,
                     results={},
                     current_tool=None,
                     error=None,
-                    # Include tool parameters in the state
-                    params={
-                        "to_upper": True,
-                        "to_lower": True,
-                        "title_case": True,
-                        "strip": True
-                    }
+                    params=params  # Use the merged parameters
                 )
                 logger.info(f"Initial state: {state}")
                 
@@ -238,6 +248,74 @@ class MCPServer:
                     logger.info("Converted result using dict()")
                 
                 logger.info(f"Workflow result as dict: {result_dict}")
+                
+                # Get the results from the workflow execution
+                results = result_dict.get('results', {})
+                
+                # Get the text processor results if available
+                text_processor_result = {}
+                if 'text_processor' in results and isinstance(results['text_processor'], dict):
+                    text_processor_result = results['text_processor']
+                
+                # Apply any transformations directly to the text_processor_result
+                if params.get('to_upper'):
+                    text_processor_result['uppercase'] = request.text.upper()
+                if params.get('to_lower'):
+                    text_processor_result['lowercase'] = request.text.lower()
+                if params.get('title_case'):
+                    text_processor_result['title_case'] = request.text.title()
+                if params.get('reverse'):
+                    text_processor_result['reversed'] = request.text[::-1]
+                if params.get('strip'):
+                    text_processor_result['stripped'] = request.text.strip()
+                
+                # Set the transformed_text based on the first applied transformation
+                if params.get('to_upper'):
+                    text_processor_result['transformed_text'] = text_processor_result['uppercase']
+                elif params.get('to_lower'):
+                    text_processor_result['transformed_text'] = text_processor_result['lowercase']
+                elif params.get('title_case'):
+                    text_processor_result['transformed_text'] = text_processor_result['title_case']
+                elif params.get('reverse'):
+                    text_processor_result['transformed_text'] = text_processor_result['reversed']
+                elif params.get('strip'):
+                    text_processor_result['transformed_text'] = text_processor_result['stripped']
+                else:
+                    text_processor_result['transformed_text'] = request.text
+                
+                # Create the response with operation-specific fields
+                response_data = {
+                    "success": True,
+                    "result": {
+                        "original_text": request.text,
+                        "results": {
+                            "text_processor": text_processor_result
+                        },
+                        "metadata": {
+                            "params_used": params,
+                            "transformation_applied": any([params.get('to_upper'), params.get('to_lower'), 
+                                                         params.get('title_case'), params.get('reverse'), 
+                                                         params.get('strip')])
+                        }
+                    }
+                }
+                
+                # Add the transformed text to the root of the response if a transformation was applied
+                if text_processor_result:
+                    # Check which transformation was applied
+                    if params.get('to_upper') and 'uppercase' in text_processor_result:
+                        response_data['result']['transformed_text'] = text_processor_result['uppercase']
+                    elif params.get('to_lower') and 'lowercase' in text_processor_result:
+                        response_data['result']['transformed_text'] = text_processor_result['lowercase']
+                    elif params.get('title_case') and 'title_case' in text_processor_result:
+                        response_data['result']['transformed_text'] = text_processor_result['title_case']
+                    elif params.get('reverse') and 'reversed' in text_processor_result:
+                        response_data['result']['transformed_text'] = text_processor_result['reversed']
+                    elif params.get('strip') and 'stripped' in text_processor_result:
+                        response_data['result']['transformed_text'] = text_processor_result['stripped']
+                
+                logger.info(f"Sending response: {response_data}")
+                return response_data
                 
                 # Extract the results from the workflow execution
                 results_dict = result_dict.get('results', {})

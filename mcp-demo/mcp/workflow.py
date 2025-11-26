@@ -111,6 +111,21 @@ class Workflow:
                     if 'results' not in state_dict or state_dict['results'] is None:
                         state_dict['results'] = {}
                     
+                    # If this is the text processor, update the input text with the appropriate transformation
+                    if name == 'text_processor':
+                        # Check for any transformation result in the response
+                        transformation_fields = ['uppercase', 'lowercase', 'title_case', 'reversed', 'stripped']
+                        for field in transformation_fields:
+                            if field in result:
+                                state_dict['input_text'] = result[field]
+                                logger.info(f"Updated input_text with {field} text: {result[field][:100]}...")
+                                # Ensure the original transformation fields are preserved in the result
+                                for tf in transformation_fields:
+                                    if tf in result and tf != field:
+                                        logger.info(f"Preserving {tf} in results")
+                                        result[tf] = result[tf]
+                                break
+                    
                     # Store the result with the tool name as the key
                     state_dict['results'][name] = result
                     

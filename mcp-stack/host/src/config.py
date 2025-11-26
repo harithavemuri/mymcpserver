@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 from typing import List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, Field, validator
+from pydantic import AnyHttpUrl, Field, validator
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -18,6 +19,33 @@ class Settings(BaseSettings):
     DEBUG: bool = Field(False, env="DEBUG")
     ENVIRONMENT: str = Field("development", env="ENVIRONMENT")
     HOST_NAME: str = Field("mcp-host-01", env="HOST_NAME")
+    
+    # Security settings
+    SECRET_KEY: str = Field(
+        default="your-secret-key-here",
+        env="SECRET_KEY",
+        description="Secret key for cryptographic operations"
+    )
+    JWT_SECRET: str = Field(
+        default="your-jwt-secret-here",
+        env="JWT_SECRET",
+        description="Secret key for JWT token signing"
+    )
+    JWT_ALGORITHM: str = Field(
+        default="HS256",
+        env="JWT_ALGORITHM",
+        description="Algorithm used for JWT token signing"
+    )
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
+        default=1440,  # 24 hours
+        env="ACCESS_TOKEN_EXPIRE_MINUTES",
+        description="Access token expiration time in minutes"
+    )
+    RATE_LIMIT: int = Field(
+        default=60,
+        env="RATE_LIMIT",
+        description="Default rate limit for API endpoints (requests per minute)"
+    )
     VERSION: str = Field("0.1.0", env="VERSION")
     
     # MCP Server settings

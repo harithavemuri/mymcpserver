@@ -8,7 +8,7 @@ from datetime import datetime
 from difflib import get_close_matches, SequenceMatcher
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Literal
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from logging.handlers import RotatingFileHandler
 
 # Import ratio from difflib for string similarity
@@ -620,8 +620,9 @@ class CallTranscript(BaseModel):
             self.sentiment = {"polarity": 0.0, "subjectivity": 0.0}
             self.contexts = []
     
-    @validator('call_summary', pre=True, always=True)
-    def analyze_call_summary(cls, v: str, values: Dict[str, Any]) -> str:
+    @field_validator('call_summary', mode='before')
+    @classmethod
+    def analyze_call_summary(cls, v: str) -> str:
         """Analyze the call summary and set sentiment and contexts."""
         return v
 

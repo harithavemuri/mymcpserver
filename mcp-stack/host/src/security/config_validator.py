@@ -4,7 +4,8 @@ import secrets
 from pathlib import Path
 from typing import Dict, List, Optional, Type, TypeVar, Any
 
-from pydantic import BaseModel, BaseSettings, Field, validator, HttpUrl, AnyHttpUrl
+from pydantic import BaseModel, Field, validator, HttpUrl, AnyHttpUrl
+from pydantic_settings import BaseSettings
 from pydantic.error_wrappers import ValidationError
 
 from ..config import settings
@@ -94,53 +95,83 @@ class ModelSettings(BaseModel):
 
 class Settings(BaseSettings):
     """Main application settings."""
-    server: ServerSettings = ServerSettings()
-    security: SecuritySettings = SecuritySettings()
-    database: DatabaseSettings = DatabaseSettings()
-    model: ModelSettings = ModelSettings()
-    MCP_SERVER_URL: str = Field(..., env="MCP_SERVER_URL")
-    API_KEY: Optional[str] = Field(None, env="API_KEY")
-    version: str = "0.1.0"
-    host_name: str = "mcp-host-01"
+    # Server settings
+    HOST: str = Field("0.0.0.0", env="HOST")
+    PORT: int = Field(8000, env="PORT")
+    DEBUG: bool = Field(False, env="DEBUG")
+    ENVIRONMENT: str = Field("development", env="ENVIRONMENT")
     HOST_NAME: str = Field(default_factory=lambda: f"mcp-host-{os.urandom(4).hex()}", env="HOST_NAME")
-
-    class Config:
-        env_prefix = "MCP_"
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = True
-        env_nested_delimiter = "__"
-        
+    VERSION: str = Field("0.1.0", env="VERSION")
+    
+    # MCP Server settings
+    MCP_SERVER_URL: str = Field("http://localhost:8005", env="MCP_SERVER_URL")
+    API_KEY: Optional[str] = Field(None, env="API_KEY")
+    
+    # Security settings
+    SECRET_KEY: str = Field(
+        default_factory=generate_secret_key,
+        env="SECRET_KEY",
+        description="Secret key for cryptographic operations"
+    )
+    JWT_SECRET: str = Field(
+        default_factory=generate_secret_key,
+        env="JWT_SECRET",
+        description="Secret key for JWT token signing"
+    )
+    JWT_ALGORITHM: str = Field("HS256", env="JWT_ALGORITHM")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(1440, env="ACCESS_TOKEN_EXPIRE_MINUTES")
+    CORS_ORIGINS: List[str] = Field("*", env="CORS_ORIGINS")
+    RATE_LIMIT: int = Field(60, env="RATE_LIMIT")
+    
+    # Logging
+    LOG_LEVEL: str = Field("INFO", env="LOG_LEVEL")
+    LOG_FORMAT: str = Field("%(asctime)s - %(name)s - %(levelname)s - %(message)s", env="LOG_FORMAT")
+    
+    # Model and data directories
+    MODEL_DIR: Path = Field(Path("models").resolve(), env="MODEL_DIR")
+    DATA_DIR: Path = Field(Path("data").resolve(), env="DATA_DIR")
+    
+    # Feature flags
+    AUTO_REGISTER_MODELS: bool = Field(True, env="AUTO_REGISTER_MODELS")
+    
+    # Health check
+    HEALTH_CHECK_INTERVAL: int = Field(30, env="HEALTH_CHECK_INTERVAL")
+    
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": True,
+    }
+    
     def __init__(self, **data):
-        # Ensure host_name and HOST_NAME are in sync
-        if 'HOST_NAME' in data and 'host_name' not in data:
-            data['host_name'] = data['HOST_NAME']
-        elif 'host_name' in data and 'HOST_NAME' not in data:
-            data['HOST_NAME'] = data['host_name']
+        # Handle CORS_ORIGINS as a comma-separated string
+        if "CORS_ORIGINS" in data and isinstance(data["CORS_ORIGINS"], str):
+            data["CORS_ORIGINS"] = [x.strip() for x in data["CORS_ORIGINS"].split(",")]
+            
+        # Ensure paths are resolved
+        if "MODEL_DIR" in data and isinstance(data["MODEL_DIR"], str):
+            data["MODEL_DIR"] = Path(data["MODEL_DIR"]).resolve()
+        if "DATA_DIR" in data and isinstance(data["DATA_DIR"], str):
+            data["DATA_DIR"] = Path(data["DATA_DIR"]).resolve()
             
         super().__init__(**data)
         self.validate()
-        
+    
     def validate(self):
         """Validate all settings."""
-        if not hasattr(self, 'HOST_NAME') or not self.HOST_NAME:
-            self.HOST_NAME = f"mcp-host-{os.urandom(4).hex()}"
-            
-        if self.server.environment == "production":
+        if self.ENVIRONMENT == "production":
             self._validate_production_settings()
-            
+    
     def _validate_production_settings(self):
         """Validate production-specific settings."""
-        if self.server.debug:
+        if self.DEBUG:
             raise ValueError("Debug mode should be disabled in production")
-        if self.security.secret_key == "insecure-secret-key":
+        if self.SECRET_KEY == "your-secret-key-here":
             raise ValueError("Change the default secret key in production")
-        
-        if self.database.url.startswith("sqlite"):
-            print("WARNING: SQLite is not recommended for production use")
-        
-        if "*" in self.security.cors_origins:
-            print("WARNING: CORS is set to allow all origins in production")
+        if self.JWT_SECRET == "your-jwt-secret-here":
+            raise ValueError("Change the default JWT secret in production")
+        if "*" in self.CORS_ORIGINS and self.ENVIRONMENT == "production":
+            raise ValueError("Wildcard CORS is not allowed in production")
 
 def get_settings() -> Settings:
     """Get and validate application settings."""

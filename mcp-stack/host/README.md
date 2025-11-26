@@ -4,6 +4,8 @@ The MCP (Model Context Protocol) Host is a FastAPI-based service that provides a
 
 ## Features
 
+- Text transformation operations (uppercase, lowercase, title case, reverse, strip)
+- Customer search with field selection and filtering
 - Model registration and management
 - Prediction serving with context support
 - Data source integration
@@ -46,7 +48,302 @@ The MCP (Model Context Protocol) Host is a FastAPI-based service that provides a
    - Copy `.env.example` to `.env`
    - Update the environment variables in `.env` as needed
 
+## API Endpoints
+
+### Text Transformations
+
+#### Transform Text
+- **Endpoint**: `POST /process`
+- **Description**: Apply text transformations
+- **Request Body**:
+  ```json
+  {
+    "text": "hello world",
+    "params": {
+      "to_upper": true,
+      "to_lower": false,
+      "title_case": false,
+      "reverse": false,
+      "strip": false
+    }
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "result": {
+      "original_text": "hello world",
+      "results": {
+        "text_processor": {
+          "original_text": "hello world",
+          "length": 11,
+          "word_count": 2,
+          "line_count": 1,
+          "transformed_text": "HELLO WORLD",
+          "uppercase": "HELLO WORLD"
+        }
+      },
+      "metadata": {
+        "params_used": {
+          "to_upper": true,
+          "to_lower": false,
+          "title_case": false,
+          "reverse": false,
+          "strip": false
+        },
+        "transformation_applied": true
+      }
+    },
+    "error": null
+  }
+  ```
+
+### Customer Search
+
+Search for customers with field selection and filtering using GraphQL.
+
+#### Search Customers
+- **Endpoint**: `POST /graphql`
+- **Description**: Search for customers with optional field selection and filtering
+- **Request Body**:
+  ```graphql
+  query SearchCustomers($filter: CustomerFilterInput!) {
+    searchCustomers(filter: $filter) {
+      id
+      firstName
+      lastName
+      email
+      phone
+      state
+    }
+  }
+  ```
+  ```json
+  {
+    "filter": {
+      "name": "John",
+      "state": "CA",
+      "limit": 10,
+      "offset": 0
+    }
+  }
+  ```
+- **Filter Parameters**:
+  - `name`: Search by customer name (partial match)
+  - `email`: Filter by email (partial match)
+  - `phone`: Filter by phone number
+  - `state`: Filter by state code (e.g., "CA")
+  - `city`: Filter by city
+  - `country`: Filter by country
+  - `limit`: Maximum results to return (default: 100)
+  - `offset`: Results to skip (for pagination)
+
+- **Available Fields**:
+  - `id` / `customerId`: Unique customer ID
+  - `firstName`: First name
+  - `lastName`: Last name
+  - `email`: Email address
+  - `phone`: Phone number
+  - `address`: Street address
+  - `city`: City
+  - `state`: State/Province
+  - `zipCode`: ZIP/Postal code
+  - `country`: Country
+
+- **Example Response**:
+  ```json
+  {
+    "data": {
+      "searchCustomers": [
+        {
+          "id": "123",
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john.doe@example.com",
+          "phone": "+14155551234",
+          "state": "CA"
+        }
+      ]
+    }
+  }
+  ```
+
+#### Health Check
+- **Endpoint**: `GET /health`
+- **Description**: Check if the service is running
+- **Response**:
+  ```json
+  {
+    "status": "ok"
+  }
+  ```
+
+#### List Available Tools
+- **Endpoint**: `GET /tools`
+- **Description**: List all available text processing tools
+- **Response**:
+  ```json
+  {
+    "text_processor": {
+      "name": "text_processor",
+      "description": "Performs basic text processing operations like case conversion and whitespace handling.",
+      "operations": ["uppercase", "lowercase", "title_case", "reverse", "strip"]
+    }
+  }
+  ```
+
+#### Process Conversation
+- **Endpoint**: `POST /conversation/process`
+- **Description**: Process natural language requests and route to appropriate client
+- **Request Body**:
+  ```json
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Convert this to uppercase: hello world",
+        "metadata": {}
+      }
+    ],
+    "context": {}
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "response": "Here's your uppercase text: HELLO WORLD",
+    "client_used": "text_transform",
+    "metadata": {
+      "operation": "uppercase",
+      "original_text": "hello world",
+      "transformed_text": "HELLO WORLD"
+    }
+  }
+  ```
+
+## Python Client Examples
+
+### Basic Usage
+
+```python
+from src.text_transform import MCPTextTransformClient
+import asyncio
+
+async def main():
+    # Initialize the client
+    client = MCPTextTransformClient(base_url="http://localhost:8002")
+    
+    try:
+        # Uppercase transformation
+        result = await client.transform("hello world", operation="uppercase")
+        print(f"Uppercase: {result.transformed}")
+        
+        # Multiple transformations (chaining)
+        text = "hello world"
+        uppercase_result = await client.transform(text, operation="uppercase")
+        reverse_result = await client.transform(uppercase_result.transformed, operation="reverse")
+        print(f"Chained transformations: {reverse_result.transformed}")
+        
+    finally:
+        await client.client.aclose()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Conversation Examples
+
+#### Using the Python Client
+
+```python
+from src.routers.conversation import ConversationMessage, MCPTextTransformClient
+import asyncio
+
+async def main():
+    # Initialize the client
+    client = MCPTextTransformClient(base_url="http://localhost:8002")
+    
+    try:
+        # Simple transformation
+        response = await client.transform("hello world", operation="uppercase")
+        print(f"Response: {response.transformed}")
+        
+        # Using the conversation endpoint
+        from src.routers.conversation import process_conversation
+        
+        messages = [
+            {"role": "user", "content": "Convert this to title case: the quick brown fox"}
+        ]
+        
+        result = await process_conversation({"messages": messages})
+        print(f"Assistant: {result.response}")
+        
+    finally:
+        await client.client.aclose()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+#### Testing the Endpoint
+
+You can test the conversation endpoint using the example script:
+
+```bash
+python examples/test_conversation_endpoint.py
+```
+
+This will run several test cases and show you the responses from the conversation endpoint.
+
 ## Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MCP_SERVER_URL` | Base URL of the MCP server | `http://localhost:8002` |
+| `MCP_TIMEOUT` | Request timeout in seconds | `30.0` |
+| `LOG_LEVEL` | Logging level | `INFO` |
+
+## Running the Examples
+
+1. Start the MCP server (from the mcp-demo directory):
+   ```bash
+   cd ../../mcp-demo
+   python -m mcp.server
+   ```
+
+2. Run the text transformation example:
+   ```bash
+   python examples/text_transform_example.py
+   ```
+
+3. Run the conversation example:
+   ```bash
+   python examples/conversation_example.py
+   ```
+
+## Error Handling
+
+The API returns error responses in the following format:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "error_code",
+    "message": "Error description",
+    "details": {}
+  }
+}
+```
+
+Common error codes:
+- `400`: Bad request (invalid parameters)
+- `404`: Resource not found
+- `422`: Validation error
+- `500`: Internal server error
 
 Edit the `.env` file to configure the following settings:
 
